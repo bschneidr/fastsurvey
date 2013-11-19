@@ -1,0 +1,82 @@
+
+R version 2.14.0 (2011-10-31)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(survey)
+
+Attaching package: 'survey'
+
+The following object(s) are masked from 'package:graphics':
+
+    dotchart
+
+> set.seed(42)
+> 
+> df<-data.frame(x=exp(rnorm(1000)))
+> df$y<-round(df$x,1)
+> ddf<-svydesign(id=~1,data=df)
+Warning message:
+In svydesign.default(id = ~1, data = df) :
+  No weights or probabilities supplied, assuming equal probability
+> rdf<-as.svrepdesign(ddf)
+> 
+> SE(svyquantile(~x,ddf, c(0.01,0.1,0.5,0.9,0.99),ci=TRUE))
+      0.01        0.1        0.5        0.9       0.99 
+0.01545209 0.01265608 0.03388011 0.16145776 2.10061576 
+> 
+> SE(svyquantile(~x,rdf, c(0.01,0.1,0.5,0.9,0.99),ci=TRUE))
+               x
+q0.01 0.01534861
+q0.1  0.01514945
+q0.5  0.03394446
+q0.9  0.16409412
+q0.99 1.86410482
+> 
+> 
+> svyquantile(~y,ddf, c(0.01,0.1,0.5,0.9,0.99),ci=TRUE,ties="rounded",interval.type="betaWald")
+$quantiles
+        0.01       0.1       0.5  0.9 0.99
+y 0.02352941 0.2230769 0.9340909 3.55  9.4
+
+$CIs
+, , y
+
+             0.01       0.1       0.5      0.9      0.99
+(lower 0.01594200 0.2020115 0.8578143 3.207543  7.568142
+upper) 0.03287947 0.2467045 1.0059815 3.862241 14.978632
+
+
+> 
+> svyquantile(~y,rdf, c(0.01,0.1,0.5,0.9,0.99),ci=TRUE)
+Statistic:
+        y
+q0.01 0.1
+q0.1  0.3
+q0.5  1.0
+q0.9  3.6
+q0.99 9.4
+SE:
+              y
+q0.01 0.0250000
+q0.1  0.0250000
+q0.5  0.0250000
+q0.9  0.1516809
+q0.99 1.8599967
+> 
+> 
+> 
+> 

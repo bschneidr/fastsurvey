@@ -1,0 +1,158 @@
+
+R version 2.14.0 (2011-10-31)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(survey)
+
+Attaching package: 'survey'
+
+The following object(s) are masked from 'package:graphics':
+
+    dotchart
+
+> data(fpc)
+> ## test various possibilities for svydesign
+> a<-svydesign(weights=~weight, ids=~psuid, strata=~stratid, variables=~x, data=fpc, nest=TRUE)
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(weights = ~weight, ids = ~psuid, strata = ~stratid, 
+    variables = ~x, data = fpc, nest = TRUE)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7413
+> a<-svydesign(weights=~weight, ids=~0, strata=~stratid, variables=~x, data=fpc, nest=TRUE)
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(weights = ~weight, ids = ~0, strata = ~stratid, variables = ~x, 
+    data = fpc, nest = TRUE)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7413
+> a<-svydesign(weights=1, ids=~0, strata=~stratid, variables=~x, data=fpc, nest=TRUE)
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(weights = 1, ids = ~0, strata = ~stratid, variables = ~x, 
+    data = fpc, nest = TRUE)
+> svymean(~x,a)
+  mean    SE
+x 44.2 6.237
+> a<-svydesign(ids=~0, strata=~stratid, variables=~x, data=fpc, nest=TRUE)
+Warning message:
+In svydesign.default(ids = ~0, strata = ~stratid, variables = ~x,  :
+  No weights or probabilities supplied, assuming equal probability
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(ids = ~0, strata = ~stratid, variables = ~x, data = fpc, 
+    nest = TRUE)
+> svymean(~x,a)
+   mean     SE
+x 5.525 0.7796
+> a<-svydesign(ids=~0, strata=~stratid, prob=~I(1/weight),variables=~x, data=fpc, nest=TRUE)
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(ids = ~0, strata = ~stratid, prob = ~I(1/weight), variables = ~x, 
+    data = fpc, nest = TRUE)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7413
+> a<-svydesign(ids=~psuid, strata=~stratid, variables=~x, data=fpc, nest=TRUE)
+Warning message:
+In svydesign.default(ids = ~psuid, strata = ~stratid, variables = ~x,  :
+  No weights or probabilities supplied, assuming equal probability
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(ids = ~psuid, strata = ~stratid, variables = ~x, data = fpc, 
+    nest = TRUE)
+> svymean(~x,a)
+   mean     SE
+x 5.525 0.7796
+> a<-svydesign(ids=~psuid, variables=~x, data=fpc, nest=TRUE)
+Warning message:
+In svydesign.default(ids = ~psuid, variables = ~x, data = fpc, nest = TRUE) :
+  No weights or probabilities supplied, assuming equal probability
+> a
+1 - level Cluster Sampling design (with replacement)
+With (5) clusters.
+svydesign(ids = ~psuid, variables = ~x, data = fpc, nest = TRUE)
+> svymean(~x,a)
+   mean    SE
+x 5.525 0.838
+> a<-svydesign(ids=~psuid, weights=~weight, variables=~x, data=fpc, nest=TRUE)
+> a
+1 - level Cluster Sampling design (with replacement)
+With (5) clusters.
+svydesign(ids = ~psuid, weights = ~weight, variables = ~x, data = fpc, 
+    nest = TRUE)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7938
+> a<-svydesign(ids=~stratid+psuid, weights=~weight, variables=~x, data=fpc)
+> a
+2 - level Cluster Sampling design (with replacement)
+With (2, 8) clusters.
+svydesign(ids = ~stratid + psuid, weights = ~weight, variables = ~x, 
+    data = fpc)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.5465
+> a<-svydesign(ids=~stratid+psuid, variables=~x, data=fpc)
+Warning message:
+In svydesign.default(ids = ~stratid + psuid, variables = ~x, data = fpc) :
+  No weights or probabilities supplied, assuming equal probability
+> a
+2 - level Cluster Sampling design (with replacement)
+With (2, 8) clusters.
+svydesign(ids = ~stratid + psuid, variables = ~x, data = fpc)
+> svymean(~x,a)
+   mean     SE
+x 5.525 0.5188
+> a<-svydesign(weights=fpc$weight, ids=fpc$psuid, strata=fpc$stratid, variables=fpc[,"x",drop=FALSE],  nest=TRUE)
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(weights = fpc$weight, ids = fpc$psuid, strata = fpc$stratid, 
+    variables = fpc[, "x", drop = FALSE], nest = TRUE)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7413
+> a<-svydesign(weights=fpc$weight, ids=fpc$psuid, strata=fpc$stratid, variables=fpc[,4:6],  nest=TRUE)
+> a
+Stratified Independent Sampling design (with replacement)
+svydesign(weights = fpc$weight, ids = fpc$psuid, strata = fpc$stratid, 
+    variables = fpc[, 4:6], nest = TRUE)
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7413
+> 
+> a<-svydesign(weights=fpc$weight, ids=fpc$psuid,  variables=fpc[,4:6], fpc=rep(27,8))
+> a
+1 - level Cluster Sampling design
+With (5) clusters.
+svydesign(weights = fpc$weight, ids = fpc$psuid, variables = fpc[, 
+    4:6], fpc = rep(27, 8))
+> svymean(~x,a)
+    mean     SE
+x 5.4481 0.7165
+> 
+> a<-svydesign(weights=fpc$weight, ids=fpc$psuid,  strata=fpc$stratid, nest=TRUE, variables=fpc[,4:6], fpc=fpc$Nh)
+> a
+Stratified Independent Sampling design
+svydesign(weights = fpc$weight, ids = fpc$psuid, strata = fpc$stratid, 
+    nest = TRUE, variables = fpc[, 4:6], fpc = fpc$Nh)
+> svymean(~x,a)
+    mean    SE
+x 5.4481 0.616
+> 

@@ -1,0 +1,266 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> ## lonely PSUs by design
+> library(survey)
+
+Attaching package: 'survey'
+
+The following object(s) are masked from 'package:graphics':
+
+    dotchart
+
+> data(api)
+> ## not certainty PSUs by fpc
+> ds<-svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = apiclus1)
+> summary(ds)
+Stratified Independent Sampling design (with replacement)
+svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = apiclus1)
+Probabilities:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.02954 0.02954 0.02954 0.02954 0.02954 0.02954 
+Stratum Sizes: 
+           61 135 178 197 255 406 413 437 448 510 568 637 716 778 815
+obs        13  34   4  13  16   2   1   4  12  21   9  11  37   2   4
+design.PSU 13  34   4  13  16   2   1   4  12  21   9  11  37   2   4
+actual.PSU 13  34   4  13  16   2   1   4  12  21   9  11  37   2   4
+Data variables:
+ [1] "cds"      "stype"    "name"     "sname"    "snum"     "dname"   
+ [7] "dnum"     "cname"    "cnum"     "flag"     "pcttest"  "api00"   
+[13] "api99"    "target"   "growth"   "sch.wide" "comp.imp" "both"    
+[19] "awards"   "meals"    "ell"      "yr.rnd"   "mobility" "acs.k3"  
+[25] "acs.46"   "acs.core" "pct.resp" "not.hsg"  "hsg"      "some.col"
+[31] "col.grad" "grad.sch" "avg.ed"   "full"     "emer"     "enroll"  
+[37] "api.stu"  "fpc"      "pw"      
+> 
+> options(survey.lonely.psu="fail")
+> try(svymean(~api00,ds))
+Error in onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  : 
+  Stratum (413) has only one PSU at stage 1
+> try(svymean(~api00, as.svrepdesign(ds)))
+Error in jknweights(design$strata[, 1], design$cluster[, 1], fpc = fpc,  : 
+  Stratum413has only one PSU
+> options(survey.lonely.psu="remove")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.8058
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.8058
+> options(survey.lonely.psu="certainty")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.8058
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.8058
+> options(survey.lonely.psu="adjust")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.8281
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.8267
+> options(survey.lonely.psu="average")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 6.0096
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.8217
+> 
+> ## fpc specified
+> fpc<-ifelse(apiclus1$dnum==413, 1,1000)
+> ds<-svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = apiclus1,fpc=fpc)
+> summary(ds)
+Stratified Independent Sampling design
+svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = apiclus1, 
+    fpc = fpc)
+Probabilities:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.02954 0.02954 0.02954 0.02954 0.02954 0.02954 
+Stratum Sizes: 
+           61 135 178 197 255 406 413 437 448 510 568 637 716 778 815
+obs        13  34   4  13  16   2   1   4  12  21   9  11  37   2   4
+design.PSU 13  34   4  13  16   2   1   4  12  21   9  11  37   2   4
+actual.PSU 13  34   4  13  16   2   1   4  12  21   9  11  37   2   4
+Population stratum sizes (PSUs): 
+ 135  178  197  255  406  413  437  448  510  568   61  637  716  778  815 
+1000 1000 1000 1000 1000    1 1000 1000 1000 1000 1000 1000 1000 1000 1000 
+Data variables:
+ [1] "cds"      "stype"    "name"     "sname"    "snum"     "dname"   
+ [7] "dnum"     "cname"    "cnum"     "flag"     "pcttest"  "api00"   
+[13] "api99"    "target"   "growth"   "sch.wide" "comp.imp" "both"    
+[19] "awards"   "meals"    "ell"      "yr.rnd"   "mobility" "acs.k3"  
+[25] "acs.46"   "acs.core" "pct.resp" "not.hsg"  "hsg"      "some.col"
+[31] "col.grad" "grad.sch" "avg.ed"   "full"     "emer"     "enroll"  
+[37] "api.stu"  "fpc"      "pw"      
+> 
+> options(survey.lonely.psu="fail")
+> try(svymean(~api00,ds))
+        mean     SE
+api00 644.17 5.7344
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.7344
+> options(survey.lonely.psu="remove")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.7344
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.7344
+> options(survey.lonely.psu="certainty")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.7344
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.7344
+> options(survey.lonely.psu="adjust")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.7344
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.7344
+> options(survey.lonely.psu="average")
+> svymean(~api00,ds)
+        mean     SE
+api00 644.17 5.7344
+> svymean(~api00, as.svrepdesign(ds))
+        mean     SE
+api00 644.17 5.7501
+> 
+> rs<-as.svrepdesign(ds)
+> svytotal(~api00,rs)
+        total    SE
+api00 3989986 35616
+> SE(svytotal(~api00,subset(rs, dnum==413)))==0
+[1] TRUE
+> 
+> ## lonely PSUs after subsetting
+> ds<-svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = subset(apiclus1,dnum !=413))
+> ds1<-ds[-31,]
+> summary(ds1)
+Stratified Independent Sampling design (with replacement)
+svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = subset(apiclus1, 
+    dnum != 413))
+Probabilities:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.02954 0.02954 0.02954 0.02954 0.02954 0.02954 
+Stratum Sizes: 
+           61 135 178 197 255 406 437 448 510 568 637 716 778 815
+obs        13  34   4  13  16   1   4  12  21   9  11  37   2   4
+design.PSU 13  34   4  13  16   2   4  12  21   9  11  37   2   4
+actual.PSU 13  34   4  13  16   1   4  12  21   9  11  37   2   4
+Data variables:
+ [1] "cds"      "stype"    "name"     "sname"    "snum"     "dname"   
+ [7] "dnum"     "cname"    "cnum"     "flag"     "pcttest"  "api00"   
+[13] "api99"    "target"   "growth"   "sch.wide" "comp.imp" "both"    
+[19] "awards"   "meals"    "ell"      "yr.rnd"   "mobility" "acs.k3"  
+[25] "acs.46"   "acs.core" "pct.resp" "not.hsg"  "hsg"      "some.col"
+[31] "col.grad" "grad.sch" "avg.ed"   "full"     "emer"     "enroll"  
+[37] "api.stu"  "fpc"      "pw"      
+> 
+> options(survey.lonely.psu="fail")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+> options(survey.lonely.psu="remove")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+> options(survey.lonely.psu="certainty")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+> options(survey.lonely.psu="adjust")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+> options(survey.lonely.psu="average")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+> 
+> ## with adjustment
+> options(survey.adjust.domain.lonely=TRUE)
+> ds<-svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = subset(apiclus1,dnum !=413))
+> ds1<-ds[-31,]
+> summary(ds1)
+Stratified Independent Sampling design (with replacement)
+svydesign(id = ~1, weights = ~pw, strata = ~dnum, data = subset(apiclus1, 
+    dnum != 413))
+Probabilities:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.02954 0.02954 0.02954 0.02954 0.02954 0.02954 
+Stratum Sizes: 
+           61 135 178 197 255 406 437 448 510 568 637 716 778 815
+obs        13  34   4  13  16   1   4  12  21   9  11  37   2   4
+design.PSU 13  34   4  13  16   2   4  12  21   9  11  37   2   4
+actual.PSU 13  34   4  13  16   1   4  12  21   9  11  37   2   4
+Data variables:
+ [1] "cds"      "stype"    "name"     "sname"    "snum"     "dname"   
+ [7] "dnum"     "cname"    "cnum"     "flag"     "pcttest"  "api00"   
+[13] "api99"    "target"   "growth"   "sch.wide" "comp.imp" "both"    
+[19] "awards"   "meals"    "ell"      "yr.rnd"   "mobility" "acs.k3"  
+[25] "acs.46"   "acs.core" "pct.resp" "not.hsg"  "hsg"      "some.col"
+[31] "col.grad" "grad.sch" "avg.ed"   "full"     "emer"     "enroll"  
+[37] "api.stu"  "fpc"      "pw"      
+> 
+> options(survey.lonely.psu="fail")
+> try(svymean(~api00,ds1))
+        mean     SE
+api00 645.14 5.8909
+Warning message:
+In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+  Stratum (406) has only one PSU at stage 1
+> options(survey.lonely.psu="remove")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+Warning message:
+In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+  Stratum (406) has only one PSU at stage 1
+> options(survey.lonely.psu="certainty")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.8909
+Warning message:
+In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+  Stratum (406) has only one PSU at stage 1
+> options(survey.lonely.psu="adjust")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 5.9119
+Warning message:
+In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+  Stratum (406) has only one PSU at stage 1
+> options(survey.lonely.psu="average")
+> svymean(~api00,ds1)
+        mean     SE
+api00 645.14 6.0914
+Warning message:
+In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+  Stratum (406) has only one PSU at stage 1
+> 
+> proc.time()
+   user  system elapsed 
+  0.771   0.043   0.805 

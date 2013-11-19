@@ -1,0 +1,47 @@
+
+R version 2.14.0 (2011-10-31)
+Copyright (C) 2011 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## 
+> ## Check that multistage samples still work
+> ##
+> library(survey)
+
+Attaching package: 'survey'
+
+The following object(s) are masked from 'package:graphics':
+
+    dotchart
+
+> example(mu284)
+
+mu284> data(mu284)
+
+mu284> (dmu284<-svydesign(id=~id1+id2,fpc=~n1+n2, data=mu284))
+2 - level Cluster Sampling design
+With (5, 15) clusters.
+svydesign(id = ~id1 + id2, fpc = ~n1 + n2, data = mu284)
+
+mu284> (ytotal<-svytotal(~y1, dmu284))
+   total     SE
+y1 15080 2274.3
+
+mu284> vcov(ytotal)
+        y1
+y1 5172234
+> 
+> 

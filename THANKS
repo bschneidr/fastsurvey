@@ -1,0 +1,70 @@
+The survey package has benefited from code, bug reports, and feature 
+requests from users, including:
+  Daniel Almirall
+  Guiseppe Antonaci
+  Milan Bouchet-Valat
+  Norman Breslow
+  Arthur Burke
+  Ron Burns
+  Stefano Calza
+  Shelby Chartkoff
+  Anthony Damico
+  Wade Davis
+  Michael Donohue
+  Melanie Edwards
+  Francisco Fabuel
+  Bob Fay
+  Daniel Fernandes
+  Ben French
+  Jacques Ferrez
+  Daniella Gollinelli
+  Alistair Gray
+  James Greiner
+  Zachary Grinspan
+  Alois Haslinger
+  Kieran Healy
+  Lucia Hindorff
+  Jeffery Hughes
+  Ward Kinkade
+  Stas Kolenikov
+  Scott Kostyshak
+  Jean Paul Lucas
+  Lisa McShane
+  Ana Patricia Martins
+  Tapan Mehta
+  Daryl Morris
+  Kirill Mueller
+  Jean Opsomer
+  Gonzalo Perez
+  Djalma Pessoa
+  Ana Quiterio
+  Gillian Raab
+  Christian Raschke
+  Brian Ripley
+  Fred Rohde
+  Steve Roberts
+  Andrew Robinson
+  Mark Rosenstein
+  Lee Sieswerda
+  Phil Smith
+  Matthew Soldner
+  Corey Sparks
+  Takahiro Tsuchiya
+  Richard Valliant
+  Tobias Verbeke
+  Renzo Vettori
+  Diego Zardetto
+  Alan Zaslavksy
+and from dicussions with Chris Wild and Alastair Scott. 
+
+Some work on the package while I was on sabbatical was funded by
+Fondation Leducq through a grant to the LINAT collaboration and by the
+Marsden Fund through a grant to the University of Auckland.
+
+Patrick Aboyoun did the S-PLUS port of version 3.6-8
+
+John Preston provided an example of the multistage rescaled bootstrap for testing.
+
+The svyolr() code is largely ripped from the MASS package of Venables & Ripley, and
+parts of the code for svycoxph() are modified from Therneau's survival package.
+

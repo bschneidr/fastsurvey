@@ -1,0 +1,54 @@
+api.R: Run example(api) to check that results haven't changed
+
+bycovmat.R: Check that svyby(,covmat=TRUE) is getting the ordering 
+   of estimates correct.
+
+caleg.R: Calibration examples
+	 - calibration to information on PSUs rather than population
+	 - check that bounded weights really are bounded
+	 - check that linear calibration with error proportional to 
+           x agrees with ratio estimators
+
+check.R:  Many combinations of options for svydesign
+
+deff.R:  Regression test on design effects, especially for totals
+
+DBIcheck.R: Check that we get the same results for SQLite-backed and
+         in-memory versions of the API data.
+
+domain.R: Check that domain estimators of means and their standard
+          errors agree with derivations as ratio and regression 
+          estimators.  Repeat for calibrated and raked designs
+
+fpc.R: Many ways to specify fpc
+
+kalton.R: Calibration examples from Kalton & Flore-Cervantes, 
+          J Off Stat, 19(2) 81-97
+
+lonely.psu.R: All the lonely PSU options
+
+multistage.R: Check that a two-stage cluster sample analysis agrees with
+              the hand-calcuated result in Sarndal et al.
+
+nwts.R:	Compare results from twophase() to published two-phase 
+        case-control example
+
+nwts-cch.R: Compare results from twophase() to case-cohort analyses in
+        survival package.
+
+pps.R: Brewer's approximation for pps without replacement
+
+quantile.R: quantile estimation on a lognormal sample
+
+rakecheck.R: check that raking by iterative post-stratification agrees with
+ 	     raking using calibrate()
+
+regpredict.R: ratio and regression estimation of a total.
+
+scoping.R: check that svyglm and svycoxph work inside functions.
+
+survcurve.R: check that svykm and predict.coxph give the same result
+           when a data set is doubled and the two replicates of each
+           observation are treated as a cluster.
+
+twophase.R: separately verifiable examples of twophase studies

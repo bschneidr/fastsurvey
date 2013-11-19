@@ -1,0 +1,129 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(survey)
+
+Attaching package: 'survey'
+
+The following object(s) are masked from 'package:graphics':
+
+    dotchart
+
+> data(election)
+> 
+> dpps<- svydesign(id=~1, weights=~wt, fpc=~p, data=election_pps, pps="brewer")
+> dppswr <-svydesign(id=~1, weights=~wt, data=election_pps)
+> svytotal(~Bush+Kerry+Nader, dpps)
+         total      SE
+Bush  64518472 2447629
+Kerry 51202102 2450787
+Nader   478530  102420
+> svytotal(~Bush+Kerry+Nader, dppswr)
+         total      SE
+Bush  64518472 2671455
+Kerry 51202102 2679433
+Nader   478530  105303
+> 
+> ##subsets
+> svytotal(~Bush+Kerry+Nader, subset(dpps, Nader>0))
+         total      SE
+Bush  34944285 5399833
+Kerry 25581714 4028434
+Nader   478530  102420
+> 
+> ##multistage: should agree with STRS analysis
+> data(api)
+> dclus2<-svydesign(id = ~dnum + snum, fpc = ~fpc1 + fpc2, data = apiclus2)
+> dclus2pps<-svydesign(id = ~dnum + snum, fpc = ~I(40/fpc1) + I(pmin(1,5/fpc2)), data = apiclus2)
+> 
+> all.equal(svytotal(~sch.wide,dclus2), svytotal(~sch.wide,dclus2pps))
+[1] TRUE
+> all.equal(svymean(~sch.wide,dclus2), svymean(~sch.wide,dclus2pps))
+[1] TRUE
+> all.equal(svytotal(~enroll,dclus2), svytotal(~enroll,dclus2pps))
+[1] TRUE
+> 
+> ## the new without-replacement methods
+> data(election)
+> dpps_br<- svydesign(id=~1,  fpc=~p, data=election_pps, pps="brewer")
+> dpps_ov<- svydesign(id=~1,  fpc=~p, data=election_pps, pps="overton")
+> dpps_hr<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=HR(sum(election$p^2)/40))
+> dpps_hr1<- svydesign(id=~1, fpc=~p, data=election_pps, pps=HR())
+> dpps_ht<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=ppsmat(election_jointprob))
+> ## Yates-Grundy type
+> dpps_yg<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=ppsmat(election_jointprob),variance="YG")
+> dpps_hryg<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=HR(sum(election$p^2)/40),variance="YG")
+> 
+> ## The with-replacement approximation
+> svytotal(~Bush+Kerry+Nader, dpps_ht)
+         total      SE
+Bush  64518472 2604404
+Kerry 51202102 2523712
+Nader   478530  102326
+> svytotal(~Bush+Kerry+Nader, dpps_yg)
+         total      SE
+Bush  64518472 2406526
+Kerry 51202102 2408091
+Nader   478530  101664
+> svytotal(~Bush+Kerry+Nader, dpps_hr)
+         total      SE
+Bush  64518472 2624662
+Kerry 51202102 2525222
+Nader   478530  102793
+> svytotal(~Bush+Kerry+Nader, dpps_hryg)
+         total      SE
+Bush  64518472 2436738
+Kerry 51202102 2439845
+Nader   478530  102016
+> svytotal(~Bush+Kerry+Nader, dpps_hr1)
+         total      SE
+Bush  64518472 2472753
+Kerry 51202102 2426842
+Nader   478530  102595
+> svytotal(~Bush+Kerry+Nader, dpps_br)
+         total      SE
+Bush  64518472 2447629
+Kerry 51202102 2450787
+Nader   478530  102420
+> svytotal(~Bush+Kerry+Nader, dpps_ov)
+         total      SE
+Bush  64518472 2939608
+Kerry 51202102 1964632
+Nader   478530  104373
+> 
+> ## subsets
+> svytotal(~Bush+Kerry+Nader, subset(dpps_ht, Nader>0))
+         total      SE
+Bush  34944285 5406348
+Kerry 25581714 4047741
+Nader   478530  102326
+> svytotal(~Bush+Kerry+Nader, subset(dpps_hryg, Nader>0))
+         total      SE
+Bush  34944285 5377659
+Kerry 25581714 4010908
+Nader   478530  102016
+> 
+> ## counts
+> svyby(~Bush+Kerry+Nader,~I(Nader>0), unwtd.count,design=dpps_ht)
+      I(Nader > 0) counts se
+FALSE        FALSE     19  0
+TRUE          TRUE     21  0
+> 
+> proc.time()
+   user  system elapsed 
+  2.783   0.089   2.862 
