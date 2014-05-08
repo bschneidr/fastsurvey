@@ -1,3 +1,6 @@
+3.29-9 	AIC.svyglm, based on Rao-Scott approximation
+     	BIC.svyglm, based on multivariate Gaussian likelihood for coefficients
+
 3.29-8  svyhist(freq=TRUE) works with replicate-weight designs (for Ward Kinkade)
 
 3.29-7  svyranktest() works with replicate-weight designs (for Matthew Soldner)

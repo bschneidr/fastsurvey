@@ -1640,10 +1640,6 @@ logLik.svrepglm<-function(object,...){
    stop("svrepglm not fitted by maximum likelihood.")
 }
 
-extractAIC.svrepglm<-function(fit,...){
-    stop("svrepglm not fitted by maximum likelihood")
-}
-
 
 withReplicates<-function(design, theta,  ..., return.replicates=FALSE){
   UseMethod("withReplicates",design)

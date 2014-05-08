@@ -204,6 +204,8 @@ S3method(extractAIC,svyglm)
 S3method(extractAIC,svrepglm)
 S3method(extractAIC,svyglm)
 S3method(anova,svyglm)
+S3method(AIC,svyglm)
+S3method(BIC,svyglm)
 
 S3method(anova,svycoxph)
 S3method(predict,svycoxph)
