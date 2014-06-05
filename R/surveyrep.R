@@ -1370,6 +1370,7 @@ svrepglm<-svyglm.svyrep.design<-function(formula, design, subset=NULL, ...,
           XX<-full$x
           YY<-full$y
           beta0<-coef(full)
+          if (!all(is.finite(beta0))) stop(paste("Infinite/NA values in estimate (",paste(beta0,collapse=","),")"))
           if(is.null(full$offset))
           offs<-rep(0,nrow(XX))
           else
