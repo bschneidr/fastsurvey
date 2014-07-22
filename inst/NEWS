@@ -1,7 +1,14 @@
+3.30	svyranktest() now allows k-sample tests (eg Kruskal-Wallis)
+
+        svylogrank() does the generalised G-rho-gamma logrank tests
+        [methods from Rader and Lipsitz (and probably al)]
+
 3.29-9 	AIC.svyglm, based on Rao-Scott approximation
      	BIC.svyglm, based on multivariate Gaussian likelihood for coefficients
 
         svyglm.svyrep.design checks values are finite before replicating
+
+        calibrate() using a list of margins now allows named vectors for 1-d margins
 
 3.29-8  svyhist(freq=TRUE) works with replicate-weight designs (for Ward Kinkade)
 

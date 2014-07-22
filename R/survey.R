@@ -1455,6 +1455,7 @@ extractAIC.svyglm<-function(fit,scale,k=2,...){
 	c(eff.p=sum(r$lambda), AIC=d+k*sum(r$lambda),deltabar=deltabar)
 }
 
+extractAIC.svrepglm<-extractAIC.svyglm
 
 BIC.svyglm<-function(object,...,maximal){
 	if (length(list(...))){

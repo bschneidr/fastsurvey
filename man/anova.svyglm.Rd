@@ -54,6 +54,9 @@ For computational reasons, the models must not only be nested, the names of the 
 \value{
 Object of class \code{seqanova.svyglm} if one model is given, otherwise of class \code{regTermTest} or \code{regTermTestLRT}
 }
+\note{
+At the moment, \code{AIC} works only for models including an intercept.
+  }
 \references{
 
 Rao, JNK, Scott, AJ (1984) "On Chi-squared Tests For Multiway Contingency Tables with Proportions Estimated From Survey Data" Annals of Statistics 12:46-60.

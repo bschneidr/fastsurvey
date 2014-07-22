@@ -224,6 +224,7 @@ S3method(print,svysmooth)
 S3method(lines,svysmooth)
 
 S3method(svykm, survey.design)
+S3method(svykm, svyrep.design)
 S3method(svykm, DBIsvydesign)
 S3method(svykm, ODBCsvydesign)
 S3method(plot,svykm)
