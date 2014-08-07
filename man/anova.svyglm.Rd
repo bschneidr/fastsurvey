@@ -61,6 +61,8 @@ At the moment, \code{AIC} works only for models including an intercept.
 
 Rao, JNK, Scott, AJ (1984) "On Chi-squared Tests For Multiway Contingency Tables with Proportions Estimated From Survey Data" Annals of Statistics 12:46-60.
 
+Lumley, T., & Scott, A. (2014). Tests for Regression Models Fitted to Survey Data. Australian and New Zealand Journal of Statistics, 56 (1), 1-14. 
+
 Lumley T, Scott AJ (forthcoming) "AIC and BIC for modelling with complex survey data" 
 
 }

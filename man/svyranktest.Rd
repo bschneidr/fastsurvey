@@ -33,9 +33,7 @@ A survey design object
 Object of class \code{htest}
 }
 \references{
-Lumley T, Scott AJ (2012) "Two-sample rank tests under complex
-sampling". Technical Report 2012-4, Department of Statistics, University
-of Auckland.
+Lumley, T., & Scott, A. J. (2013). Two-sample rank tests under complex sampling. BIOMETRIKA, 100 (4), 831-842. 
 
 }
 
