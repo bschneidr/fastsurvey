@@ -1,6 +1,6 @@
 
 
-svyranktest<-function(formula,design,test=c('wilcoxon','vanderWaerden','median'),...){
+svyranktest<-function(formula,design,test=c('wilcoxon','vanderWaerden','median',"KruskalWallis"),...){
         UseMethod("svyranktest", design)
 }
 
@@ -86,7 +86,7 @@ multiranktest<-function(formula,design,test=c('wilcoxon','vanderWaerden','median
     N<-sum(w)
     rankhat[ii]<-ave(cumsum(w[ii])-w[ii]/2,factor(y[ii]))
     rankscore<-testf(rankhat,N)
-    m <- glm(rankscore~factor(g),w=w)
+    m <- glm(rankscore~factor(g),weights=w)
     V<-svy.varcoef(m,design)
     ndf<-length(unique(g))-1
     beta<-coef(m)[-1]

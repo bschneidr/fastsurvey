@@ -286,7 +286,7 @@ predict.svycoxph<-function(object, newdata, se=FALSE,
 ##
 ## The simple case first
 ##  
-  risk<-survival:::predict.coxph(object,type="risk",se.fit=FALSE)
+  risk<-getS3method("predict","coxph")(object,type="risk",se.fit=FALSE)
   if(se==FALSE){
     tt<-c(time,entry)
     ss<-c(status,rep(0,length(entry)))

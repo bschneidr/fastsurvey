@@ -156,7 +156,8 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
       rval<-rval[order(byfactor[uniques]),]
 
       i<-expand.index(order(byfactor[uniques]),nstats)
-      covmat.mat<-covmat.mat[i,i]
+      if (keep.var)
+        covmat.mat<-covmat.mat[i,i]
 
   } else {
       a<-do.call("expand.grid", lapply(byfactors,function(f) levels(as.factor(f))))
@@ -166,12 +167,12 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
       rval<-a
       if (keep.names)
           rownames(rval)<-levels(byfactor)
-      
-      tmp<-matrix(ncol=nrow(a)*nstats,nrow=nrow(a)*nstats)
-      i<-expand.index(match(byfactor[uniques], levels(byfactor)),nstats,TRUE)
-      tmp[i,i]<-covmat.mat
-      covmat.mat<-tmp
-      
+      if (keep.var){
+        tmp<-matrix(ncol=nrow(a)*nstats,nrow=nrow(a)*nstats)
+        i<-expand.index(match(byfactor[uniques], levels(byfactor)),nstats,TRUE)
+        tmp[i,i]<-covmat.mat
+        covmat.mat<-tmp
+      }
   }
                   
   attr(rval,"svyby")<-list(margins=1:NCOL(byfactors),nstats=nstats,

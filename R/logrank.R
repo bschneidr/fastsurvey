@@ -1,4 +1,4 @@
-svylogrank<-function(formula, design,rho=0,gamma=0,...){
+svylogrank<-function(formula, design,rho=0,gamma=0,method=c("small","large","score"),...){
 	UseMethod("svylogrank",design)
 }
 
@@ -38,7 +38,7 @@ print.svylogrank<-function(x,...){
 	chisqstat<-coef(means)%*%solve(vcov(means),coef(means))
 
 	rval<-list(cbind(score=coef(means),se=SE(means),z=coef(means)/SE(means),p= 2*pnorm(-abs(coef(means)/SE(means)))),
-		 c(chisq=chisqstat,p=pchisq(chisqstat,df=ncol(x),lower=FALSE)))
+		 c(chisq=chisqstat,p=pchisq(chisqstat,df=ncol(x),lower.tail=FALSE)))
         class(rval)<-"svylogrank"
 	rval
 	}
@@ -77,7 +77,7 @@ print.svylogrank<-function(x,...){
 	chisqstat<-coef(means)%*%solve(vcov(means),coef(means))
 
 	rval<-list(data.frame(score=coef(means),se=SE(means),z=coef(means)/SE(means),p= 2*pnorm(-abs(coef(means)/SE(means)))),
-		 c(chisq=chisqstat,p=pchisq(chisqstat,df=ncol(x),lower=FALSE)))
+		 c(chisq=chisqstat,p=pchisq(chisqstat,df=ncol(x),lower.tail=FALSE)))
         class(rval)<-"svylogrank"
         rval
 	
@@ -192,7 +192,7 @@ expandlogrank<-function(formula, design, rho=0, gamma=0){
 	formula[[2]]<-quote(Surv(.start,.time,.status))
 
 	mfsplit$.weights<-weights(design,"sampling")[match(mfsplit$.id, rownames(mf))]*w(mfsplit$.time)
-	expdesign<-svydesign(id=eval(design$call$id), strata=eval(design$call$strata), data=mfsplit, weights=~.weights)
+	expdesign<-svydesign(ids=eval(design$call$id), strata=eval(design$call$strata), data=mfsplit, weights=~.weights)
 	#svylogrank(formula,expdesign)
 	tms<-delete.response(terms(formula,specials="strata"))
 	findstrat<-untangle.specials(tms,"strata")
