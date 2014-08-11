@@ -9,7 +9,8 @@ Design-based versions of k-sample rank tests.  The built-in tests are
 all for location hypotheses, but the user could specify others.  
 }
 \usage{
-svyranktest(formula, design, test = c("wilcoxon", "vanderWaerden", "median","KruskalWallis"), ...)
+svyranktest(formula, design, 
+  test = c("wilcoxon", "vanderWaerden", "median","KruskalWallis"), ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

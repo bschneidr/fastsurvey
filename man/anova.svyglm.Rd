@@ -10,7 +10,8 @@ Model comparison for glms.
 A method for the \code{\link{anova}} function, for use on \code{\link{svyglm}} objects.  With a single model argument it produces a sequential anova table, with two arguments it compares the two models.
 }
 \usage{
-\method{anova}{svyglm}(object, object2 = NULL, test = c("F", "Chisq"), method = c("LRT", "Wald"), tolerance = 1e-05, ..., force = FALSE)
+\method{anova}{svyglm}(object, object2 = NULL, test = c("F", "Chisq"), 
+ method = c("LRT", "Wald"), tolerance = 1e-05, ..., force = FALSE)
 \method{AIC}{svyglm}(object,...,k=2)
 \method{BIC}{svyglm}(object,...,maximal)
 }
@@ -72,17 +73,18 @@ Lumley T, Scott AJ (forthcoming) "AIC and BIC for modelling with complex survey 
 }
 \examples{
 data(api)
- dclus2<-svydesign(id=~dnum+snum, weights=~pw, data=apiclus2)
+dclus2<-svydesign(id=~dnum+snum, weights=~pw, data=apiclus2)
 
- model0<-svyglm(I(sch.wide=="Yes")~ell+meals+mobility, design=dclus2, family=quasibinomial())
- model1<-svyglm(I(sch.wide=="Yes")~ell+meals+mobility+as.numeric(stype), design=dclus2, family=quasibinomial())
- model2<-svyglm(I(sch.wide=="Yes")~ell+meals+mobility+stype, design=dclus2, family=quasibinomial())
+model0<-svyglm(I(sch.wide=="Yes")~ell+meals+mobility, design=dclus2, family=quasibinomial())
+model1<-svyglm(I(sch.wide=="Yes")~ell+meals+mobility+as.numeric(stype), 
+     design=dclus2, family=quasibinomial())
+model2<-svyglm(I(sch.wide=="Yes")~ell+meals+mobility+stype, design=dclus2, family=quasibinomial())
 
- anova(model2)	
- anova(model0,model2)					     		    
- anova(model1, model2)
+anova(model2)	
+anova(model0,model2)					     		    
+anova(model1, model2)
 
- anova(model1, model2, method="Wald")
+anova(model1, model2, method="Wald")
 
 AIC(model0,model1, model2)
 BIC(model0, model2,maximal=model2)

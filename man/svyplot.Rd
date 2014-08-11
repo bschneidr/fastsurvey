@@ -95,7 +95,8 @@ fourfoldplot(svytable(~sch.wide+comp.imp+stype,design=dstrat,round=TRUE))
 
 h<-svyplot(api00~api99, design=dstrat, style="hex", xlab="1999 API",ylab="2000 API")
 s<-svysmooth(api00~api99,design=dstrat)
-grid.polyline(s$api99$x,s$api99$y,vp=h$plot.vp@hexVp.on,default.units="native", gp=gpar(col="red",lwd=2))
+grid.polyline(s$api99$x,s$api99$y,vp=h$plot.vp@hexVp.on,default.units="native", 
+   gp=gpar(col="red",lwd=2))
 }
 \keyword{survey}% at least one, from doc/KEYWORDS
 \keyword{hplot}% __ONLY ONE__ keyword per line

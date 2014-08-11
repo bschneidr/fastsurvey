@@ -75,7 +75,6 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
       ## but it seems to work.
       results<-(if (multicore) mclapply else lapply)(uniques,
                       function(i){
-                        if (multicore) parallel:::closeAll()
                         if(verbose && !multicore) print(as.character(byfactor[i]))
                         if (inherits(formula,"formula"))
                           data<-formula

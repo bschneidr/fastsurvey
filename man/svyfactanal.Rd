@@ -9,7 +9,8 @@ Factor analysis in complex surveys (experimental).
 This function fits a factor analysis model or SEM,  by maximum weighted likelihood.
 }
 \usage{
-svyfactanal(formula, design, factors, n = c("none", "sample", "degf","effective", "min.effective"), ...)
+svyfactanal(formula, design, factors, 
+   n = c("none", "sample", "degf","effective", "min.effective"), ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
