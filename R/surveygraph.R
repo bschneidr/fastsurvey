@@ -176,9 +176,9 @@ svycoplot.default<-function(formula, design, style=c("hexbin","transparent"),
            xyplot(formula, data=model.frame(design), xbins=xbins,
                   panel=function(x,y,style="centroids",xbins,subscripts,...) {
                     if (!length(x)) return(panel.xyplot(x,y,...))
-                    vp<-current.viewport()
-                    wd<-convertWidth(vp$width,unitTo="cm",valueOnly=TRUE)
-                    ht<-convertHeight(vp$height,unitTo="cm",valueOnly=TRUE)
+                    vp<-grid::current.viewport()
+                    wd<-grid::convertWidth(vp$width,unitTo="cm",valueOnly=TRUE)
+                    ht<-grid::convertHeight(vp$height,unitTo="cm",valueOnly=TRUE)
                     W<-wt[subscripts]
                     rval<-hexbin(x,y,IDs=TRUE,xbins=xbins,shape=ht/wd,xbnds=vp$xscale,ybnds=vp$yscale)
                     cell<-rval@cID
