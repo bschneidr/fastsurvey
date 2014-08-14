@@ -128,7 +128,7 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
   }
 
   nr<-NCOL(rval)
-  nstats<-nr/(1+ keep.var*length(vartype) + hasdeff)
+  nstats<-nr/(1+ keep.var*(length(vartype)+ ("ci" %in% vartype)) + hasdeff)
 
               
   if (nr>1)

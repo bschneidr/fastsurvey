@@ -38,17 +38,7 @@ svyplot.default<-function(formula,
            symbols(X,Y,circles=sqrt(W),inches=inches,fg=basecol,...)
          },
          hex={
-           if (exists("hcell")) {
-             ## old version of hexbin
-             rval<-hexbin(X,Y,xbins=xbins)
-             cell<-hcell(X,Y)$cell
-             rval$cnt<-tapply(W,cell,sum)
-           rval$xcm<-tapply(1:length(X), cell,
-                          function(ii) weighted.mean(X[ii],W[ii]))
-           rval$ycm<-tapply(1:length(Y), cell,
-                           function(ii) weighted.mean(Y[ii],W[ii]))
-             plot(rval,legend=legend,style="centroids",...)
-           } else {
+           ## CRAN will be happier if we stop supporting the old version of hexbin
              ## new version
              rval<-hexbin(X,Y,IDs=TRUE,xbins=xbins)
              cell<-rval@cID
@@ -58,24 +48,16 @@ svyplot.default<-function(formula,
              rval@ycm<-as.vector(tapply(1:length(Y), cell,
                               function(ii) weighted.mean(Y[ii],W[ii])))
              gplot.hexbin(rval, legend=legend, style="centroids",...)
-           }
+           
            
          },
          grayhex={
-           if (exists("hcell")) {
-             ## old version of hexbin
-             rval<-hexbin(X,Y,xbins=xbins)
-             cell<-hcell(X,Y)$cell
-             rval$cnt<-tapply(W,cell,sum)
-             plot(rval, legend=legend,...)
-           } else {
              ## new version
              rval<-hexbin(X,Y,IDs=TRUE,xbins=xbins)
              cell<-rval@cID
              rval@count<-as.vector(tapply(W,cell,sum))
              gplot.hexbin(rval, legend=legend,...)
-           }
-
+        
          },
          subsample={
            index<-sample(length(X),sample.size,replace=TRUE, prob=W)
