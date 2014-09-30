@@ -1,3 +1,6 @@
+3.30-4  confint.svystat was handling denominator degrees of freedom wrongly
+	for the Wald method (Jared Smith)
+
 3.30-3  vcov.svrepstat does more sensible things when covariances aren't
         estimated (eg for quantiles). This fixes issues with svyby
 
