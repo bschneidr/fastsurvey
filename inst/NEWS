@@ -1,3 +1,6 @@
+3.30-4  svypredmeans() does the same things (together with svycontrast()) as
+        as PREDMARG in SUDAAN (for Thomas Yokota and Anthony Damico)
+
 3.30-4  confint.svystat was handling denominator degrees of freedom wrongly
 	for the Wald method (Jared Smith)
 
