@@ -19,7 +19,7 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
       stop("covmat=TRUE not implemented for this design type")
   }
 
-  if (multicore && !require("parallel",quietly=TRUE))
+  if (multicore && !requireNamespace("parallel",quietly=TRUE))
     multicore<-FALSE
 
   ## some people insist on using vectors rather than formulas
@@ -73,7 +73,7 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
 
       ## In dire need of refactoring (or rewriting)
       ## but it seems to work.
-      results<-(if (multicore) mclapply else lapply)(uniques,
+      results<-(if (multicore) parallel::mclapply else lapply)(uniques,
                       function(i){
                         if(verbose && !multicore) print(as.character(byfactor[i]))
                         if (inherits(formula,"formula"))

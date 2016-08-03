@@ -1099,7 +1099,6 @@ svycoxph.survey.design<-function(formula,design,subset=NULL,...){
 
     if(any(weights(design)<0)) stop("weights must be non-negative")
     
-    require(survival) || stop("Needs the survival package")
     data<-model.frame(design)
     
     g<-match.call()
