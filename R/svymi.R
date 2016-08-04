@@ -232,7 +232,7 @@ close.svyDBimputationList<-function(con,...){
   if (is(dbcon,"DBIConnection"))
     DBI::dbDisconnect(dbcon)
   else
-    RODBC::close(dbcon)
+    RODBC::odbcClose(dbcon)
   invisible(con)
 }
 

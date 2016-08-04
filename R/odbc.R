@@ -19,7 +19,7 @@ print.summary.ODBCsvydesign<-function(x,...){
 }
 
 close.ODBCsvydesign<-function(con,...){
-  RODBC::close(con$db$connection,...)
+  RODBC::odbcClose(con$db$connection,...)
   invisible(con)
 }
 
