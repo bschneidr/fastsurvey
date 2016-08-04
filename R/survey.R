@@ -1492,8 +1492,8 @@ dBIC<-function(modela,modelM){
 confint.svyglm<-function(object,parm,level=0.95,method=c("Wald","likelihood"),ddf=Inf,...){
   method<-match.arg(method)
   if(method=="Wald"){
-    tlevel<-pnorm(qt(level,df=ddf))
-    return(confint.default(object,parm=parm,level=tlevel,...))
+      tlevel <- 1 - 2*pnorm(qt((1 - level)/2, df = ddf))
+      return(confint.default(object,parm=parm,level=tlevel,...))
   }
   pnames <- names(coef(object))
   if (missing(parm)) 

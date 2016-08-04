@@ -30,7 +30,7 @@ svyrqss<-function(formula,design,quantile=0.5,df=4,...){
   ll<-vector("list", length(tt))
   for(i in 1:length(tt)){
     termi<-as.name(tt[i])
-    ff<-eval(bquote(update(formula,.~bs(.(termi),df=.(df[i])))))
+    ff<-eval(bquote(update(formula,.~splines::bs(.(termi),df=.(df[i])))))
     rqfit<-quantreg::rq(ff, tau=quantile[i],weights=w,data=mf,...)
     xx<-mf[,i+1]
     oo<-order(xx)

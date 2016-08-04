@@ -1,4 +1,4 @@
-import(stats,graphics,splines,grid, survival,lattice,methods, Matrix)
+import(stats,graphics,splines,grid, survival,lattice,methods,Matrix)
 export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
        rake, calibrate, estWeights, as.svydesign2, svyplot, svyhist,
        svyboxplot, svyby, cv, SE, deff, svycoxph, svyglm, svyquantile,

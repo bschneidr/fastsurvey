@@ -53,7 +53,7 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
   
   if(missing(vartype)) vartype<-"se"
   vartype<-match.arg(vartype,several.ok=TRUE)
-  nvartype<-which(eval(formals(sys.function())$vartype) %in% vartype)
+  nvartype<-base::which(eval(formals(sys.function())$vartype) %in% vartype)
   if(any(is.na(nvartype))) stop("invalid vartype")
   
   if (keep.var){

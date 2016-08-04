@@ -18,18 +18,18 @@ svrepdesign.imputationList<-function(variables=NULL, repweights,weights,data,mse
   
   if(!is.null(variables)){
     if (inherits(repweights,"imputationList")){
-      designs <- mapply(function(v,d,r) svrepdesign(variables=v, repweights=r, weights=weights,data=NULL,...),
+      designs <- mapply(function(v,d,r) svrepdesign(variables=v, repweights=r, weights=weights,data=NULL,mse=mse,...),
                         variables$imputations,data$imputations, repweights$imputations,SIMPLIFY=FALSE)
     } else {
-      designs <- mapply(function(d,v) svrepdesign(variables=v, repweights=repweights, weights=weights,data=d,...),
+      designs <- mapply(function(d,v) svrepdesign(variables=v, repweights=repweights, weights=weights,data=d,mse=mse,...),
                       data$imputations,variables$imputations,SIMPLIFY=FALSE)
     }
   }else{
     if (inherits(repweights,"imputationList")){
-      designs <- mapply(function(d,r) svrepdesign(repweights=r, weights=weights,data=NULL,...),
+      designs <- mapply(function(d,r) svrepdesign(repweights=r, weights=weights,data=NULL,mse=mse,...),
                         data$imputations, repweights$imputations,SIMPLIFY=FALSE)
     } else {
-      designs <- lapply(data$imputations, function(d) svrepdesign( repweights=repweights, weights=weights,data=d,...))
+      designs <- lapply(data$imputations, function(d) svrepdesign( repweights=repweights, weights=weights,data=d,mse=mse,...))
     }
   }
   rval <- list(designs=designs, call=sys.call(-1))
@@ -85,6 +85,7 @@ subset.svyimputationList<-function(x, subset,...){
     n<-nrow(x$designs[[1]])
     e<-substitute(subset)
     r<-eval(e,x$designs[[1]]$variables, parent.frame())
+    r <- r & !is.na( r )
     x$designs[[1]]<-x$designs[[1]][r,]
     same<-TRUE
     for(i in 2:length(x$designs)){

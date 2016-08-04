@@ -104,7 +104,7 @@ svyboxplot.default<-function(formula, design,  all.outliers=FALSE,col=NULL,names
         group.values<-model.frame(groups, model.frame(design),na.action=na.pass)[[1]]
         n<-NCOL(qs)
         iqr<- qs[,n-1]-qs[,n-3]
-        low<-pmax(qs[,n-4],qs[,n-2]-1.5*iqr)
+        low<-pmax(qs[,n-4],qs[,n-3]-1.5*iqr)
         hi<-pmin(qs[,n],qs[,n-1]+1.5*iqr)
         stats<-t(as.matrix(cbind(low,qs[,n-(3:1)],hi)))
         z<-list(stats=stats,n=coef(svytotal(groups,design,na.rm=TRUE)))
