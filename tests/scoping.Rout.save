@@ -1,7 +1,7 @@
 
-R version 3.1.0 (2014-04-10) -- "Spring Dance"
-Copyright (C) 2014 The R Foundation for Statistical Computing
-Platform: x86_64-apple-darwin13.1.0 (64-bit)
+R version 3.2.1 (2015-06-18) -- "World-Famous Astronaut"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -19,6 +19,9 @@ Type 'q()' to quit R.
 > ## regression test for testing regression
 > 
 > library(survey)
+Loading required package: grid
+Loading required package: Matrix
+Loading required package: survival
 
 Attaching package: 'survey'
 
@@ -80,8 +83,6 @@ Residual Deviance: 1835 	AIC: 719.8
 + }
 > 
 > f()
-Loading required package: survival
-Loading required package: splines
 Call:
 svycoxph(formula = form, design = dstrat)
 
@@ -118,4 +119,4 @@ Likelihood ratio test=  on 1 df, p=  n= 134, number of events= 134
 > 
 > proc.time()
    user  system elapsed 
-  0.275   0.028   0.313 
+  1.089   0.057   1.164 
