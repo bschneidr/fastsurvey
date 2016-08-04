@@ -12,6 +12,9 @@
 
 	calibrate() with variable-specific epsilons and zero sample totals didn't work (Alex Kowarik)
 
+	document that regTermTest(method="LRT") can't handle models with a start= argument
+	and document how to use anova.svyglm instead. (Brad Biggerstaff)
+
 
 3.30-4  svypredmeans() does the same things (together with svycontrast()) as
         as PREDMARG in SUDAAN (for Thomas Yokota and Anthony Damico)
