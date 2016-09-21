@@ -1,3 +1,5 @@
+3.31-1	Allow forincompatible change in output of CompQuadForm::farebrother()  
+
 3.31	update isIdValid() to dbIsValid() for DBI changes.
 
 	explicitly :: or import ALL THE THINGS.
