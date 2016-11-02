@@ -1,3 +1,11 @@
+3.31-3  svyciprop has method="xlogit" that reproduces what SUDAAN and SPSS give. (Rex Dwyer)
+
+	Added reference for svylogrank
+
+	Added example from YRBS for software comparison
+
+	Copied some names from NEWS into THANKS
+
 3.31-2	explicitly dropping dimensions on a 1x1 matrix
 
 3.31-1	Allow for incompatible change in output of CompQuadForm::farebrother()  
