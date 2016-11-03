@@ -1,3 +1,6 @@
+3.31-4	svyciprop(,method="like") and confint.svyglm(method="like") work even when the 
+        design effect is large. 
+
 3.31-3  svyciprop has method="xlogit" that reproduces what SUDAAN and SPSS give. (Rex Dwyer)
 
 	Added reference for svylogrank

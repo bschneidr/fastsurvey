@@ -72,6 +72,7 @@ Patrick Aboyoun did the S-PLUS port of version 3.6-8
 
 John Preston provided an example of the multistage rescaled bootstrap for testing.
 
-The svyolr() code is largely ripped from the MASS package of Venables & Ripley, and
-parts of the code for svycoxph() are modified from Therneau's survival package.
+The svyolr() code and the likelihood-based confidenece intervals are largely ripped from
+the MASS package of Venables & Ripley, and parts of the code for svycoxph() are modified 
+from Therneau's survival package.
 
