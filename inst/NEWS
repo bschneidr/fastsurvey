@@ -1,3 +1,6 @@
+3.31-5  predict.svyglm() uses object$xlevels and object$contrasts and so should be able to
+        guess the right factor levels when they aren't supplied in newdata= (for @thosjleeper)
+
 3.31-4	svyciprop(,method="like") and confint.svyglm(method="like") work even when the 
         design effect is large. 
 

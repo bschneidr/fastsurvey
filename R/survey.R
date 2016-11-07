@@ -2125,8 +2125,8 @@ predict.svyglm <- function(object, newdata=NULL, total=NULL,
     if (type=="terms")
       return(predterms(object,se=se.fit,...))
     tt<-delete.response(terms(formula(object)))
-    mf<-model.frame(tt,data=newdata)
-    mm<-model.matrix(tt,mf)
+    mf<-model.frame(tt,data=newdata, xlev=object$xlevels)
+    mm<-model.matrix(tt,mf,contrasts.arg = object$contrasts)
     if (!is.null(total) && attr(tt,"intercept")){
         mm[,attr(tt,"intercept")]<-mm[,attr(tt,"intercept")]*total
     }
