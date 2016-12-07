@@ -17,6 +17,10 @@ svydesign.character<-function (ids, probs = NULL, strata = NULL, variables = NUL
   }
   design.vars<-c(all.vars(ids), all.vars(probs), all.vars(strata),
                  all.vars(fpc), all.vars(weights))
+  
+  ## Need at least one variable to find out the data size
+  if (length(design.vars)==0) design.vars<-"1 as _ugly_workaround_" 
+  
   design.query<-paste("select", paste(design.vars,collapse=","), "from", data)
   if (dbtype=="ODBC")
     design.data<-RODBC::sqlQuery(dbconn, design.query)
