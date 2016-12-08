@@ -788,15 +788,15 @@ svyratio.survey.design2<-function(numerator=formula, denominator, design, separa
     
     vars<-matrix(ncol=nd,nrow=nn)
 
-    if (deff) deffs<-matrix(ncol=nd,nrow=nn)
+    if (deff=="replace" || deff) deffs<-matrix(ncol=nd,nrow=nn)
     
     for(i in 1:nn){
       for(j in 1:nd){
         r<-(numerator[,i]-rval$ratio[i,j]*denominator[,j])/sum(denominator[,j]/design$prob)
         vars[i,j]<-svyrecvar(r*1/design$prob, design$cluster, design$strata, design$fpc,
                             postStrata=design$postStrata)
-        if (deff){
-          deffs[i,j]<-deff(svytotal(r,design,deff=TRUE))
+        if (deff=="replace" || deff){
+          deffs[i,j]<-deff(svytotal(r,design,deff=deff))
         }
       }
     }
@@ -813,7 +813,7 @@ svyratio.survey.design2<-function(numerator=formula, denominator, design, separa
     colnames(vars)<-colnames(denominator)
     rownames(vars)<-colnames(numerator)
     rval$var<-vars
-    if (deff) attr(rval,"deff")<-deffs
+    if (deff=="replace" || deff) attr(rval,"deff")<-deffs
     attr(rval,"call")<-sys.call()
     class(rval)<-"svyratio"
     rval
