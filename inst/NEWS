@@ -1,5 +1,7 @@
 3.31-7  Add deff="replace" as an option for svyratio (for Chris Webb)
 
+        Add psrsq() for pseudo-R^2 statistics (for Ward Kinkade)
+
 3.31-6  Make database-backed svydesign work with *no* design variables  (for Anthony Damico and Guilherme Jacob)
 
 3.31-5  predict.svyglm() uses object$xlevels and object$contrasts and so should be able to
