@@ -5,7 +5,7 @@ citEntry(entry="misc",
    year=2016,
    title="survey: analysis of complex survey samples",
    note="R package version 3.31-7",
-   textVersion="T. Lumley (2016) \"survey: analysis of complex survey samples\". R package version 3.31-7." )
+   textVersion="T. Lumley (2017) \"survey: analysis of complex survey samples\". R package version 3.31-7." )
 
 
 
