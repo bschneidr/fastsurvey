@@ -1,3 +1,7 @@
+3.31-8  Add svysurvreg() (for Pam Shaw and Eric Oh)
+
+        Remove the tests that don't produce character-identical output on all platforms (for CRAN)
+
 3.31-7  Add deff="replace" as an option for svyratio (for Chris Webb)
 
         Add psrsq() for pseudo-R^2 statistics (for Ward Kinkade)
