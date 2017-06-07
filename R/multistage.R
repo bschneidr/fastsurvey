@@ -283,7 +283,7 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
       if (inherits(psvar, "greg_calibration")) {
         if (psvar$stage==0){
           ## G-calibration at population level
-          x<-qr.resid(psvar$qr,x/psvar$w)*psvar$w
+          x<-as.matrix(qr.resid(psvar$qr,x/psvar$w)*psvar$w)
         } else {
           ## G-calibration within clusters
           cal<-c(cal, list(psvar))
@@ -337,7 +337,7 @@ multistage<-function(x, clusters,  stratas, nPSUs, fpcs,
           stop("Internal problem in g-calibration data: stage",stage,
                ", cluster", j)
         j<-j[[1]]
-        x[index,]<-qr.resid(cali$qr[[j]], x[index,,drop=FALSE]/cali$w[[j]])*cali$w[[j]]
+        x[index,]<-as.matrix(qr.resid(cali$qr[[j]], x[index,,drop=FALSE]/cali$w[[j]])*cali$w[[j]])
       }
       multistage(x[index,,drop=FALSE], clusters[index,-1,drop=FALSE],
                  stratas[index,-1,drop=FALSE], nPSUs[index,-1,drop=FALSE],

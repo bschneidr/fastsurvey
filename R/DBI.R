@@ -233,7 +233,7 @@ subset.DBIsvydesign<-function (x, subset, ...)
 
 dim.DBIsvydesign<-function(x){
   w<-weights(x)
-  nrow<-sum(w!=0)
+  nrow <- length(w) #need dim to report honest matrix size, so not: nrow<-sum(w!=0)
    coln<-names(DBI::dbGetQuery(x$db$conn, paste("select * from", x$db$tablename, "limit 1")))
    if (!is.null(x$updates)){
      update.names<-do.call(c, lapply(x$updates, names))
