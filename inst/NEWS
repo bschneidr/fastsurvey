@@ -1,5 +1,7 @@
 3.32-1 pseudo-rsquared paper is out: update reference
 
+       Add cal.sinh for the hyperbolic sine distance function (used in CALMAR2) with code from Maciej Beręsewicz
+
 3.32	Add diffs for calibration from Daniel Oehm at ABS
 
         - Sparse matrix support
