@@ -2,6 +2,8 @@
 
        Add cal.sinh for the hyperbolic sine distance function (used in CALMAR2) with code from Maciej Beręsewicz
 
+       Coerce tbl_dfs to data frames in svydesign, svrepdesign, twophase, because they aren't actually a drop-in replacement.
+
 3.32	Add diffs for calibration from Daniel Oehm at ABS
 
         - Sparse matrix support
