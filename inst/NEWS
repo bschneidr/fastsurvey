@@ -1,3 +1,7 @@
+3.32-2 Actually add the hyperbolic sine distance function
+
+       Add AIC method for svycoxph
+
 3.32-1 pseudo-rsquared paper is out: update reference
 
        Add cal.sinh for the hyperbolic sine distance function (used in CALMAR2) with code from Maciej Beręsewicz
