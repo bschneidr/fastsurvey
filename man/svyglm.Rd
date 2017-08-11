@@ -59,10 +59,6 @@ return.replicates=FALSE, na.action,multicore=getOption("survey.multicore"))
     variance-covariance matrix of predictions}
 }
 \details{
-There is no \code{anova} method for \code{svyglm} as the models are not
-fitted by maximum likelihood. The function \code{\link{regTermTest}} may
-be useful for testing sets of regression terms.
-
 For binomial and Poisson families use \code{family=quasibinomial()}
 and \code{family=quasipoisson()} to avoid a warning about non-integer
 numbers of successes.  The `quasi' versions of the family objects give
