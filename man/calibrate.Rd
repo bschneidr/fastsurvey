@@ -34,7 +34,7 @@ calibrate(design,...)
        calfun=c("linear","raking","logit","rrz"),...)
 grake(mm,ww,calfun,eta=rep(0,NCOL(mm)),bounds,population,epsilon, 
   verbose,maxit,variance=NULL)
-cal_names(formula,design)
+cal_names(formula,design,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
