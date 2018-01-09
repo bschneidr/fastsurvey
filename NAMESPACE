@@ -14,7 +14,7 @@ export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
        svyciprop, svyttest, marginpred, twophasevar, twophase2var, ppsmat, HR, unwtd.count,
        svyfactanal, svypredmeans, svyprcomp, trimWeights,stratsample,svylogrank,
        svyranktest,svystandardize,
-       psrsq, svysurvreg)
+       psrsq, svysurvreg, cal_names)
 
 S3method(svyloglin,survey.design)
 S3method(svyloglin,svyrep.design)
@@ -463,3 +463,6 @@ S3method(svyranktest,ODBCsvydesign)
 S3method(psrsq,glm)
 S3method(psrsq,svyglm)
 
+S3method(cal_names, survey.design)
+S3method(cal_names, DBIsvydesign)
+S3method(cal_names, ODBCsvydesign)

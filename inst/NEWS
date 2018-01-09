@@ -1,5 +1,9 @@
 3.32-3 Add explicit family= argument to svyglm() methods because of strange scoping problems (for Thomas Leeper)
 
+       calibrate() now displays differences between sample and population names (for Stas Kolenikov)
+
+       cal_names() displays what the auxiliary variable names will be for a formula
+
 3.32-2 Actually add the hyperbolic sine distance function
 
        Add AIC method for svycoxph
