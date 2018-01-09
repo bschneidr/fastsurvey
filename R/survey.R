@@ -1250,7 +1250,7 @@ svyglm<-function(formula, design, ...){
   UseMethod("svyglm",design)
 }
 
-svyglm.survey.design<-function(formula,design,subset=NULL,...){
+svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussian(),...){
 
       subset<-substitute(subset)
       subset<-eval(subset, model.frame(design), parent.frame())

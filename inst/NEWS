@@ -1,3 +1,5 @@
+3.32-3 Add explicit family= argument to svyglm() methods because of strange scoping problems (for Thomas Leeper)
+
 3.32-2 Actually add the hyperbolic sine distance function
 
        Add AIC method for svycoxph
