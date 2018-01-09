@@ -218,10 +218,10 @@ regcalibrate.svyrep.design<-function(design, formula, population,compress=NA,lam
     sample.total<-sample.total[!zz]
   }
   
-    if(NCOL(mm)!=length(population[[1]])){
+    if(length(sample.total)!=length(population)){
         stop("Population and sample totals are not the same length.")
     }
-    if (any(colnames(mm)!=names(population[[1]]))){
+    if (!is.null(names(population)) && any(names(sample.total)!=names(population))){
             warning("Sampling and population totals have different names.")
             cat("Sample: "); print(colnames(mm))
             cat("Popltn: "); print(names(population[[1]]))
