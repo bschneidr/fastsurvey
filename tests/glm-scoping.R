@@ -9,12 +9,12 @@ svyglm(api00~ell+meals+mobility, design=dstrat, family = gaussian())
 
 # passing `family` via ... (WORKS!)
 myfun1 <- function(formula, design, ...) {
-    svyglm(formula, design = design, ...)
+    svyglm(formula, design = design, ...)
 }
 myfun1(api00~ell+meals+mobility, design=dstrat, family = gaussian())
 
 # passing `family` via default argument (DOES NOT WORK!)
 myfun2 <- function(formula, design, family = gaussian()) {
-    svyglm(formula, design = design, family = family)
+    svyglm(formula, design = design, family = family)
 }
 myfun2(api00~ell+meals+mobility, design=dstrat, family = gaussian())
