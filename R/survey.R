@@ -1245,7 +1245,7 @@ anova.svycoxph<-function(object,...){
     stop("No anova method for survey models")
 }
 
-svyglm<-function(formula, design, ...){
+svyglm<-function(formula, design,subset=NULL,family=stats::gaussian(), ...){
   .svycheck(design)
   UseMethod("svyglm",design)
 }
@@ -1263,6 +1263,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
       g$formula<-eval.parent(g$formula)
       g$design<-NULL
       g$var<-NULL
+      g$family<-family
       if (is.null(g$weights))
         g$weights<-quote(.survey.prob.weights)
       else 
