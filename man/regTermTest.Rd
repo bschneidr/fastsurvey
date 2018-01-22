@@ -8,8 +8,7 @@
   hypothesis that all coefficients associated with a particular
   regression term are zero (or have some other specified
   values). Particularly useful as a substitute for \code{\link{anova}}
-  when not fitting by maximum likelihood.  }.
-}
+  when not fitting by maximum likelihood.  }
 \usage{
 regTermTest(model, test.terms, null=NULL,df=NULL,
 method=c("Wald","WorkingWald","LRT"), lrt.approximation="saddlepoint")
@@ -44,7 +43,10 @@ ratio statistic in this model.  The working Wald test statistic is the Wald stat
 in this model. The working-model tests do not have a chi-squared
 sampling distribution: we use a linear combination of chi-squared or F
 distributions as in \code{\link{pchisqsum}}. I believe the working Wald
-test is what SUDAAN refers to as a "Satterthwaite adjusted Wald test".
+test is what SUDAAN refers to as a
+"Satterthwaite adjusted Wald test".
+
+To match other software you will typically need to use \code{lrt.approximation="satterthwaite"}
   }
 
 \references{
@@ -78,6 +80,11 @@ The \code{"LRT"} method will not work if the model had starting values supplied 
  regTermTest(model2, ~ell,df=NULL)
  regTermTest(model2, ~ell, method="LRT", df=Inf)
  regTermTest(model2, ~ell+meals, method="LRT", df=NULL)
+
+ regTermTest(model2, ~ell+meals, method="WorkingWald", df=NULL)
+
+
+
 }
 \keyword{regression}% at least one, from doc/KEYWORDS
 

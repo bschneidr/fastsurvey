@@ -75,7 +75,7 @@ regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","Wo
         model0<-eval(bquote(update(model, .~.-(.(test.formula)))))
         chisq<-deviance(model0)-deviance(model)
     } else {
-        chisq<-beta%*%solve(V)%*%beta
+        chisq<-beta%*%solve(V0)%*%beta
     }
     
     misspec<-eigen(solve(V0)%*%V, only.values=TRUE)$values
@@ -147,12 +147,12 @@ print.regTermTestWW<-function(x,...){
   if (is.null(x$ddf) || x$ddf==Inf)
     cat("Working (Rao-Scott) Wald test for ")
   else
-    cat("Working (Rao-Scott+F) Wald test for ")
+    cat("Working (Rao-Scott+F)  for ")
   cat(x$test.terms)
   cat("\n in ")
   print(x$mcall)
   chisq<-x$chisq/mean(x$lambda)
-  cat("Working 2logLR = ",chisq, 'p=',format.pval(x$p),"\n")
+  cat("Working Wald statistic = ",chisq, 'p=',format.pval(x$p),"\n")
   if (length(x$lambda)>1)
     cat("(scale factors: ",signif(x$lambda/mean(x$lambda),2),")")
   else cat("df=1")
