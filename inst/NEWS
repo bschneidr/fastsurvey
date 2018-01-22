@@ -4,6 +4,9 @@
 
        cal_names() displays what the auxiliary variable names will be for a formula
 
+       regTermTest() now does Rao-Scott-type Wald tests, which I think are the same as SUDAAN's
+       "Satterthwaite Adjusted Wald Tests" (but I don't have an example to verify).
+
 3.32-2 Actually add the hyperbolic sine distance function
 
        Add AIC method for svycoxph
