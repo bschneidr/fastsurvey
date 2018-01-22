@@ -1,4 +1,4 @@
-3.32-3 Add explicit family= argument to svyglm() methods because of strange scoping problems (for Thomas Leeper)
+3.33   Add explicit family= argument to svyglm() methods because of strange scoping problems (for Thomas Leeper)
 
        calibrate() now displays differences between sample and population names (for Stas Kolenikov)
 
