@@ -1,3 +1,5 @@
+3.33-2 confint method for svyttest (for Brian Guay)
+
 3.33-1 two minor bug fixes for ABS contributions to calibrate()
 
 3.33   Add explicit family= argument to svyglm() methods because of strange scoping problems (for Thomas Leeper)
