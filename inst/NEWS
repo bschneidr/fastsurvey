@@ -24,7 +24,7 @@
 
        fix printing of predicted values from predict.svrepglm  (for Anthony Damico)
 
-       added minqa::uobyqa and minqa::bobyqa as options for svymle(), and made 'uobyqa'
+       added minqa::newuoa and minqa::bobyqa as options for svymle(), and made 'newuoa'
        the default when a gradient is available
 
 

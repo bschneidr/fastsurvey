@@ -1669,14 +1669,13 @@ svymle<-function(loglike, gradient=NULL, design, formulas,
     start=NULL, control=list(),
     na.action="na.fail", method=NULL,lower=NULL,upper=NULL,...){
   if(is.null(method))
-    method<-if(is.null(gradient)) "Nelder-Mead" else "uobyqa"
-  print(1)
+    method<-if(is.null(gradient)) "Nelder-Mead" else "newuoa"
   if (!inherits(design,"survey.design")) 
     stop("design is not a survey.design")
   weights<-weights(design)
   wtotal<-sum(weights)
   
-  if (!(method %in% c("bobyqa","uobyqa")) && is.null(control$fnscale))
+  if (!(method %in% c("bobyqa","newuoa")) && is.null(control$fnscale))
     control$fnscale <- -wtotal/length(weights)
   if (inherits(design, "twophase")) {
     data<-design$phase1$sample$variables
@@ -1804,12 +1803,12 @@ svymle<-function(loglike, gradient=NULL, design, formulas,
     rval<-nlm(ff, theta0,hessian=TRUE)
     if (rval$code>3) warning("nlm did not converge")
     rval$par<-rval$estimate
-  } else if (method == "uobyqa"){
+  } else if (method == "newuoa"){
       rval<-minqa::uobyqa(theta0, function(par,...) -objectivefn(par,...), control=control, ...)
       if(rval$ier>0) warning(rval$msg)
       rval$hessian <- numDeriv::hessian(objectivefn, rval$par)
   } else if (method == "bobyqa"){
-      rval<-minqa::bobyqa(theta0, function(par,...) -objectivefn(par,...), control=control,lower=lower,upper=upper ...)
+      rval<-minqa::bobyqa(theta0, function(par,...) -objectivefn(par,...), control=control,lower=lower,upper=upper, ...)
       if(rval$ier>0) warning(rval$msg)
       rval$hessian <- numDeriv::hessian(objectivefn,rval$par)
   }else {

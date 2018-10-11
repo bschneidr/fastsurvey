@@ -149,12 +149,20 @@ model the \code{stderr="model"} should work fairly well.
         cbind(dm,ds)      
  }
 
-m<-svymle(loglike=lcens, gradient=gcens, design=dpbc, method="uobyqa",
+m<-svymle(loglike=lcens, gradient=gcens, design=dpbc, method="newuoa",
       formulas=list(mean=I(cbind(time,status>0))~bili+protime+albumin,
                     sd=~1),
          start=list(c(10,0,0,0),c(1)))
 
 summary(m)
+
+## the same model, but now specifying the lower bound of zero on the
+## log standard deviation
+
+mbox<-svymle(loglike=lcens, gradient=gcens, design=dpbc, method="bobyqa",
+      formulas=list(mean=I(cbind(time,status>0))~bili+protime+albumin,
+                    sd=~1), lower=c(-Inf,-Inf,-Inf,-Inf,0), upper=Inf,
+         start=list(c(10,0,0,0),c(1)))
 
 
 ## The censored lognormal model is now available in svysurvreg()
@@ -164,6 +172,9 @@ summary(svysurvreg(Surv(time,status>0)~bili+protime+albumin,
 
 ## compare svymle scale value after log transformation
 svycontrast(m, quote(log(`sd.(Intercept)`)))
+
+
+
 }
 \keyword{survey}% at least one, from doc/KEYWORDS
 \keyword{models}% __ONLY ONE__ keyword per line
