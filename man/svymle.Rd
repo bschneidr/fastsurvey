@@ -26,6 +26,7 @@ svymle(loglike, gradient = NULL, design, formulas, start = NULL, control
   \item{start}{Starting values for parameters}
   \item{control}{control options for the optimiser: see the help page
     for the optimiser you are using.}
+  \item{lower,upper}{Parameter bounds for \code{bobyqa}}
   \item{na.action}{Handling of \code{NA}s}
   \item{method}{\code{"nlm"} to use \code{nlm},\code{"uobyqa"} or
     \code{"bobyqa"} to use those optimisers from the \code{minqa}
@@ -156,7 +157,7 @@ m<-svymle(loglike=lcens, gradient=gcens, design=dpbc, method="uobyqa",
 summary(m)
 
 
-## This model is now available in svysurvreg
+## The censored lognormal model is now available in svysurvreg()
 
 summary(svysurvreg(Surv(time,status>0)~bili+protime+albumin,
         design=dpbc,dist="lognormal"))
