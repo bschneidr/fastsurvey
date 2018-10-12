@@ -14,7 +14,7 @@ maximises an estimated population likelihood, it is not the sample MLE.
 }
 \usage{
 svymle(loglike, gradient = NULL, design, formulas, start = NULL, control
-= list(), na.action="na.fail", method=NULL, ...)
+= list(), na.action="na.fail", method=NULL, lower=NULL,upper=NULL,...)
 \method{summary}{svymle}(object, stderr=c("robust", "model"),...)
 }
 %- maybe also `usage' for other objects documented here.
