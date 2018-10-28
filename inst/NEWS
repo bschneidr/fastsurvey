@@ -1,5 +1,7 @@
 3.34-1 Some instances of deparse() needed to be paste(deparse(), collapse=""), notably in svyciprop() (Boris Fazio)
 
+       Fix to svycontrast had broken the no-names case (Brian Miner)
+
 3.34   removed duplicate definition of svycontrast.svystat
 
        fix match.names() for the case of all the same names in different order (Sebastien Lucie)
