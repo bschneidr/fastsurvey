@@ -5,7 +5,7 @@ Version: 3.34-1
 Author: Thomas Lumley
 Maintainer: "Thomas Lumley" <t.lumley@auckland.ac.nz>
 License: GPL-2 | GPL-3
-Depends: R (>= 2.16.0), grid, methods, Matrix, survival
+Depends: R (>= 3.1.0), grid, methods, Matrix, survival
 Imports: stats, graphics, splines, lattice, minqa, numDeriv
 Suggests: foreign, MASS, KernSmooth, hexbin,
         mitools,  RSQLite, RODBC, quantreg, parallel,

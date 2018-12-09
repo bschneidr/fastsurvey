@@ -8,6 +8,8 @@
 
        svystandardize() now takes over=~1 for the whole population (for Michael Laviolette)
 
+       svycralpha() does Cronbach's alpha (for Franziska Kößler)
+
 3.34   removed duplicate definition of svycontrast.svystat
 
        fix match.names() for the case of all the same names in different order (Sebastien Lucie)
