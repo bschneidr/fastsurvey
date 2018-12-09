@@ -2,6 +2,8 @@
 
        Fix to svycontrast had broken the no-names case (Brian Miner)
 
+       More helpful error message with missing values in replicate weights
+
 3.34   removed duplicate definition of svycontrast.svystat
 
        fix match.names() for the case of all the same names in different order (Sebastien Lucie)
