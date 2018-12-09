@@ -27,7 +27,7 @@ survey design object
 A number
 }
 \references{
-Cronbach LJ (1951). "Coefficient alpha and the internal structure of tests". Psychometrika. 16 (3): 297–334. doi:10.1007/bf02310555.
+Cronbach LJ (1951). "Coefficient alpha and the internal structure of tests". Psychometrika. 16 (3): 297-334. doi:10.1007/bf02310555.
 }
 
 \examples{
