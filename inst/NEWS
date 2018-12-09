@@ -4,6 +4,10 @@
 
        More helpful error message with missing values in replicate weights
 
+       svyglm() now uses match.call() rather than sys.call() for storing the call (for Michael Laviolette)
+
+       svystandardize() now takes over=~1 for the whole population (for Michael Laviolette)
+
 3.34   removed duplicate definition of svycontrast.svystat
 
        fix match.names() for the case of all the same names in different order (Sebastien Lucie)
