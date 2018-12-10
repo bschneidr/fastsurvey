@@ -31,8 +31,6 @@ The following object is masked from ‘package:graphics’:
 
     dotchart
 
-Warning message:
-package ‘Matrix’ was built under R version 3.4.4 
 > load("nwts.rda")
 > nwtsnb<-nwts
 > nwtsnb$case<-nwts$case-nwtsb$case
