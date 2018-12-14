@@ -1,4 +1,4 @@
-3.34-1 The use of RODBC is DEPRECATED. If possible, I want to move to just supporting the R-DBI
+3.35   The use of RODBC is DEPRECATED. If possible, I want to move to just supporting the R-DBI
        interface; you can use ODBC connections with the DBI-compatible 'odbc' package
 
        Some instances of deparse() needed to be paste(deparse(), collapse=""), notably in svyciprop() (Boris Fazio)
@@ -12,6 +12,9 @@
        svystandardize() now takes over=~1 for the whole population (for Michael Laviolette)
 
        svycralpha() does Cronbach's alpha (for Franziska Kößler)
+
+       many tests based on the printed output are moved to tests/testoutput because they
+       differ trivially between platforms and so aren't CRAN-compliant.
 
 3.34   removed duplicate definition of svycontrast.svystat
 
