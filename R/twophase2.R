@@ -47,7 +47,7 @@ Dcheck_subset<-function(strata, subset, prob, withreplacement){
     rval
   }
 
-Dcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
+oldDcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
    nstage<-NCOL(id)
    n<-sum(subset)
    rval<-matrix(0,n,n)
@@ -61,7 +61,26 @@ Dcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
        rval<- twophaseDcheck(rval, this_stage)
      }
    rval
+}
+
+
+Dcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
+   nstage<-NCOL(id)
+   n<-sum(subset)
+   rval<-matrix(0,n,n)
+   if (all(probs==1) && withreplacement)
+     return(as(diag(n),"sparseMatrix"))
+   for(stage in 1:nstage){
+       uid<-rep(FALSE,NROW(id))
+       uid[subset]<-!duplicated(id[subset,stage])
+       insubset<-rowsum(as.integer(subset),id[,stage],reorder=FALSE)>0
+       idx<-match(id[subset,stage],id[subset,stage][uid[subset]])
+       this_stage<-Dcheck_subset(strata[uid,stage],insubset,probs[uid,stage],withreplacement)[idx,idx]
+       rval<- twophaseDcheck(rval, this_stage)
+     }
+   rval
  }
+
 twophaseDcheck<-function(Dcheck1,Dcheck2){
   as(-Dcheck1*Dcheck2+Dcheck1+Dcheck2,"sparseMatrix")
 }
@@ -164,9 +183,9 @@ twophase2<-function(id,strata=NULL, probs=NULL, fpc=NULL,
       cm<-rval$phase1$full$cluster[,m]
       if (nunique(sa)!=nunique(sa[subset]))
           stop("Some phase-2 strata have zero sampling fraction")
-      rval$usu<-ave(cm[subset],sa[subset],FUN=nunique)/ave(cm,sa,FUN=nunique)[subset]
+      rval$usu<-ave(as.numeric(cm[subset]),sa[subset],FUN=nunique)/ave(as.numeric(cm),sa,FUN=nunique)[subset]
   } else {
-      rval$usu<-drop(with(rval$phase1$sample,ave(cluster[,m], strata[,m], FUN=nunique))/rval$phase1$full$fpc$sampsize[rval$subset])
+      rval$usu<-drop(with(rval$phase1$sample,ave(as.numeric(cluster[,m]), strata[,m], FUN=nunique))/rval$phase1$full$fpc$sampsize[rval$subset])
   }
 
   if (length(rval$phase1$sample$prob)==length(d2$prob))
