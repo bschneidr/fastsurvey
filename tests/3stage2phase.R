@@ -1,6 +1,8 @@
 ## simulated data with three-stage sample at phase 1, SRS at phase 2
 ## motivated by dietary biomarker substudy in HCHS
 
+library(survey)
+
 load("simdata1.Rdata")
 
 twophase.full = twophase(id=list(~block+house+ind,~1),
