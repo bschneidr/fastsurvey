@@ -29,7 +29,28 @@ Dcheck_multi<-function(id,strata,probs){
    rval
  }
 
-Dcheck_subset<-function(strata, subset, prob, withreplacement){
+
+## subsetting now happens in Dcheck_multi_subset
+Dcheck_subset<-function(strata, prob, withreplacement){
+    strata<-as.numeric(strata) ## for ave()
+    N<-length(strata)
+    n<-NROW(strata)
+    rval<-matrix(0, n,n)
+    sampsize<-ave(strata,strata,FUN=length)
+    strats<-unique(strata)
+    if (!withreplacement){
+      for(strat in strats){
+        these <- strata == strat
+        ithese<-which(these)
+        rval[these,these]<- -(1-prob[ithese])/(sampsize[ithese]-1)
+      }
+    }
+    diag(rval)<-(1-prob)
+    rval
+}
+
+
+oldDcheck_subset<-function(strata, subset, prob, withreplacement){
     strata<-as.numeric(strata) ## for ave()
     N<-length(strata)
     n<-sum(subset)
@@ -75,7 +96,7 @@ Dcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
        uid[subset]<-!duplicated(id[subset,stage])
        insubset<-rowsum(as.integer(subset),id[,stage],reorder=FALSE)>0
        idx<-match(id[subset,stage],id[subset,stage][uid[subset]])
-       this_stage<-Dcheck_subset(strata[uid,stage],insubset,probs[uid,stage],withreplacement)[idx,idx]
+       this_stage<-Dcheck_subset(strata[uid,stage],probs[uid,stage],withreplacement)[idx,idx]
        rval<- twophaseDcheck(rval, this_stage)
      }
    rval

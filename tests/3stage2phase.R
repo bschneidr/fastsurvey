@@ -32,4 +32,4 @@ twophase.repapprox = twophase(id=list(~block,~1),
 svymean(~age, twophase.full)
 svymean(~age, twophase.approx)
 svymean(~age, twophase.rep)
-svymean(~age, twophase.approx)
+svymean(~age, twophase.repapprox)
