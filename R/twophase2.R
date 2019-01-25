@@ -31,12 +31,14 @@ Dcheck_multi<-function(id,strata,probs){
 
 
 ## subsetting now happens in Dcheck_multi_subset
-Dcheck_subset<-function(strata, prob, withreplacement){
+## (no: need to know strata before subsetting to get sampsize.
+
+Dcheck_subset<-function(strata, prob,sampsize, withreplacement){
     strata<-as.numeric(strata) ## for ave()
     N<-length(strata)
     n<-NROW(strata)
     rval<-matrix(0, n,n)
-    sampsize<-ave(strata,strata,FUN=length)
+    #sampsize<-ave(strata,strata,FUN=length)
     strats<-unique(strata)
     if (!withreplacement){
       for(strat in strats){
@@ -96,7 +98,8 @@ Dcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
        uid[subset]<-!duplicated(id[subset,stage])
        insubset<-rowsum(as.integer(subset),id[,stage],reorder=FALSE)>0
        idx<-match(id[subset,stage],id[subset,stage][uid[subset]])
-       this_stage<-Dcheck_subset(strata[uid,stage],probs[uid,stage],withreplacement)[idx,idx]
+       sampsize<-ave(as.numeric(strata[[1]]),strata[[1]],FUN=length)
+       this_stage<-Dcheck_subset(strata[uid,stage],probs[uid,stage],sampsize, withreplacement)[idx,idx]
        rval<- twophaseDcheck(rval, this_stage)
      }
    rval
