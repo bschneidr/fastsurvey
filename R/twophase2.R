@@ -3,6 +3,9 @@
 ## We use this form because it can be sparse and because it is easy to combine
 ## multistage and multiphase sampling.
 ##
+## For (stratified, cluster) simple random sampling,
+## Dcheck simplifies to (n/N-1)/(n-1) or -(1-p)/(n-1)
+##
 Dcheck_strat<-function(strata, prob){
     strata<-as.numeric(strata) ## for ave()
     n<-length(strata)
@@ -92,13 +95,14 @@ Dcheck_multi_subset<-function(id,strata,subset,probs,withreplacement){
    n<-sum(subset)
    rval<-matrix(0,n,n)
    if (all(probs==1) && withreplacement)
-     return(as(diag(n),"sparseMatrix"))
+       return(as(diag(n),"sparseMatrix"))
+   sampsize<-NULL
    for(stage in 1:nstage){
        uid<-rep(FALSE,NROW(id))
        uid[subset]<-!duplicated(id[subset,stage])
        insubset<-rowsum(as.integer(subset),id[,stage],reorder=FALSE)>0
        idx<-match(id[subset,stage],id[subset,stage][uid[subset]])
-       sampsize<-ave(as.numeric(strata[[1]]),strata[[1]],FUN=length)
+       sampsize<-ave(as.numeric(id[,stage]),strata[,stage],FUN=function(i) length(unique(i)))
        this_stage<-Dcheck_subset(strata[uid,stage],probs[uid,stage],sampsize, withreplacement)[idx,idx]
        rval<- twophaseDcheck(rval, this_stage)
      }
