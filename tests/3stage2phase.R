@@ -3,7 +3,7 @@
 
 library(survey)
 
-load("simdata1.Rdata")
+load("simdata1.RData")
 
 twophase.full = twophase(id=list(~block+house+ind,~1),
                          strata=list(~strat,NULL),
