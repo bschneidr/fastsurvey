@@ -1,3 +1,6 @@
+3.35-2 The previous (3.34) patch to allow offsets in svymle() didn't work with non-trivial linear predictors
+       for multiple parameters. (reported by Beat Hulliger)
+
 3.35-1 svytable() could give an integer overflow with a replicate-weight design having integer weights,
        such as CHIS.  (Elizabeth Purdom)
 
