@@ -1,3 +1,6 @@
+3.35-3 Warning from svrepdesign() if type="BRR" and scale= is specified, to catch defaulting
+       to BRR (Stas Kolenikov)
+
 3.35-2 The previous (3.34) patch to allow offsets in svymle() didn't work with non-trivial linear predictors
        for multiple parameters. (reported by Beat Hulliger)
 
