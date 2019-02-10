@@ -1731,7 +1731,7 @@ svymle<-function(loglike, gradient=NULL, design, formulas,
   # add a vector of zeros if there is no offset provided
   noOffset = which(unlist(lapply(mmOffset, length))==0)
   for(D in noOffset) {
-    mmOffset[[D]] =  rep(0, NROW(mm))
+    mmOffset[[D]] =  rep(0, NROW(mm[[1]]))
   }
   
   ## parameter names
