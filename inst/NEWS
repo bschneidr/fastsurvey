@@ -4,6 +4,9 @@
        More fixes to svymle() with linear predictors for multiple parameters
        (no change to results, but gets rid of warning)
 
+       allow svyby() to have a vector as the first argument
+       
+
 3.35-2 The previous (3.34) patch to allow offsets in svymle() didn't work with non-trivial linear predictors
        for multiple parameters. (reported by Beat Hulliger)
 
