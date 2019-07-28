@@ -1,3 +1,16 @@
+3.37   set scale<-1 if it is still NULL after processing, inside svrepdesign()
+       [https://stats.stackexchange.com/questions/409463]
+
+       Added withPV for replicate-weight designs [for Tomasz Żółtak]
+
+       svyquantile for replicate-weight designs now uses a supplied alpha to get
+       confidence intervals and estimates SE by dividing confidence interval length
+       by twice abs(qnorm(alpha/2)). [For Klaus Ignacio Lehmann Melendez]
+
+       All the svyquantile methods now take account of design degrees of freedom and
+       use t distributions for confidence intervals. Specify df=Inf to get a Normal.
+       [For Klaus Ignacio Lehmann Melendez]
+
 3.36   Add withPV.survey.design for plausible-value analyses (needs mitools >=2.4)
 
 3.35-3 Warning from svrepdesign() if type="BRR" and scale= is specified, to catch defaulting

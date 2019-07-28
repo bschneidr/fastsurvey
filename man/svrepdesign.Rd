@@ -157,6 +157,7 @@ c(0,1,0,1,1,0))
 scdrep<-svrepdesign(data=scd, type="BRR", repweights=repweights, combined.weights=FALSE)
 svyratio(~alive, ~arrests, scdrep)
 
+
 \dontrun{
 ## Needs RSQLite
 library(RSQLite)

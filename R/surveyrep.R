@@ -555,7 +555,8 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
       fpc<-switch(fpctype,correction=fpc,fraction=1-fpc)
       rscales<-rscales*fpc
   }
-  
+
+    if (is.null(scale)) scale<-1
   
   rval<-list(type=type, scale=scale, rscales=rscales,  rho=rho,call=sys.call(),
              combined.weights=combined.weights)
@@ -681,7 +682,8 @@ weights.survey.design<-function(object,...){
 svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="linear",
                                                    interval.type=c("probability","quantile"),f=1,
                                                    return.replicates=FALSE,
-                                                   ties=c("discrete","rounded"),na.rm=FALSE,...){
+                                                   ties=c("discrete","rounded"),na.rm=FALSE,
+                                                   alpha=0.05,df=NULL,...){
 
   if (!exists(".Generic",inherits=FALSE))
     .Deprecated("svyquantile")
@@ -723,6 +725,13 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
       return(rval)
   }
 
+    if (is.null(df))
+        df<-degf(design)
+    if (df==Inf)
+        qcrit<-qnorm
+    else
+        qcrit <-function(...) qt(...,df=df)
+    
   
     w<-weights(design,"analysis")
 
@@ -802,9 +811,10 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
             estfun<-0+outer(xx,point.estimates,"<")
           est<-svymean(estfun,design, return.replicates=return.replicates)
           if (return.replicates)
-            q.estimates<-matrix(Qf(est$replicates),nrow=NROW(est$replicates))
-          ci<-matrix(Qf(c(coef(est)+2*SE(est), coef(est)-2*SE(est))),ncol=2)
-          variances<-((ci[,1]-ci[,2])/4)^2
+              q.estimates<-matrix(Qf(est$replicates),nrow=NROW(est$replicates))
+          zcrit<-abs(qcrit(min(alpha,1-alpha)/2))
+          ci<-matrix(Qf(c(coef(est)+zcrit*SE(est), coef(est)-zcrit*SE(est))),ncol=2)
+          variances<-((ci[,1]-ci[,2])/2/zcrit)^2
           rval<-list(quantiles=point.estimates,
                      variances=variances)
           if (return.replicates)
@@ -829,9 +839,10 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
                 estfun<-0+outer(xx,point.estimates,"<")
           est<-svymean(estfun, design, return.replicates=return.replicates)
           if (return.replicates)
-            q.estimates<-matrix(Qf(est$replicates),nrow=NROW(est$replicates))
-          ci<-matrix(Qf(c(coef(est)+2*SE(est), coef(est)-2*SE(est))),ncol=2)
-          variances<-((ci[,1]-ci[,2])/4)^2
+              q.estimates<-matrix(Qf(est$replicates),nrow=NROW(est$replicates))
+          zcrit<-abs(qcrit(min(alpha,1-alpha)/2))
+          ci<-matrix(Qf(c(coef(est)+zcrit*SE(est), coef(est)-zcrit*SE(est))),ncol=2)
+          variances<-((ci[,1]-ci[,2])/2/zcrit)^2
           rval<-list(quantiles=point.estimates,
                      variances=variances)
           if (return.replicates)
