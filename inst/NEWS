@@ -1,4 +1,7 @@
-3.37   set scale<-1 if it is still NULL after processing, inside svrepdesign()
+3.37	RODBC database connections are no longer supported.
+	Use the DBI-compatible 'odbc' package
+
+	set scale<-1 if it is still NULL after processing, inside svrepdesign()
        [https://stats.stackexchange.com/questions/409463]
 
        Added withPV for replicate-weight designs [for Tomasz Żółtak]
@@ -11,7 +14,7 @@
        use t distributions for confidence intervals. Specify df=Inf to get a Normal.
        [For Klaus Ignacio Lehmann Melendez]
 
-       svyivreg() for 2-stage least-squares (requires the AER package) 
+       svyivreg() for 2-stage least-squares (requires the AER package)
 
 3.36   Add withPV.survey.design for plausible-value analyses (needs mitools >=2.4)
 
