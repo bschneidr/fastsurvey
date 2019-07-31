@@ -507,6 +507,7 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
     if (type == "BRR"){
         ## the default, so check it hasn't been accidentally defaulted to
         if (!is.null(scale)) warning("type='BRR' does not use 'scale=' argument")
+        if (!is.null(rho))  warning("type='BRR' does not use 'rho=' argument, you may want type='Fay'")
       scale<-1/ncol(repweights)
       }
   if (type=="Fay")
