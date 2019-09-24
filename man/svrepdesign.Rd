@@ -72,12 +72,12 @@ below}
   unstratified designs.
 
  The successive-difference weights in the American Community Survey
-  use \code{scale = 4/ncol(repweights)} and \code{rscales=rep(1,
-    ncol(repweights)}. This can be specified as \code{type="ACS"} or
-  \code{type="successive-difference"}.
+ use \code{scale = 4/ncol(repweights)} and \code{rscales=rep(1,
+   ncol(repweights))}. This can be specified as \code{type="ACS"} or
+ \code{type="successive-difference"}.
 
-  JK2 weights (\code{type="JK2"}), as in the California Health Interview
-  Survey, use \code{scale=1},  \code{rscales=rep(1, ncol(repweights))}}
+ JK2 weights (\code{type="JK2"}), as in the California Health Interview
+ Survey, use \code{scale=1},  \code{rscales=rep(1, ncol(repweights))}
 
   Averaged bootstrap weights ("mean bootstrap") are used for some
   surveys from Statistics Canada. Yee et al (1999) describe their
