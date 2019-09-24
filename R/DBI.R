@@ -329,7 +329,7 @@ dimnames.DBIrepdesign<-function(x){
 
 
 svrepdesign.character<-function (variables=NULL,repweights=NULL, weights=NULL,
-                                 data=NULL,type=c("BRR","Fay","JK1", "JKn","bootstrap","other"),
+                                 data=NULL,type=c("BRR","Fay","JK1", "JKn","bootstrap","ACS","successive-difference","JK2","other"),
                                  combined.weights=TRUE, rho=NULL, bootstrap.average=NULL,
                                  scale=NULL,rscales=NULL,fpc=NULL, fpctype=c("fraction","correction"),
                                  mse=getOption("survey.replicates.mse"),dbtype="SQLite", dbname,

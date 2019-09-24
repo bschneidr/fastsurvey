@@ -19,14 +19,15 @@ data structure for such a survey.
 \usage{
 svrepdesign(variables , repweights , weights, data,...)
 \method{svrepdesign}{default}(variables = NULL, repweights = NULL, weights = NULL, 
-   data = NULL, type = c("BRR", "Fay", "JK1","JKn","bootstrap","other"),
+   data = NULL, type = c("BRR", "Fay", "JK1","JKn","bootstrap",
+   "ACS","successive-difference","JK2","other"),
    combined.weights=TRUE, rho = NULL, bootstrap.average=NULL,
    scale=NULL, rscales=NULL,fpc=NULL, fpctype=c("fraction","correction"),
    mse=getOption("survey.replicates.mse"),...)
 \method{svrepdesign}{imputationList}(variables=NULL, repweights,weights,data,
    mse=getOption("survey.replicates.mse"),...)
 \method{svrepdesign}{character}(variables=NULL,repweights=NULL, weights=NULL,data=NULL,
-type=c("BRR","Fay","JK1", "JKn","bootstrap","other"),combined.weights=TRUE, rho=NULL, 
+type=c("BRR","Fay","JK1", "JKn","bootstrap","ACS","successive-difference","JK2","other"),combined.weights=TRUE, rho=NULL, 
 bootstrap.average=NULL, scale=NULL,rscales=NULL,fpc=NULL,
 fpctype=c("fraction","correction"),mse=getOption("survey.replicates.mse"),
  dbtype="SQLite", dbname,...) 
@@ -69,6 +70,14 @@ below}
   The JK1 and JKn types are both jackknife estimators deleting one
   cluster at a time. JKn is designed for stratified and JK1 for
   unstratified designs.
+
+ The successive-difference weights in the American Community Survey
+  use \code{scale = 4/ncol(repweights)} and \code{rscales=rep(1,
+    ncol(repweights)}. This can be specified as \code{type="ACS"} or
+  \code{type="successive-difference"}.
+
+  JK2 weights (\code{type="JK2"}), as in the California Health Interview
+  Survey, use \code{scale=1},  \code{rscales=rep(1, ncol(repweights))}}
 
   Averaged bootstrap weights ("mean bootstrap") are used for some
   surveys from Statistics Canada. Yee et al (1999) describe their
@@ -138,10 +147,7 @@ database and so can be used with read-only permissions on the database.
 
 \note{To use replication-weight analyses on a survey specified by
   sampling design, use \code{as.svrepdesign} to convert it. }
-\note{The successive difference weights in the American Community Survey
-  use \code{scale = 4/ncol(repweights)} and \code{rscales=rep(1,
-  ncol(repweights)}.  JK2 weights use \code{scale=1},
-  \code{rscales=rep(1, ncol(repweights))}}
+
 
 \seealso{\code{\link{as.svrepdesign}}, \code{\link{svydesign}},
   \code{\link{brrweights}}, \code{bootweights} }

@@ -18,6 +18,11 @@
 
        	warn when rho= is used with type="BRR" in svrepdesign [for Tomasz Żółtak]
 
+	Add "ACS" and "successive-difference" to type= in svrepdesign(),
+	for the American Community Survey weights
+
+	Add "JK2" to type= in svrepdesign
+
 3.36   Add withPV.survey.design for plausible-value analyses (needs mitools >=2.4)
 
 3.35-3 Warning from svrepdesign() if type="BRR" and scale= is specified, to catch defaulting

@@ -432,7 +432,8 @@ as.svrepdesign<- function(design,type=c("auto","JK1","JKn","BRR","bootstrap","su
 svrepdesign<-function(variables, repweights, weights,data=NULL,...) UseMethod("svrepdesign",data)
 
 svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
-                              data=NULL,type=c("BRR","Fay","JK1", "JKn","bootstrap","other"),
+                              data=NULL,type=c("BRR","Fay","JK1", "JKn","bootstrap",
+                                               "ACS","successive-difference","JK2","other"),
                               combined.weights=TRUE, rho=NULL, bootstrap.average=NULL,
                               scale=NULL,rscales=NULL,fpc=NULL, fpctype=c("fraction","correction"),
                               mse=getOption("survey.replicates.mse"),...)
@@ -443,7 +444,7 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
   if(type=="Fay" && is.null(rho))
     stop("With type='Fay' you must supply the correct rho")
   
-  if (type %in% c("JK1","JKn")  && !is.null(rho))
+  if (type %in% c("JK1","JKn","ACS","successive-difference","JK2")  && !is.null(rho))
     warning("rho not relevant to JK1 design: ignored.")
   
   if (type %in% c("other")  && !is.null(rho))
@@ -539,6 +540,17 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
       rscales<-1/apply(repweights,2,max)
     } else stop("Must provide rscales for combined JKn weights")
 
+    if (type %in% c("ACS","successive-difference")){
+        rscales<-rep(1, ncol(repweights))
+        scale<-4/ncol(repweights)
+    }
+
+     if (type =="JK2"){
+        rscales<-rep(1, ncol(repweights))
+        scale<-1
+    }
+    
+
   if (type=="other" && (is.null(rscales) || is.null(scale))){
     if (is.null(rscales)) rscales<-rep(1,NCOL(repweights))
     if (is.null(scale)) scale<-1
@@ -549,7 +561,7 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
   if (!is.null(fpc)){
       if (missing(fpctype)) stop("Must specify fpctype")
       fpctype<-match.arg(fpctype)
-      if (type %in% c("BRR","Fay")) stop("fpc not available for this type")
+      if (type %in% c("BRR","Fay","JK2","ACS","successive-difference")) stop("fpc not available for this type")
       if (type %in% "bootstrap") stop("Separate fpc not needed for bootstrap")
       if (length(fpc)!=length(rscales)) stop("fpc is wrong length")
       if (any(fpc>1) || any(fpc<0)) stop("Illegal fpc value")
