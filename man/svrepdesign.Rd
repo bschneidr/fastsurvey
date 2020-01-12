@@ -65,19 +65,23 @@ below}
   are given weight \code{rho} in one half-sample and \code{2-rho} in the
   other.  The ideal BRR analysis is restricted to a design where each
   stratum has two PSUs, however, it has been used in a much wider class
-  of surveys.
+  of surveys. The \code{scale} and \code{rscales}
+ arguments will be ignored (with a warning) if they are specified.
   
   The JK1 and JKn types are both jackknife estimators deleting one
   cluster at a time. JKn is designed for stratified and JK1 for
   unstratified designs.
 
  The successive-difference weights in the American Community Survey
- use \code{scale = 4/ncol(repweights)} and \code{rscales=rep(1,
+ automatically use \code{scale = 4/ncol(repweights)} and \code{rscales=rep(1,
    ncol(repweights))}. This can be specified as \code{type="ACS"} or
- \code{type="successive-difference"}.
+ \code{type="successive-difference"}. The \code{scale} and \code{rscales}
+ arguments will be ignored (with a warning) if they are specified.
 
  JK2 weights (\code{type="JK2"}), as in the California Health Interview
- Survey, use \code{scale=1},  \code{rscales=rep(1, ncol(repweights))}
+ Survey, automatically use \code{scale=1},  \code{rscales=rep(1, ncol(repweights))}.
+ The \code{scale} and \code{rscales}
+ arguments will be ignored (with a warning) if they are specified.
 
   Averaged bootstrap weights ("mean bootstrap") are used for some
   surveys from Statistics Canada. Yee et al (1999) describe their

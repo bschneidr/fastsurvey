@@ -504,6 +504,11 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
   if (!is.null(rscales) && !(length(rscales) %in% c(1, ncol(repweights)))){
     stop(paste("rscales has length ",length(rscales),", should be ncol(repweights)",sep=""))
   }
+
+    if (type %in% c("ACS", "successive-difference")){
+        if(!is.null(scale) | !is.null(rscales))
+            warning(paste("with type",type,"scale= and rscales= are not needed and will be ignored"))
+    }
   
     if (type == "BRR"){
         ## the default, so check it hasn't been accidentally defaulted to
@@ -545,7 +550,8 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
         scale<-4/ncol(repweights)
     }
 
-     if (type =="JK2"){
+    if (type =="JK2"){
+        warning(paste("with type",type,"scale= and rscales= are not needed and will be ignored"))
         rscales<-rep(1, ncol(repweights))
         scale<-1
     }
