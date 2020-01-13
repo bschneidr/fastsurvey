@@ -27,12 +27,13 @@ svrepdesign(variables , repweights , weights, data,...)
 \method{svrepdesign}{imputationList}(variables=NULL, repweights,weights,data,
    mse=getOption("survey.replicates.mse"),...)
 \method{svrepdesign}{character}(variables=NULL,repweights=NULL, weights=NULL,data=NULL,
-type=c("BRR","Fay","JK1", "JKn","bootstrap","ACS","successive-difference","JK2","other"),combined.weights=TRUE, rho=NULL, 
-bootstrap.average=NULL, scale=NULL,rscales=NULL,fpc=NULL,
-fpctype=c("fraction","correction"),mse=getOption("survey.replicates.mse"),
+type=c("BRR","Fay","JK1", "JKn","bootstrap","ACS","successive-difference","JK2","other"),
+combined.weights=TRUE, rho=NULL, bootstrap.average=NULL, scale=NULL,rscales=NULL,
+fpc=NULL,fpctype=c("fraction","correction"),mse=getOption("survey.replicates.mse"),
  dbtype="SQLite", dbname,...) 
 
-\method{image}{svyrep.design}(x, ..., col=grey(seq(.5,1,length=30)), type.=c("rep","total"))
+\method{image}{svyrep.design}(x, ...,
+				 col=grey(seq(.5,1,length=30)), type.=c("rep","total"))
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{

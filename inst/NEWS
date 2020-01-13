@@ -29,6 +29,8 @@
 
         Link to blog post about design df with replicate weights.
 
+        Chase 'Encyclopedia of Design Theory' link again. 
+
 3.36   Add withPV.survey.design for plausible-value analyses (needs mitools >=2.4)
 
 3.35-3 Warning from svrepdesign() if type="BRR" and scale= is specified, to catch defaulting
