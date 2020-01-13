@@ -23,6 +23,12 @@
 
 	Add "JK2" to type= in svrepdesign
 
+	Warn when scale, rscales are supplied unnecessarily to svyrepdesign
+
+        More explanation of 'symbolically nested' in anova.svyglm
+
+        Link to blog post about design df with replicate weights.
+
 3.36   Add withPV.survey.design for plausible-value analyses (needs mitools >=2.4)
 
 3.35-3 Warning from svrepdesign() if type="BRR" and scale= is specified, to catch defaulting
