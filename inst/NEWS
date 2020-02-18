@@ -1,3 +1,7 @@
+3.38	When given a statistic including replicates, svycontrast() now transforms the replicates
+	and calculates the variance, rather than calculating the variance then using the
+	delta method.  Allows geometric means to exactly match SAS/SUDAAN (for Robert Baskin)
+
 3.37	RODBC database connections are no longer supported.
 	Use the DBI-compatible 'odbc' package
 

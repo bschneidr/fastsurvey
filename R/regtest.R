@@ -257,11 +257,15 @@ svycontrast.svrepstat<-function(stat, contrasts,...){
     contrasts<-list(contrast=contrasts)
   if (is.call(contrasts[[1]])){
     if (is.list(stat)){ ##replicates
-      rval<-list(nlcon=nlcon(contrasts,as.list(coef(stat)),vcov(stat)))
-      colnames(stat$replicates)<-names(coef(stat))
-      rval$replicates<-t(apply(stat$replicates,1,
-                             function(repi) nlcon(datalist=as.list(repi),
-                                                  exprlist=contrasts, varmat=NULL)))
+        rval<-list(nlcon=nlcon(contrasts,as.list(coef(stat)),varmat=NULL))
+        reps<-as.matrix(stat$replicates)
+        colnames(reps)<-names(coef(stat))
+        xreps<-apply(reps,1, function(repi) nlcon(datalist=as.list(repi),
+                                                            exprlist=contrasts, varmat=NULL))
+        rval$replicates<-if(is.matrix(xreps)) t(xreps) else as.matrix(xreps)
+        attr(rval$nlcon,"var")<-svrVar(rval$replicates, scale=attr(stat$replicates,"scale"),
+                                     rscales=attr(stat$replicates,"rscales"),mse=attr(stat$replicates,"mse"),
+                                     coef=rval$nlcon)
       attr(rval$nlcon,"statistic")<-"nlcon"
     } else {
       rval<-nlcon(contrasts,as.list(coef(stat)), vcov(stat))
