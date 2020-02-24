@@ -2,7 +2,9 @@
 	and calculates the variance, rather than calculating the variance then using the
 	delta method.  Allows geometric means to exactly match SAS/SUDAAN (for Robert Baskin)
 
-	vcov.svyrep.design to simplify computing variances from replicates. (for William Pelham)
+	vcov.svyrep.design to simplify computing variances from replicates (for William Pelham)
+
+	svykm() no longer throws an error with single-observation domains (for Guy Cafri)
 
 3.37	RODBC database connections are no longer supported.
 	Use the DBI-compatible 'odbc' package
