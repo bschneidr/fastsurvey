@@ -37,7 +37,7 @@ withReplicates(design, theta,..., return.replicates=FALSE)
       this is the result of estimation using the sampling weights, and
       must be supplied.  If  \code{object$mse} is \code{FALSE} the
       mean of the replicates is used and this argument is silently ignored.
-}
+}}
 \details{
 The method for \code{svyrep.design} objects evaluates a function or
 expression using the sampling weights and then each set of replicate
@@ -119,6 +119,7 @@ bstrat<- as.svrepdesign(dstrat,type="subbootstrap")
 v <- svyvar(~api00+api99, bstrat, return.replicates=TRUE)
 vcor<-cov2cor(as.matrix(v))[2,1]
 vreps<-v$replicates
+correps<-apply(vreps,1, function(v) v[2]/sqrt(v[1]*v[4]))
 
 vcov(bstrat,correps, centre=vcor)
 
