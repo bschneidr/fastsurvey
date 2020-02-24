@@ -175,6 +175,7 @@ S3method(SE,svyby)
 S3method(SE,svyquantile)
 S3method(SE,svyratio)
 
+S3method(vcov,svyrep.design)
 S3method(vcov, svyquantile)
 S3method(vcov, svrepstat)
 S3method(vcov, svyglm)
