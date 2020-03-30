@@ -124,7 +124,7 @@ km.stderr<-function(survobj,design){
   dVy <- vcov(totals)[-(1:ntimes),-(1:ntimes)]*outer(dNbar/y^2,dNbar/y^2)
   dCVny<- -vcov(totals)[(1:ntimes),-(1:ntimes)]*outer(1/y,dNbar/y^2)
   dV<-dVn+dVy+dCVny+t(dCVny)
-  
+
   V<-numeric(ntimes)
   if (ntimes>0)
       V[1]<-dV[1,1]

@@ -95,6 +95,13 @@ mean and total can also be obtained with \code{\link{calibrate}}.
 
 
 }
+\note{
+\code{svyglm} always returns 'model-robust' standard errors; the
+Horvitz-Thompson-type standard errors used everywhere in the survey
+package are a generalisation of the model-robust 'sandwich' estimators.
+In particular, a quasi-Poisson \code{svyglm} will return correct
+standard errors for relative risk regression models. 
+  }
 
  \value{ \code{svyglm} returns an object of class \code{svyglm}.  The
  \code{predict} method returns an object of class \code{svystat}}
