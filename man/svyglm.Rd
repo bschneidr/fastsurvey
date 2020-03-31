@@ -105,6 +105,25 @@ In particular, a quasi-Poisson \code{svyglm} will return correct
 standard errors for relative risk regression models. 
   }
 
+  \note{
+This function does not return the same standard error estimates for the
+regression estimator of population mean and total as some textbooks, or
+SAS.  However, it does give the same standard error estimator as
+estimating the mean or total with calibrated weights.
+
+In particular, under simple random sampling with or without replacement
+there is a simple rescaling of the mean squared residual to estimate the
+mean squared error of the regression estimator.   The standard error
+estimate produced by \code{predict.svyglm} has very similar
+(asymptotically identical) expected
+value to the textbook estimate, and has the advantage of being
+applicable when the supplied \code{newdata} are not the population mean
+of the predictors.
+
+The difference is small when the sample size is large, but can be
+appreciable for small samples.
+}
+
  \value{ \code{svyglm} returns an object of class \code{svyglm}.  The
  \code{predict} method returns an object of class \code{svystat}}
 
