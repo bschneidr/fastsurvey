@@ -3,7 +3,7 @@
 	a survey.design2 object and the influence=TRUE option.  These allow svyby() to
 	estimate covariances between domains, which could previously only be done for
 	replicate-weight designs
-	 - svymean, svytotal, svyratio
+	 - svymean, svytotal, svyratio, svymle, svyglm
 
 3.38	When given a statistic including replicates, svycontrast() now transforms the replicates
 	and calculates the variance, rather than calculating the variance then using the

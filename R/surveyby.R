@@ -336,7 +336,7 @@ svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.va
                   data<-formula
               else
                   data<-subset(formula, byfactor %in% byfactor[i]) 
-              if (covmat ) {
+              if (covmat||influence ) {
                   r<-FUN(data,
                       design[byfactor %in% byfactor[i],],
                       deff=deff,...,influence=influence)

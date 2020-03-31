@@ -18,7 +18,8 @@ with inverse-probability weighting and design-based standard errors.
 }
 \usage{
 \method{svyglm}{survey.design}(formula, design, subset=NULL,
-family=stats::gaussian(),start=NULL, rescale=TRUE, ...)
+family=stats::gaussian(),start=NULL, rescale=TRUE, ...,
+ influence=FALSE)
 \method{svyglm}{svyrep.design}(formula, design, subset=NULL,
 family=stats::gaussian(),start=NULL, rescale=NULL, ..., rho=NULL,
 return.replicates=FALSE, na.action,multicore=getOption("survey.multicore"))
@@ -53,6 +54,7 @@ return.replicates=FALSE, na.action,multicore=getOption("survey.multicore"))
   \item{return.replicates}{Return the replicates as the \code{replicates} component of the
     result? (for \code{predict}, only possible if they
     were computed in the \code{svyglm} fit)}
+  \item{influence}{Return influence functions}
   \item{object}{A \code{svyglm} object}
   \item{correlation}{Include the correlation matrix of parameters?}
   \item{na.action}{Handling of NAs}
