@@ -365,6 +365,7 @@ S3method(transform,svyimputationList)
 
 S3method(svyby, default)
 S3method(svyby, DBIsvydesign)
+S3method(svyby, survey.design2)
 
 S3method(regcalibrate, survey.design2)
 S3method(regcalibrate, svyrep.design)

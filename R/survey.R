@@ -514,7 +514,7 @@ svymean<-function(x, design,na.rm=FALSE,...){
   UseMethod("svymean",design)
 }
 
-svymean.survey.design<-function(x,design, na.rm=FALSE,deff=FALSE,...){
+svymean.survey.design<-function(x,design, na.rm=FALSE,deff=FALSE, influence=FALSE,...){
 
   if (!inherits(design,"survey.design"))
     stop("design is not a survey design")
@@ -550,7 +550,9 @@ svymean.survey.design<-function(x,design, na.rm=FALSE,deff=FALSE,...){
   v<-svyCprod(x*pweights/psum,design$strata,design$cluster[[1]], design$fpc,
               design$nPSU,design$certainty, design$postStrata)
   attr(average,"var")<-v
-  attr(average,"statistic")<-"mean"
+    attr(average,"statistic")<-"mean"
+  if(influence)
+    attr(average, "influence")<-x*pweights/psum
   class(average)<-"svystat"
   if (is.character(deff) || deff){
     nobs<-NROW(design$cluster)
@@ -598,6 +600,10 @@ vcov.svystat<-function(object,...){
   as.matrix(attr(object,"var"))
 }
 
+influence.svystat<-function(object,...){
+  attr(object,"influence")
+}
+
 SE.svystat<-function(object,...){
  v<-vcov(object)
  if (!is.matrix(v) || NCOL(v)==1) sqrt(v) else sqrt(diag(v))
@@ -627,7 +633,7 @@ svytotal<-function(x,design,na.rm=FALSE,...){
   .svycheck(design)
   UseMethod("svytotal",design)
 }
-svytotal.survey.design<-function(x,design, na.rm=FALSE, deff=FALSE,...){
+svytotal.survey.design<-function(x,design, na.rm=FALSE, deff=FALSE,influence=TRUE,...){
 
   if (!inherits(design,"survey.design"))
     stop("design is not a survey design")
@@ -661,7 +667,10 @@ svytotal.survey.design<-function(x,design, na.rm=FALSE, deff=FALSE,...){
   attr(total, "var")<-v<-svyCprod(x/design$prob,design$strata,
                                   design$cluster[[1]], design$fpc,
                                   design$nPSU,design$certainty,design$postStrata)
-  attr(total,"statistic")<-"total"
+    attr(total,"statistic")<-"total"
+    if (influence){
+        attr(total,"influence")<-x/design$prob
+        }
   if (is.character(deff) || deff){
     vsrs<-svyvar(x,design)*sum(weights(design)^2)
     vsrs<-vsrs*(N-NROW(design$cluster))/N
