@@ -25,8 +25,6 @@ citEntry(entry="book",
   author="Thomas Lumley",
   title = "Complex Surveys: A Guide to Analysis Using R: A Guide to Analysis Using R",
   publisher="John Wiley and Sons",
-  volume="9",number=1,pages="1-19",
-  note="R package verson 2.2",
-  textVersion="T. Lumley (2010) Complex Surveys: A Guide to Analysis Using R: A Guide to Analysis Using R. John Wiley and Sons."
+  textVersion="T. Lumley (2010) Complex Surveys: A Guide to Analysis Using R. John Wiley and Sons."
 )
    
