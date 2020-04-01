@@ -422,7 +422,8 @@ S3method(`[`, DBIrepdesign)
          
 
 S3method(`[<-`, survey.design)         
-         
+
+S3method(`names<-`, svrepstat)
 
 S3method(svylogrank,survey.design2)
 S3method(svylogrank,svyrep.design)
