@@ -616,7 +616,7 @@ is.pps<-function(x) if(is.null(x$pps)) FALSE else (x$pps!=FALSE)
   x
 }
 
-svytotal.survey.design2<-function(x,design, na.rm=FALSE, deff=FALSE,influence=TRUE,...){
+svytotal.survey.design2<-function(x,design, na.rm=FALSE, deff=FALSE,influence=FALSE,...){
 
   
     if (inherits(x,"formula")){
@@ -686,7 +686,7 @@ svytotal.survey.design2<-function(x,design, na.rm=FALSE, deff=FALSE,influence=TR
 }
 
 
-svymean.survey.design2<-function(x,design, na.rm=FALSE,deff=FALSE,influence=TRUE,...){
+svymean.survey.design2<-function(x,design, na.rm=FALSE,deff=FALSE,influence=FALSE,...){
   
   if (inherits(x,"formula")){
     ## do the right thing with factors

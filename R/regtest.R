@@ -184,7 +184,7 @@ match.names <- function(nms,contrasts){
   
 }
 
-contrast<-function(coef,var,contrasts){
+contrast<-function(coef,var,contrasts, influence=NULL){
   nas<-is.na(var[,1])
   drop<-nas & apply(contrasts,2,function(v) all(v==0))
   if(any(drop)){
@@ -201,11 +201,17 @@ contrast<-function(coef,var,contrasts){
     v[!bad,!bad]<-contrasts[!bad,!badin,drop=FALSE]%*%var[!badin,!badin,drop=FALSE]%*%t(contrasts[!bad,!badin,drop=FALSE])
     dimnames(v)<-list(names(rval),names(rval))
     rval<-drop(rval)
+    if(!is.null(influence)){
+        attr(rval,"influence")<- influence[,!badin,drop=FALSE]%*%t(contrasts[!bad,!badin,drop=FALSE])
+    }
     attr(rval, "var")<-v
   } else{
     rval<-drop(contrasts%*%coef)
     v<-contrasts%*%var%*%t(contrasts)
     dimnames(v)<-list(names(rval),names(rval))
+    if(!is.null(influence)){
+        attr(rval,"influence")<- influence%*%t(contrasts)
+    }
     attr(rval,"var")<-v
   }
   rval
@@ -215,14 +221,14 @@ svycontrast.svystat<-function(stat, contrasts,...){
   if (!is.list(contrasts))
     contrasts<-list(contrast=contrasts)
   if (is.call(contrasts[[1]])){
-    rval<-nlcon(contrasts,as.list(coef(stat)), vcov(stat))
+    rval<-nlcon(contrasts,as.list(coef(stat)), vcov(stat), attr(stat,"influence"))
     class(rval)<-"svrepstat"
     attr(rval,"statistic")<-"nlcon"
     return(rval)
   }
   contrasts<-match.names(names(coef(stat)),contrasts)
   contrasts<-do.call(rbind,contrasts)
-  coef<-contrast(coef(stat),vcov(stat),contrasts)
+  coef<-contrast(coef(stat),vcov(stat),contrasts, attr(stat,"influence"))
   class(coef)<-"svystat"
   attr(coef,"statistic")<-"contrast"
   coef
@@ -289,19 +295,23 @@ svycontrast.svrepstat<-function(stat, contrasts,...){
 
 
 
-nlcon<-function(exprlist, datalist, varmat){
-  if (!is.list(exprlist)) exprlist<-list(contrast=exprlist)
-  dexprlist<-lapply(exprlist,
-                    function(expr) deriv(expr, names(datalist))[[1]])
-  values<-lapply(dexprlist,
-                 function(dexpr) eval(do.call(substitute, list(dexpr,datalist))))
-  if (is.null(varmat))
-    return(do.call(c,values))
-  jac<-do.call(rbind,lapply(values,
-                            function(value) attr(value,"gradient")))
-  var<-jac%*%varmat%*%t(jac)
-  values<-do.call(c, values)
-  dimnames(var)<-list(names(values),names(values))
-  attr(values, "var")<-var
-  values
+nlcon<-function(exprlist, datalist, varmat, influence=NULL){
+    if (!is.list(exprlist))
+        exprlist<-list(contrast=exprlist)
+    dexprlist<-lapply(exprlist,
+                      function(expr) deriv(expr, names(datalist))[[1]])
+    values<-lapply(dexprlist,
+                   function(dexpr) eval(do.call(substitute, list(dexpr,datalist))))
+    if (is.null(varmat))
+        return(do.call(c,values))
+    jac<-do.call(rbind,lapply(values,
+                              function(value) attr(value,"gradient")))
+    var<-jac%*%varmat%*%t(jac)
+    values<-do.call(c, values)
+    dimnames(var)<-list(names(values),names(values))
+    attr(values, "var")<-var
+    if(!is.null(influence)){
+        attr(values,"influence")<-influence%*%t(jac)
+    }
+    values
 }

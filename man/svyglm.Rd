@@ -118,10 +118,12 @@ estimate produced by \code{predict.svyglm} has very similar
 (asymptotically identical) expected
 value to the textbook estimate, and has the advantage of being
 applicable when the supplied \code{newdata} are not the population mean
-of the predictors.
-
-The difference is small when the sample size is large, but can be
+of the predictors. The difference is small when the sample size is large, but can be
 appreciable for small samples.
+
+You can obtain the other standard error estimator by calling
+\code{predict.svyglm} with the covariates set to their estimated (rather
+than true) population mean values.
 }
 
  \value{ \code{svyglm} returns an object of class \code{svyglm}.  The
