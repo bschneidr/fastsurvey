@@ -1,8 +1,10 @@
 4.0	Some (and eventually all) functions now return influence functions when called with
 	a survey.design2 object and the influence=TRUE option.  These allow svyby() to
 	estimate covariances between domains, which could previously only be done for
-	replicate-weight designs
-	 - svymean, svytotal, svyratio, svymle, svyglm
+	replicate-weight designs, and so allow svycontrast() to do domain contrasts
+	 - svymean, svytotal, svyratio, svymle, svyglm, svykappa
+
+	Nonlinear least squares with svynls() now available
 
 	Document that predict.svyglm() doesn't use a rescaled residual mean square
 	to estimate standard errors, and so disagrees with some textbooks. (for Trent Buskirk)
