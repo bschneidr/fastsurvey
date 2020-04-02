@@ -1,7 +1,7 @@
-4.0	Some (and eventually all) functions now return influence functions when called with
-	a survey.design2 object and the influence=TRUE option.  These allow svyby() to
-	estimate covariances between domains, which could previously only be done for
-	replicate-weight designs, and so allow svycontrast() to do domain contrasts
+4.0	Some (and eventually nearly all) functions now return influence functions when
+	called with a survey.design2 object and the influence=TRUE option.  These allow
+	svyby() to estimate covariances between domains, which could previously only be
+	done for replicate-weight designs, and so allow svycontrast() to do domain contrasts
 	 - svymean, svytotal, svyratio, svymle, svyglm, svykappa
 
 	Nonlinear least squares with svynls() now available
