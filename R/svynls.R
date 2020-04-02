@@ -12,6 +12,8 @@ svynls.DBIsvydesign<-function(formula, design, ...){
 }
 
 
+utils::globalVariables(c(".survey.prob.weight", ".survey.repwt"))
+
 svynls.svyrep.design<-function(formula, design, start, ..., return.replicates=FALSE){
     has_vars<- intersect(all.vars(formula),colnames(design))
     dat<-model.frame(design)[,all.vars(formula)]
@@ -32,7 +34,7 @@ svynls.svyrep.design<-function(formula, design, start, ..., return.replicates=FA
     }
 
     rval<-list()
-    rval$fit<-fit
+    rval$fit<-first
     
     v<-svrVar(thetas, design$scale, design$rscales, coef=theta)
     rval$naive.cov<-summary(first)$cov.unscaled

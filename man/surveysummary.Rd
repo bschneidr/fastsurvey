@@ -33,16 +33,16 @@
 Compute means, variances, ratios and totals for data from complex surveys.
 }
 \usage{
-\method{svymean}{survey.design}(x, design, na.rm=FALSE,deff=FALSE,influence=TRUE,...) 
-\method{svymean}{survey.design}(x, design, na.rm=FALSE,deff=FALSE,influence=TRUE,...) 
+\method{svymean}{survey.design}(x, design, na.rm=FALSE,deff=FALSE,influence=FALSE,...) 
+\method{svymean}{survey.design2}(x, design, na.rm=FALSE,deff=FALSE,influence=FALSE,...) 
 \method{svymean}{twophase}(x, design, na.rm=FALSE,deff=FALSE,...) 
 \method{svymean}{svyrep.design}(x, design, na.rm=FALSE, rho=NULL,
   return.replicates=FALSE, deff=FALSE,...) 
 \method{svyvar}{survey.design}(x, design, na.rm=FALSE,...) 
 \method{svyvar}{svyrep.design}(x, design, na.rm=FALSE, rho=NULL,
    return.replicates=FALSE,...,estimate.only=FALSE) 
-\method{svytotal}{survey.design}(x, design, na.rm=FALSE,deff=FALSE,influence=TRUE...) 
-\method{svytotal}{survey.design2}(x, design, na.rm=FALSE,deff=FALSE,influence=TRUE...) 
+\method{svytotal}{survey.design}(x, design, na.rm=FALSE,deff=FALSE,influence=FALSE,...) 
+\method{svytotal}{survey.design2}(x, design, na.rm=FALSE,deff=FALSE,influence=FALSE,...) 
 \method{svytotal}{twophase}(x, design, na.rm=FALSE,deff=FALSE,...) 
 \method{svytotal}{svyrep.design}(x, design, na.rm=FALSE, rho=NULL,
    return.replicates=FALSE, deff=FALSE,...)

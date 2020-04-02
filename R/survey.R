@@ -633,7 +633,7 @@ svytotal<-function(x,design,na.rm=FALSE,...){
   .svycheck(design)
   UseMethod("svytotal",design)
 }
-svytotal.survey.design<-function(x,design, na.rm=FALSE, deff=FALSE,influence=TRUE,...){
+svytotal.survey.design<-function(x,design, na.rm=FALSE, deff=FALSE,influence=FALSE,...){
 
   if (!inherits(design,"survey.design"))
     stop("design is not a survey design")
@@ -1323,7 +1323,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
     if (influence){
         estfun<-model.matrix(g)*resid(g,"working")*g$weights
         if (g$rank<NCOL(estfun)){
-            estfun<-estfun[,glm.object$qr$pivot[1:glm.object$rank]]
+            estfun<-estfun[,g$qr$pivot[1:g$rank]]
         }
         attr(g, "influence")<-estfun%*%g$naive.cov
     }

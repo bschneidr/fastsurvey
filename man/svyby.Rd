@@ -6,6 +6,7 @@
 \alias{coef.svyby}
 \alias{confint.svyby}
 \alias{unwtd.count}
+\alias{svyby.survey.design2}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Survey statistics on subsets}
 \description{
@@ -20,7 +21,7 @@ keep.names = TRUE,verbose=FALSE, vartype=c("se","ci","ci","cv","cvpct","var"),
 multicore=getOption("survey.multicore"))
 \method{svyby}{survey.design2}(formula, by, design, FUN, ..., deff=FALSE,keep.var = TRUE,
 keep.names = TRUE,verbose=FALSE, vartype=c("se","ci","ci","cv","cvpct","var"),
- drop.empty.groups=TRUE, covmat=FALSE, influence=FALSE,
+ drop.empty.groups=TRUE, covmat=FALSE, influence=covmat,
  na.rm.by=FALSE, na.rm.all=FALSE, multicore=getOption("survey.multicore"))
 
 \method{SE}{svyby}(object,...)

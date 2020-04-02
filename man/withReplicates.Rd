@@ -3,6 +3,7 @@
 \alias{withReplicates.svyrep.design}
 \alias{withReplicates.svrepvar}
 \alias{withReplicates.svrepstat}
+\alias{vcov.svyrep.design}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Compute variances by replicate weighting}
 \description{
