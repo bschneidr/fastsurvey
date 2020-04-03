@@ -41,6 +41,7 @@ svynls.svyrep.design<-function(formula, design, start, ..., return.replicates=FA
     rval$cov<-v
     rval$coef<-theta
     rval$design<-design
+    rval$meanweight<-meanweight
     rval$call<-sys.call(-1)
     if (return.replicates)
         rval$replicates<-thetas
@@ -78,6 +79,7 @@ svynls.survey.design2<-function(formula, design, start, ..., influence=FALSE){
     rval$naive.cov<-vcov(fit)
     rval$call<-sys.call(-1)
     rval$design<-design
+    rval$meanweight<-meanweight
     if(influence)
         attr(rval,"inference")<-infl
     class(rval)<-"svynls"
@@ -117,8 +119,8 @@ print.svynls<-function (x, digits = max(3L, getOption("digits") - 3L), ...)
     cat(" design: ")
     print(x$design)
     print(x$fit$m$getAllPars(), digits = digits, ...)
-    cat(" ", if (!is.null(x$weights) && diff(range(x$weights))) 
-        "weighted ", "residual sum-of-squares: ", format(x$fit$m$deviance(), 
+    cat(" ",  "weighted ", "residual sum-of-squares: ",
+        format(x$fit$m$deviance()*x$meanweight, 
         digits = digits), "\n", sep = "")
     .p.nls.convInfo(x, digits = digits)
     invisible(x)

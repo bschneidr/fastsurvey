@@ -38,7 +38,24 @@ svynls(formula, design, ...)
 one or more parameters
 }
 \examples{
+set.seed(2020-4-3)
+x<-rep(seq(0,50,1),10)
+y<-((runif(1,10,20)*x)/(runif(1,0,10)+x))+rnorm(510,0,1)
 
+pop_model<-nls(y~a*x/(b+x), start=c(a=15,b=5))
+
+df<-data.frame(x=x,y=y)
+df$p<-ifelse((y-fitted(pop_model))*(x-mean(x))>0, .4,.1)
+
+df$strata<-ifelse(df$p==.4,"a","b")
+
+in_sample<-stratsample(df$strata, round(table(df$strat)*c(0.4,0.1)))
+
+sdf<-df[in_sample,]
+des<-svydesign(id=~1, strata=~strata, prob=~p, data=sdf)
+pop_model
+(biased_sample<-nls(y~a*x/(b+x),data=sdf, start=c(a=15,b=5)))
+(corrected <- svynls(y~a*x/(b+x), design=des, start=c(a=15,b=5)))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
