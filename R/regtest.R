@@ -253,16 +253,13 @@ svycontrast.svyolr<-function(stat, contrasts,...){
 }
 
 
-svycontrast.svyglm<-svycontrast.svystat
-svycontrast.svycoxph<-svycontrast.svystat
-svycontrast.svyby<-svycontrast.svystat
-svycontrast.default<-svycontrast.svystat
+
 
 svycontrast.svrepstat<-function(stat, contrasts,...){
   if (!is.list(contrasts))
     contrasts<-list(contrast=contrasts)
   if (is.call(contrasts[[1]])){
-    if (is.list(stat)){ ##replicates
+    if (is.list(stat) && !is.null(stat$replicates)){ ##replicates
         rval<-list(nlcon=nlcon(contrasts,as.list(coef(stat)),varmat=NULL))
         reps<-as.matrix(stat$replicates)
         colnames(reps)<-names(coef(stat))
@@ -314,4 +311,27 @@ nlcon<-function(exprlist, datalist, varmat, influence=NULL){
         attr(values,"influence")<-influence%*%t(jac)
     }
     values
+}
+
+
+
+svycontrast.svyglm<-svycontrast.svystat
+svycontrast.svycoxph<-svycontrast.svystat
+svycontrast.svrepglm<-svycontrast.svrepstat
+svycontrast.svrepcoxph<-svycontrast.svrepstat
+
+
+svycontrast.svyby<-svycontrast.svystat
+svycontrast.default<-svycontrast.svystat
+
+
+svycontrast.svyby<-function(stat, contrasts,...){
+
+    if(!is.null(r<-attr(stat, "replicates"))){
+        repstat<-list(stat=coef(stat), replicates=r)
+        attr(repstat,"var")<-vcov(stat)
+        class(repstat)<-c("svrepstat",class(stat))
+        svycontrast(repstat, contrasts,...)
+    } else NextMethod() ## default
+   
 }

@@ -153,6 +153,12 @@ vcov(tots)
 svycontrast(tots, quote(E/H))
 
 
+## comparing subgroups uses the delta method unless replicates are present
+meanlogs<-svyby(~log(enroll),~stype,svymean, design=rclus1,covmat=TRUE)
+svycontrast(meanlogs, quote(exp(E-H)))
+meanlogs<-svyby(~log(enroll),~stype,svymean, design=rclus1,covmat=TRUE,return.replicates=TRUE)
+svycontrast(meanlogs, quote(exp(E-H)))
+
 
 ## extractor functions
 (a<-svyby(~enroll, ~stype, rclus1, svytotal, deff=TRUE, verbose=TRUE, 

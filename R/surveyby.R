@@ -93,7 +93,10 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
                       })
       rval<-t(sapply(results, unwrap))
       if ((covmat && inherits(design, "svyrep.design")) || return.replicates) {
-        replicates<-do.call(cbind,lapply(results,"[[","replicates"))
+          replicates<-do.call(cbind,lapply(results,"[[","replicates"))
+          attr(replicates,"scale")<-design$scale
+          attr(replicates, "rscales")<-design$rscales
+          attr(replicates, "mse")<-design$mse
         colnames(replicates)<-rep(as.character(uniquelevels), each=NCOL(replicates)/length(uniquelevels))
         covmat.mat<-svrVar(replicates,design$scale,design$rscales, mse=design$mse,coef=as.vector(sapply(results,coef)))
       } else{
