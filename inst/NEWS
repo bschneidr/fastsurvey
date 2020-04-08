@@ -1,6 +1,9 @@
 4.1	svycontrast()'s improvements for statistics with replicates are now also there with
 	svyby(), for domain comparisons (Robert Baskin)
 
+	svyttest() now gives an error if the binary group variable isn't binary
+	(for StackOverflow 60930323)
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
