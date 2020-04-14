@@ -1316,7 +1316,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
       }
 
     if(deff){
-        vsrs<-summ$cov.scaled*mean(data$.survey.prob.weights)/nrow(data)
+        vsrs<-summ$cov.scaled*mean(data$.survey.prob.weights)
         attr(g,"deff")<-g$cov.unscaled/vsrs
     }
 
