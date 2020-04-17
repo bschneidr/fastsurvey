@@ -12,6 +12,9 @@
 
 	svyglm() gave deffs that were too large by a factor of nrow(design). (Adrianne Bradford)
 
+	svycoxph() now warns if you try to use frailty or other penalised terms, because I
+	have no idea if they work correctly (for Claudia Rivera)
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow

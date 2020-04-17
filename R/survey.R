@@ -1131,6 +1131,10 @@ svycoxph.survey.design<-function(formula,design, subset=NULL, rescale=TRUE, ...)
     if (!all(all.vars(formula) %in% names(data))) 
         stop("all variables must be in design= argument")
     g<-with(list(data=data), eval(g))
+
+    if (inherits(g, "coxph.penal"))
+        warning("svycoxph does not support penalised terms")
+    
     g$call<-match.call()
     g$call[[1]]<-as.name(.Generic)
     g$printcall<-sys.call(-1)

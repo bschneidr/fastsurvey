@@ -1265,7 +1265,9 @@ svycoxph.svyrep.design<-function(formula, design, subset=NULL,rescale=NULL,...,r
     stop("all variables must be in design= argument")
   .survey.prob.weights<-pwts
   full<-with(data,eval(g))
-  
+  if (inherits(full, "coxph.penal"))
+      warning("svycoxph does not support penalised terms")
+ 
   nas<-attr(full$model, "na.action")
   
   betas<-matrix(ncol=length(coef(full)),nrow=ncol(design$repweights))
