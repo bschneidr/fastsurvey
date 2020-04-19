@@ -1343,7 +1343,7 @@ print.svyglm<-function(x,...){
 
 }
 
-coef.svyglm<-function(object,...,na.rm=TRUE) {
+coef.svyglm<-function(object,complete=FALSE,...,na.rm=!complete) {
   beta<-object$coefficients
   if (!na.rm || length(beta)==object$rank)
     beta
