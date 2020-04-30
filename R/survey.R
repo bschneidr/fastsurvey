@@ -1449,8 +1449,9 @@ summary.svyglm<-function (object, correlation = FALSE, df.resid=NULL,...)
             "Pr(>|t|)"))
     }
     else {
-        coef.table <- cbind(coef.p, Inf)
-        dimnames(coef.table) <- list(names(coef.p), dn)
+       coef.table <- cbind(coef.p, s.err, tvalue, NaN)
+       dimnames(coef.table) <- list(names(coef.p), c(dn, "t value", 
+                                                      "Pr(>|t|)"))
     }
     ans <- c(object[c("call", "terms", "family", "deviance", 
         "aic", "contrasts", "df.residual", "null.deviance", "df.null", 

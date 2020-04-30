@@ -17,6 +17,9 @@
 
 	coef.svyglm() now has a complete= argument to match coef.default(). (for Thomas Leeper)
 
+	summary.svyglm() now gives NA p-values and a warning, rather than Inf standard errors,
+	when the residual df are zero or negative (for Dan Simpson and Lauren Kennedy)
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow

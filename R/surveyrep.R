@@ -1503,7 +1503,8 @@ print.summary.svyglm<-function (x, digits = max(3, getOption("digits") - 3),
         }
         printCoefmat(coefs, digits = digits, signif.stars = signif.stars, 
             na.print = "NA", ...)
-    
+    if (x$df.resid<=0)
+        cat("\nZero or negative residual df; p-values not defined\n")
     cat("\n(Dispersion parameter for ", x$family$family, " family taken to be ", 
         format(x$dispersion), ")\n\n",  "Number of Fisher Scoring iterations: ", 
         x$iter, "\n", sep = "")
