@@ -11,11 +11,11 @@ Compute quantiles for data from complex surveys.
 }
 \usage{
 \method{svyquantile}{survey.design}(x, design, quantiles, alpha=0.05,
-   ci=FALSE, method = "linear", f = 1,
+   ci=FALSE, method = "linear", f = 0,
    interval.type=c("Wald","score","betaWald"), na.rm=FALSE,se=ci,
    ties=c("discrete","rounded"), df=NULL,...)
 \method{svyquantile}{svyrep.design}(x, design, quantiles,
-   method ="linear", interval.type=c("probability","quantile"), f = 1,
+   method ="linear", interval.type=c("probability","quantile"), f = 0,
    return.replicates=FALSE, ties=c("discrete","rounded"),na.rm=FALSE,
    alpha=0.05,df=NULL,...)
 \method{SE}{svyquantile}(object,...)

@@ -39,7 +39,11 @@ unwtd.count(x, design, ...)
   \item{design}{A \code{svydesign} or \code{svrepdesign} object}
   \item{FUN}{A function taking a formula and survey design object as its
   first two arguments.}
-  \item{\dots}{Other arguments to \code{FUN}}
+  \item{\dots}{Other arguments to \code{FUN}. NOTE: if any of the
+    names of these are partial matches to \code{formula},\code{by},
+    or \code{design}, you must specify the  \code{formula},\code{by},
+    or \code{design} argument by name, not just by position.
+  }
   \item{deff}{Request a design effect from \code{FUN}}
   \item{keep.var}{If \code{FUN} returns a \code{svystat} object, extract
   standard errors from it}
@@ -98,6 +102,7 @@ The variance type "ci" asks for confidence intervals, which are produced
 
   }
 
+  
   \note{The function works by making a lot of calls of the form
     \code{FUN(formula, subset(design, by==i))}, where \code{formula} is
     re-evaluated in each subset, so it is unwise to use data-dependent

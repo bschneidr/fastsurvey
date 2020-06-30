@@ -2,7 +2,7 @@
 svyquantile<-function(x,design,quantiles,...) UseMethod("svyquantile", design)
 
 svyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
-                                    ci=FALSE, method="linear",f=1,
+                                    ci=FALSE, method="linear",f=0,
                                     interval.type=c("Wald","score","betaWald"),
                                     na.rm=FALSE,se=ci, ties=c("discrete","rounded"), df=NULL,...){
     if (inherits(x,"formula"))
@@ -21,6 +21,8 @@ svyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
    
 
     w<-weights(design)
+    epsilon<-0.1*min(w[w>0])/sum(w)
+
 
     if (is.null(df)){
       qcrit<-function(p, lower.tail=TRUE) qt(p, df=degf(design), lower.tail=lower.tail)
@@ -30,11 +32,14 @@ svyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
       qcrit <- function(p,lower.tail=TRUE) qt(p,df=df,lower.tail=lower.tail)
     }
 
+
     
     computeQuantiles<-function(xx,p=quantiles){
       if (any(is.na(x))) return(NA*p)
       oo<-order(xx)
       cum.w<-cumsum(w[oo])/sum(w)
+      tick <- p %in% cum.w
+      p[tick]<-p[tick]+epsilon
       cdf<-approxfun(cum.w,xx[oo],method=method,f=f,
                      yleft=min(xx),yright=max(xx),ties=min) 
       cdf(p)
@@ -45,6 +50,8 @@ svyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
       ww<-rowsum(w,xx,reorder=TRUE)
       xx<-sort(unique(xx))
       cum.w <- cumsum(ww)/sum(ww)
+      tick <- p %in% cum.w
+      p[tick]<-p[tick]+epsilon
       cdf <- approxfun(cum.w, xx, method = method, f = f, 
                        yleft = min(xx), yright = max(xx),ties=min)
       cdf(p)
@@ -97,6 +104,10 @@ svyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
       p.up<-p.ci[2]
       oo<-order(xx)
       cum.w<-cumsum(w[oo])/sum(w)
+      tick <- p.low %in% cum.w
+      p.low[tick]<-p.low[tick]+epsilon
+      tick <- p.up %in% cum.w
+      p.up[tick]<-p.up[tick]+epsilon
       approx(cum.w,xx[oo],xout=c(p.low,p.up), method=method,f=f,
              yleft=min(xx),yright=max(xx),ties=min)$y 
       
@@ -113,7 +124,12 @@ svyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
         p.low<-p.ci[1]
         p.up<-p.ci[2]
         oo<-order(xx)
-        cum.w<-cumsum(ww)/sum(ww)
+      cum.w<-cumsum(ww)/sum(ww)
+      tick <- p.low %in% cum.w
+      p.low[tick]<-p.low[tick]+epsilon
+      tick <- p.up %in% cum.w
+      p.up[tick]<-p.up[tick]+epsilon
+  
         approx(cum.w,uxx,xout=c(p.low,p.up), method=method,f=f,
                yleft=min(xx),yright=max(xx),ties=min)$y 
         
@@ -195,7 +211,7 @@ print.svyquantile<-function(x,...){
 
 
 svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="linear",
-                                                   interval.type=c("probability","quantile"),f=1,
+                                                   interval.type=c("probability","quantile"),f=0,
                                                    return.replicates=FALSE,
                                                    ties=c("discrete","rounded"),na.rm=FALSE,
                                                    alpha=0.05,df=NULL,...){
@@ -250,6 +266,7 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
   
     w<-weights(design,"analysis")
 
+
     if (interval=="quantile"){
       ## interval on quantile scale
       if (ties=="discrete")
@@ -257,16 +274,27 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
           oo<-order(xx)
           
           ws<-weights(design,"sampling")
+          epsilon<-0.1*min(ws[ws>0])/sum(ws)
+
           cum.ws<-cumsum(ws[oo])/sum(ws)
+          tick <- quantiles %in% cum.wi
+          quantiles1<-quantiles+epsilon*tick
+ 
           rval<-approx(cum.ws,xx[oo],method=method,f=f,
                        yleft=min(xx),yright=max(xx),
-                       xout=quantiles,ties=min)$y
+                       xout=quantiles1,ties=min)$y
           
           cum.w<-apply(w,2,function(wi) cumsum(wi[oo])/sum(wi))
-          
-          qq<-apply(cum.w, 2,function(cum.wi) approx(cum.wi,xx[oo],method=method,f=f,
-                                                     yleft=min(xx),yright=max(xx),
-                                                     xout=quantiles,ties=min)$y)
+   
+          qq<-apply(cum.w, 2,
+                    function(cum.wi){
+                        tick <- quantiles %in% cum.wi
+                        quantiles[tick]<-quantiles[tick]+epsilon
+                        approx(cum.wi,xx[oo],method=method,f=f,
+                               yleft=min(xx),yright=max(xx),
+                               xout=quantiles,ties=min)$y
+                    }
+                    )
           if (length(quantiles)>1)
             qq<-t(qq)
           else
@@ -280,21 +308,30 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
           rval
         } else { ##ties="rounded"
           computeQuantiles<-function(xx){
-            ws<-weights(design,"sampling")
+              ws<-weights(design,"sampling")
+              epsilon<-0.1*min(ws[ws>0])/sum(ws)
 
             wws<-rowsum(ws,xx,reorder=TRUE)
             uxx<-sort(unique(xx))
             
             cum.wws<-cumsum(wws)/sum(wws)
+            tick <- quantiles %in% cum.wws
+            quantiles1<-quantiles+epsilon*tick
             rval<-approx(cum.wws,uxx,method=method,f=f,
                      yleft=min(xx),yright=max(xx),
-                         xout=quantiles,ties=min)$y
-            
+                         xout=quantiles1,ties=min)$y
+  
             cum.w<-apply(rowsum(w,xx,reorder=TRUE),2,function(wi) cumsum(wi)/sum(wi))
-            
-            qq<-apply(cum.w, 2,function(cum.wi) approx(cum.wi,uxx,method=method,f=f,
-                                                       yleft=min(xx),yright=max(xx),
-                                                       xout=quantiles,ties=min)$y)
+              
+            qq<-apply(cum.w, 2,
+                      function(cum.wi){
+                          tick <- quantiles %in% cum.wi
+                          quantiles[tick]<-quantiles[tick]+epsilon
+                          approx(cum.wi,uxx,method=method,f=f,
+                                 yleft=min(xx),yright=max(xx),
+                                 xout=quantiles,ties=min)$y
+                      }
+                      )
             if (length(quantiles)>1)
               qq<-t(qq)
             else
@@ -314,13 +351,18 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
         computeQuantiles<-function(xx){
           oo<-order(xx)
           w<-weights(design,"sampling")
+          epsilon<-0.1*min(w[w>0])/sum(w)
+
           cum.w<- cumsum(w[oo])/sum(w)
+          tick <- quantiles %in% cum.w
+          quantiles1<-quantiles+epsilon*tick
+  
           Qf<-approxfun(cum.w,xx[oo],method=method,f=f,
                         yleft=min(xx),yright=max(xx),
                         ties=min)
           
-          point.estimates<-Qf(quantiles)
-          if(length(quantiles)==1)
+          point.estimates<-Qf(quantiles1)
+          if(length(quantiles1)==1)
             estfun<-as.numeric(xx<point.estimates)
           else
             estfun<-0+outer(xx,point.estimates,"<")
@@ -339,16 +381,21 @@ svyquantile.svyrep.design<-svrepquantile<-function(x,design,quantiles,method="li
       } else {
         ## ties=rounded
         computeQuantiles<-function(xx){
-          w<-weights(design,"sampling")
+            w<-weights(design,"sampling")
+            epsilon<-0.1*min(w[w>0])/sum(w)
+
           ww<-rowsum(w,xx,reorder=TRUE)
           uxx<-sort(unique(xx))
           cum.w<- cumsum(ww)/sum(ww)
+          tick <- quantiles %in% cum.w
+          quantiles1<-quantiles+epsilon*tick
+  
           Qf<-approxfun(cum.w,uxx,method=method,f=f,
                         yleft=min(xx),yright=max(xx),
                         ties=min)
           
-          point.estimates<-Qf(quantiles)
-          if(length(quantiles)==1)
+          point.estimates<-Qf(quantiles1)
+          if(length(quantiles1)==1)
             estfun<-as.numeric(xx<point.estimates)
           else
                 estfun<-0+outer(xx,point.estimates,"<")
