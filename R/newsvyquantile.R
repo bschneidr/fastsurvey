@@ -1,17 +1,17 @@
 svyquantile<-function(x,design,quantiles,...) UseMethod("svyquantile", design)
 
-qq<-function (x, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE, 
+qq<-function (x, w, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE, 
     type = 7, ...) 
 {
-    if (is.factor(x)) {
-        if (is.ordered(x)) {
-            if (!any(type == c(1L, 3L))) 
-                stop("'type' must be 1 or 3 for ordered factors")
-        }
-        else stop("factors are not allowed")
-        lx <- levels(x)
-    }
-    else lx <- NULL
+    ## if (is.factor(x)) {
+    ##     if (is.ordered(x)) {
+    ##         if (!any(type == c(1L, 3L))) 
+    ##             stop("'type' must be 1 or 3 for ordered factors")
+    ##     }
+    ##     else stop("factors are not allowed")
+    ##     lx <- levels(x)
+    ## }
+    ## else lx <- NULL
     if (na.rm) 
         x <- x[!is.na(x)]
     else if (anyNA(x)) 
