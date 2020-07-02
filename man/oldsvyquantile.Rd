@@ -1,28 +1,17 @@
-\name{svyquantile}
-\alias{svyquantile}
+\name{oldsvyquantile}
 \alias{oldsvyquantile}
 \alias{oldsvyquantile.survey.design}
 \alias{oldsvyquantile.svyrep.design}
 \alias{print.svyquantile}
-\alias{SE.svyquantile}
-\alias{svyquantile.survey.design}
-\alias{svyquantile.svyrep.design}
 %- Also NEED an `\alias' for EACH other topic documented here.
-\title{Quantiles for sample surveys}
+\title{Deprecated implementation of quantiles}
 \description{
 Compute quantiles for data from complex surveys.  This function was
 completely rewritten in version 4.1; the function \code{oldsvyquantile}
-is available for backwards compatibility but is deprecated.
+is available for backwards compatibility. See \code{\link{svyquantile}}
+for the current version
 }
 \usage{
-\method{svyquantile}{survey.design}(x, design, quantiles, alpha=0.05,
-   ci=TRUE, type=1,
-   interval.type=c("Wald","score","betaWald"), na.rm=FALSE,se=ci,
-   ties=c("discrete","rounded"), df=NULL,...)
-\method{svyquantile}{svyrep.design}(x, design, quantiles, type=1,
-    interval.type=c("probability","quantile"),
-   return.replicates=FALSE, ties=c("discrete","rounded"),na.rm=FALSE,
-   alpha=0.05,df=NULL,...)
 \method{oldsvyquantile}{survey.design}(x, design, quantiles, alpha=0.05,
    ci=FALSE, method = "linear", f = 0,
    interval.type=c("Wald","score","betaWald"), na.rm=FALSE,se=ci,
