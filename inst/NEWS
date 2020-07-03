@@ -1,10 +1,5 @@
-4.1	The behaviour of svyquantile() has changed. The defaults have changed in order to agree
-	with the previous output (almost?) everywhere. But now, if you have only two observations
-	and they have equal weight, the f= argument will control whether the median is the
-	lower value (as before), interpolated between, or the upper value. The same will happen
-	in other cases when there's an observed value precisely at the quantile. Previously,
-	when there was an observed value precisely at the quantile, that's what you got.
-	For David Eduardo Jorquera Petersen
+4.1	svyquantile() has been completely rewritten. The old version is available
+	as oldsvyquantile() (for David Eduardo Jorquera Petersen)
 
 	svycontrast()'s improvements for statistics with replicates are now also there with
 	svyby(), for domain comparisons (Robert Baskin)
@@ -20,8 +15,9 @@
 
 	svyglm() gave deffs that were too large by a factor of nrow(design). (Adrianne Bradford)
 
-	svycoxph() now warns if you try to use frailty or other penalised terms, because I
-	have no idea if they work correctly (for Claudia Rivera)
+	svycoxph() now warns if you try to use frailty or other penalised terms, because they
+	just come from calling coxph and I have no reason to believe they work correctly
+	in complex samples (for Claudia Rivera)
 
 	coef.svyglm() now has a complete= argument to match coef.default(). (for Thomas Leeper)
 
