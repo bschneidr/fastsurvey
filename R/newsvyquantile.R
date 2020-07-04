@@ -40,7 +40,7 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
     w<-weights(design)
     
     rvals<-lapply(x,
-                  function(xi){ sapply(quantiles,
+                  function(xi){ lapply(quantiles,
                                       function(p){
                                           qhat<-qrule(xi,w,p)
                                           ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
@@ -102,7 +102,7 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
     }
     
     rvals<-lapply(x,
-                  function(xi){ sapply(quantiles,
+                  function(xi){ lapply(quantiles,
                                        function(p){
                                            qhat<-qrule(xi,w,p)
                                            ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)

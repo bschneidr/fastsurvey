@@ -166,36 +166,6 @@ oldsvyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
     rval
   }
 
-SE.svyquantile<-function(object,...){
-    attr(object,"SE")
-}
-
-vcov.svyquantile<-function(object,...){
-  se<-SE(object)
-  if (is.null(se)) stop("no uncertainty information present")
-  v<-matrix(NA,length(se),length(se))
-  warning("Only diagonal of vcov() available")
-  diag(v)<-se
-  v
-}
-
-coef.svyquantile<-function(object,...){
-  rval<-as.vector(object$quantiles)
-  if(ncol(object$quantiles)==1)
-    names(rval)<-rownames(object$quantiles)
-  else if (nrow(object$quantiles)==1)
-    names(rval)<-colnames(object$quantiles)
-  else names(rval)<-t(outer(colnames(object$quantiles),
-                            rownames(object$quantiles),
-                            paste,sep=":"))
-  rval
-}
-
-print.svyquantile<-function(x,...){
-    print(list(quantiles=x$quantiles, CIs=x$CIs))
-}
-
-
 
 
 oldsvyquantile.svyrep.design<-function(x,design,quantiles,method="linear",
@@ -413,3 +383,34 @@ oldsvyquantile.svyrep.design<-function(x,design,quantiles,method="linear",
   rval
   
 }
+
+
+SE.oldsvyquantile<-function(object,...){
+    attr(object,"SE")
+}
+
+vcov.oldsvyquantile<-function(object,...){
+  se<-SE(object)
+  if (is.null(se)) stop("no uncertainty information present")
+  v<-matrix(NA,length(se),length(se))
+  warning("Only diagonal of vcov() available")
+  diag(v)<-se
+  v
+}
+
+coef.oldvyquantile<-function(object,...){
+  rval<-as.vector(object$quantiles)
+  if(ncol(object$quantiles)==1)
+    names(rval)<-rownames(object$quantiles)
+  else if (nrow(object$quantiles)==1)
+    names(rval)<-colnames(object$quantiles)
+  else names(rval)<-t(outer(colnames(object$quantiles),
+                            rownames(object$quantiles),
+                            paste,sep=":"))
+  rval
+}
+
+print.oldsvyquantile<-function(x,...){
+    print(list(quantiles=x$quantiles, CIs=x$CIs))
+}
+
