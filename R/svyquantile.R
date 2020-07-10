@@ -398,7 +398,7 @@ vcov.oldsvyquantile<-function(object,...){
   v
 }
 
-coef.oldvyquantile<-function(object,...){
+coef.oldsvyquantile<-function(object,...){
   rval<-as.vector(object$quantiles)
   if(ncol(object$quantiles)==1)
     names(rval)<-rownames(object$quantiles)

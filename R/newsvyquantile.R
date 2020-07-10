@@ -40,16 +40,16 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
     w<-weights(design)
     
     rvals<-lapply(x,
-                  function(xi){ lapply(quantiles,
+                  function(xi){t(sapply(quantiles,
                                       function(p){
                                           qhat<-qrule(xi,w,p)
                                           ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
                                           names(ci)<-c(signif(alpha/2,2),signif(1-alpha/2,2))
-                                          list(quantile=qhat,ci=ci,
-                                               se=diff(ci)/(2*qcrit(1-alpha/2))
+                                          c(quantile=qhat,ci=ci,
+                                               se=as.numeric(diff(ci)/(2*qcrit(1-alpha/2)))
                                                )
                                       }
-                                      )
+                                      ))
                   }
                   )
     
@@ -63,7 +63,7 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                        se = TRUE,
                                        qrule=c("school","math","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
                                        df = NULL, return.replicates=FALSE,...) {
-    interval <- match.arg(interval.type)
+    interval.type <- match.arg(interval.type)
     
     if (design$type %in% c("JK1", "JKn") && interval == "quantile") 
         warning("Jackknife replicate weights may not give valid standard errors for quantiles")
@@ -118,7 +118,7 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
     rvals
 }
 
-SE.svyquantile<-function(object) {
+SE.newsvyquantile<-function(object) {
     lapply(object, function(v) sapply(v, function(vp) vp$se))
     }
 
@@ -246,9 +246,11 @@ woodruffCI<-function(x, qhat,p, design, qrule,alpha,df,method=c("mean","beta","x
                         sin(as.vector(confint(xform, 1, level = 1-alpha,  df = df)))^2
                     }
                     )
-    lower<-qrule(x,weights(design,"sampling"), pconfint[1])
-    upper<-qrule(x,weights(design,"sampling"), pconfint[2])
-    c(lower, upper)
+    lower<-if(is.nan(pconfint[1])) NaN else qrule(x,weights(design,"sampling"), pconfint[1])
+    upper<-if(is.nan(pconfint[2])) NaN else qrule(x,weights(design,"sampling"), pconfint[2])
+    rval<-c(lower, upper)
+    names(rval)<-c(round(100*alpha/2,1),round(100*(1-alpha/2),1))
+    rval
     
 }
 
