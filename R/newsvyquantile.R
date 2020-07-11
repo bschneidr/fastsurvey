@@ -61,7 +61,7 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                        interval.type = c("mean", "beta","xlogit", "asin","quantile"),
                                        na.rm = FALSE, 
                                        se = TRUE,
-                                       qrule=c("school","math","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
+                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
                                        df = NULL, return.replicates=FALSE,...) {
     interval.type <- match.arg(interval.type)
     

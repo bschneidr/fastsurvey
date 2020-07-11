@@ -6,10 +6,10 @@
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Deprecated implementation of quantiles}
 \description{
-Compute quantiles for data from complex surveys.  This function was
-completely rewritten in version 4.1; the function \code{oldsvyquantile}
-is available for backwards compatibility. See \code{\link{svyquantile}}
-for the current version
+  Compute quantiles for data from complex surveys. \code{oldsvyquantile}
+  is the version of the function from before version 4.1 of the package,
+  available for backwards compatibility. See \code{\link{svyquantile}}
+  for the current version
 }
 \usage{
 \method{oldsvyquantile}{survey.design}(x, design, quantiles, alpha=0.05,
