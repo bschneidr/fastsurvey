@@ -8,7 +8,9 @@
 Quantiles under complex sampling.
 }
 \description{
-Estimates quantiles and confidence intervals for them. This function was completely re-written for version 4.1 of the survey package, and has a wider range of ways to define the quantile. See \code{link{qrule}} for a list of them. 
+Estimates quantiles and confidence intervals for them. This function was
+completely re-written for version 4.1 of the survey package, and has a
+wider range of ways to define the quantile. See the vignette for a list of them. 
 }
 \usage{
 svyquantile(x, design, quantiles, ...)
@@ -77,11 +79,9 @@ interval length divided by \code{2*1.96}.
 
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+An object of class \code{"newsvyquantile"}, except that with a
+replicate-weights design and \code{interval.type="quantile"} and
+\code{return.replicates=TRUE} it's an object of class \code{"svrepstat"}
 }
 \references{
   Dorfman A, Valliant R (1993) Quantile variance estimators in complex
@@ -98,18 +98,47 @@ interval length divided by \code{2*1.96}.
 
 
 \seealso{
-  \code{\link{qrule}}
-  \code{\link{oldsvyquantile}}
+  \code{vignette("Quantile rules", package = "survey")}
+  \code{\link{oldsvyquantile}}	 
 
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+data(api)
+## population
+quantile(apipop$api00,c(.25,.5,.75))
 
-## The function is currently defined as
-function (x, design, quantiles, ...) 
-UseMethod("svyquantile", design)
+## one-stage cluster sample
+dclus1<-svydesign(id=~dnum, weights=~pw, data=apiclus1, fpc=~fpc)
+rclus1<-as.svrepdesign(dclus1)
+bclus1<-as.svrepdesign(dclus1,type="boot")
+
+
+svyquantile(~api00, dclus1, c(.25,.5,.75))
+svyquantile(~api00, dclus1, c(.25,.5,.75),interval.type="beta")
+
+svyquantile(~api00, rclus1, c(.25,.5,.75))
+svyquantile(~api00, rclus1, c(.25,.5,.75),interval.type="quantile")
+svyquantile(~api00, bclus1, c(.25,.5,.75),interval.type="quantile")
+
+svyquantile(~api00+ell, dclus1, c(.25,.5,.75), qrule="math")
+svyquantile(~api00+ell, dclus1, c(.25,.5,.75), qrule="school")
+svyquantile(~api00+ell, dclus1, c(.25,.5,.75), qrule="hf8")
+
+
+data(scd)
+repweights<-2*cbind(c(1,0,1,0,1,0), c(1,0,0,1,0,1), c(0,1,1,0,0,1),
+              c(0,1,0,1,1,0))
+scdrep<-svrepdesign(data=scd, type="BRR", repweights=repweights)
+svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="school",
+interval.type="beta")
+svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="math",
+interval.type="beta")
+svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="shahvaish",
+interval.type="beta")
+svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="shahvaish",
+interval.type="quantile")
+
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

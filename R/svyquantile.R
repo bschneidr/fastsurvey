@@ -414,3 +414,16 @@ print.oldsvyquantile<-function(x,...){
     print(list(quantiles=x$quantiles, CIs=x$CIs))
 }
 
+
+
+confint.oldsvyquantile<-function(object,parm=NULL,level=NULL,...){
+  if (!is.null(level)) stop("need to re-run svyquantile to specify level")
+  ci<-t(matrix(as.vector(object$CIs),nrow=2))
+  colnames(ci)<-dimnames(object$CIs)[[1]]
+  rownames(ci)<-outer(dimnames(object$CIs)[[2]],
+                      dimnames(object$CIs)[[3]],paste,sep="_")
+  if (is.null(parm)) 
+    ci
+  else 
+    ci[parm,,drop=FALSE]
+}

@@ -44,7 +44,7 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
                                       function(p){
                                           qhat<-qrule(xi,w,p)
                                           ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
-                                          names(ci)<-c(signif(alpha/2,2),signif(1-alpha/2,2))
+                                          names(ci)<-c(round(100*alpha/2,2),round(100-100*alpha/2,2))
                                           c(quantile=qhat,ci=ci,
                                                se=as.numeric(diff(ci)/(2*qcrit(1-alpha/2)))
                                                )
@@ -65,10 +65,10 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                        df = NULL, return.replicates=FALSE,...) {
     interval.type <- match.arg(interval.type)
     
-    if (design$type %in% c("JK1", "JKn") && interval == "quantile") 
+    if (design$type %in% c("JK1", "JKn") && interval.type == "quantile") 
         warning("Jackknife replicate weights may not give valid standard errors for quantiles")
-    if (design$type %in% "other" && interval == "quantile") 
-        warning("Not all replicate weight designs give valid standard errors for quantiles.")
+    if (design$type %in% "other" && interval.type == "quantile") 
+        message("Not all replicate weight designs give valid standard errors for quantiles.")
 
     if (inherits(x, "formula")) 
         x <- model.frame(x, design$variables, na.action = if (na.rm) 
@@ -98,22 +98,46 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
         ci_fun<-function(...) repCI(...,return.replicates=return.replicates)
     } else {
         if(return.replicates) warning("return.replicates=TRUE only implemented for interval.type='quantile'")
-        ci<-woodruffCI
+        ci_fun<-woodruffCI
     }
-    
-    rvals<-lapply(x,
-                  function(xi){ lapply(quantiles,
-                                       function(p){
-                                           qhat<-qrule(xi,w,p)
-                                           ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
-                                           names(ci)<-c(signif(alpha/2,2),signif(1-alpha/2,2))
-                                           list(quantile=qhat,ci=ci,
-                                                se=diff(ci)/(2*qcrit(1-alpha/2))
-                                                )
-                                       }
-                                       )
-                  }
-                  )
+
+    if ((interval.type=="quantile") && return.replicates){
+              rvals<-lapply(x,
+                      function(xi){ lapply(quantiles,
+                                           function(p){
+                                               qhat<-qrule(xi,w,p)
+                                               ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
+                                               list(quantile=qhat, replicates=attr(ci,"replicates"))
+                                           }
+                                           )
+                      }
+                      )
+              ests<-sapply(rvals, function(v) sapply(v, function(qi) qi$qhat))
+              attr(ests, "scale") <- design$scale
+              attr(ests, "rscales") <- design$rscales
+              attr(ests, "mse") <- design$mse
+              reps<-sapply(rvals, function(v) t(sapply(v, function(qi) qi$replicates)))
+              rval<-list(quantile=ests,replicates=reps)
+              
+              attr(rval,"var")<-svrVar(reps, design$scale, design$rscales, mse=design$mse, coef=ests)
+              class(rval)<-"svrepstat"
+              return(rval)
+    } else {
+        rvals<-lapply(x,
+                      function(xi){ t(sapply(quantiles,
+                                           function(p){
+                                               qhat<-qrule(xi,w,p)
+                                               ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
+                                               names(ci)<-c(round(100*alpha/2,2),round(100-100*alpha/2,2))
+                                               c(quantile=qhat,ci=ci,
+                                                    se=diff(ci)/(2*qcrit(1-alpha/2))
+                                                    )
+                                           }
+                                           ))
+                      }
+                      )
+        class(rvals)<-"newsvyquantile"
+    }
     
     rvals
 }
@@ -180,7 +204,7 @@ ffullerCI<-function(x, qhat, p, design, qrule, alpha, df){
 repCI<-function(x, qhat, p, design, qrule, alpha, df,return.replicates){
     qcrit<-if(df==Inf) qnorm else function(...) qt(...,df=df)
 
-    wrep<-weights(x,"analysis")
+    wrep<-weights(design,"analysis")
     reps<-apply(wrep,2, function(wi) qrule(x,wi,p))
     v<-with(design, svrVar(reps, scale=scale, rscales=rscales, mse=mse,coef=qhat))
 
