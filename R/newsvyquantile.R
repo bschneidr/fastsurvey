@@ -167,8 +167,8 @@ woodruffCI<-function(x, qhat,p, design, qrule,alpha,df,method=c("mean","beta","x
                         sin(as.vector(confint(xform, 1, level = 1-alpha,  df = df)))^2
                     }
                     )
-    lower<-if(is.nan(pconfint[1])) NaN else qrule(x,weights(design,"sampling"), pconfint[1])
-    upper<-if(is.nan(pconfint[2])) NaN else qrule(x,weights(design,"sampling"), pconfint[2])
+    lower<-if(is.nan(pconfint[1]) || (pconfint[1]<0)) NaN else qrule(x,weights(design,"sampling"), pconfint[1])
+    upper<-if(is.nan(pconfint[2])|| (pconfint[2]>1)) NaN else qrule(x,weights(design,"sampling"), pconfint[2])
     rval<-c(lower, upper)
     names(rval)<-c(round(100*alpha/2,1),round(100*(1-alpha/2),1))
     rval

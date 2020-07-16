@@ -40,6 +40,7 @@ qrule_shahvaish<-function(x,w,p){
     wj <- (qdata$wup+qdata$wlow)/sum(w)
     
     padj<- (floor(p*n)+0.5 -0.5*wj)/(n+1)
+    if (is.na(padj)) return(NaN)
     qdata<-qs(x,w,padj)
     
     if(qdata$wlow==0) qdata$qlow else qdata$qup
@@ -52,7 +53,7 @@ qrule_hf4 <- function(x,w,p){
         x<-x[!zero]
      }
      qdata<-qs(x,w,p)
-     gamma<-with(qdata, wup/(wup+wlow))
+     gamma<-with(qdata, wlow/(wup+wlow))
      qdata$qlow*(1-gamma)+qdata$qup*gamma
 }
 
@@ -68,7 +69,7 @@ qrule_hf7 <- function(x,w,p){
 
     qdata<-qs(x,w,padj)
     
-    gamma<-with(qdata, wup/(wup+wlow))
+    gamma<-with(qdata, wlow/(wup+wlow))
     qdata$qlow*(1-gamma)+qdata$qup*gamma
 }
 
@@ -83,7 +84,7 @@ qrule_hf8 <- function(x,w,p){
     
     qdata<-qs(x,w,padj)
     
-    gamma<-with(qdata, wup/(wup+wlow))
+    gamma<-with(qdata, wlow/(wup+wlow))
     qdata$qlow*(1-gamma)+qdata$qup*gamma
 }
 
