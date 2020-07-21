@@ -27,6 +27,8 @@
 	In the multigroup case, svyranktest() now documents which elements of the 'htest'
 	object have which parts of the result, because it's a bit weird (for Justin Allen)
 
+	svycontrast() gets a new argument add=TRUE to keep the old coefficients as well
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow

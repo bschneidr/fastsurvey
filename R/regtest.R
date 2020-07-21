@@ -217,34 +217,57 @@ contrast<-function(coef,var,contrasts, influence=NULL){
   rval
 }
 
-svycontrast.svystat<-function(stat, contrasts,...){
-  if (!is.list(contrasts))
-    contrasts<-list(contrast=contrasts)
-  if (is.call(contrasts[[1]])){
-    rval<-nlcon(contrasts,as.list(coef(stat)), vcov(stat), attr(stat,"influence"))
-    class(rval)<-"svrepstat"
-    attr(rval,"statistic")<-"nlcon"
-    return(rval)
-  }
+addQuote<-function(contrasts, original){
+    ll<-as.list(original)
+    names(ll)<-original
+    ll<-lapply(ll, as.name)
+    c(contrasts,ll)
+}
+
+addLin<-function(contrasts, original){
+    id<-diag(length(original))
+    dimnames(id)<-list(original,original)
+    rbind(contrasts,id)
+    }
+
+svycontrast.svystat<-function(stat, contrasts,add=FALSE,...){
+    if (!is.list(contrasts))
+        contrasts<-list(contrast=contrasts)
+    if (is.language(contrasts[[1]])){
+        if(add){
+            contrasts<-addQuote(contrasts,names(coef(stat)))
+        }
+        rval<-nlcon(contrasts,as.list(coef(stat)), vcov(stat), attr(stat,"influence"))
+        class(rval)<-"svrepstat"
+        attr(rval,"statistic")<-"nlcon"
+        return(rval)
+    }
   contrasts<-match.names(names(coef(stat)),contrasts)
-  contrasts<-do.call(rbind,contrasts)
-  coef<-contrast(coef(stat),vcov(stat),contrasts, attr(stat,"influence"))
+    contrasts<-do.call(rbind,contrasts)
+    if (add)
+          contrasts<-addLin(contrasts, names(coef(stat)))
+    coef<-contrast(coef(stat),vcov(stat),contrasts, attr(stat,"influence"))
   class(coef)<-"svystat"
   attr(coef,"statistic")<-"contrast"
   coef
 }
 
-svycontrast.svyolr<-function(stat, contrasts,...){
+svycontrast.svyolr<-function(stat, contrasts,add=FALSE,...){
   if (!is.list(contrasts))
     contrasts<-list(contrast=contrasts)
-  if (is.call(contrasts[[1]])){
-      rval<-nlcon(contrasts,as.list(c(coef(stat),stat$zeta)), vcov(stat))
+  if (is.language(contrasts[[1]])){
+         if(add){
+            contrasts<-addQuote(contrasts,names(coef(stat)))
+         }
+         rval<-nlcon(contrasts,as.list(c(coef(stat),stat$zeta)), vcov(stat))
       class(rval)<-"svystat"
       attr(rval,"statistic")<-"nlcon"
       return(rval)
   }
   contrasts <- match.names(names(coef(stat)), contrasts)
   contrasts<-do.call(rbind,contrasts)
+  if (add)
+          contrasts<-addLin(contrasts, names(coef(stat)))
   coef<-contrast(as.vector(as.matrix(coef(stat))),
                  vcov(stat),contrasts)
   class(coef)<-"svystat"
@@ -255,11 +278,14 @@ svycontrast.svyolr<-function(stat, contrasts,...){
 
 
 
-svycontrast.svrepstat<-function(stat, contrasts,...){
+svycontrast.svrepstat<-function(stat, contrasts,add=FALSE,...){
   if (!is.list(contrasts))
     contrasts<-list(contrast=contrasts)
-  if (is.call(contrasts[[1]])){
-    if (is.list(stat) && !is.null(stat$replicates)){ ##replicates
+  if (is.language(contrasts[[1]])){
+      if(add){
+            contrasts<-addQuote(contrasts,names(coef(stat)))
+      }
+      if (is.list(stat) && !is.null(stat$replicates)){ ##replicates
         rval<-list(nlcon=nlcon(contrasts,as.list(coef(stat)),varmat=NULL))
         reps<-as.matrix(stat$replicates)
         colnames(reps)<-names(coef(stat))
@@ -276,18 +302,21 @@ svycontrast.svrepstat<-function(stat, contrasts,...){
     }
     class(rval)<-"svrepstat"
     return(rval)
+  } else {
+      contrasts<-match.names(names(coef(stat)), contrasts)
+      contrasts<-do.call(rbind,contrasts)
+      if (add)
+          contrasts<-addLin(contrasts, names(coef(stat)))
+     
+      coef<-contrast(coef(stat), vcov(stat), contrasts)
+      if (is.list(stat)){
+          coef<-list(contrast=coef,
+                     replicates=crossprod(stat$replicates, contrasts))
+      }
+      class(coef)<-"svrepstat"
+      attr(coef,"statistic")<-"contrast"
+      coef
   }
-  contrasts<-match.names(names(coef(stat)), contrasts)
-  contrasts<-do.call(rbind,contrasts)
-  
-  coef<-contrast(coef(stat), vcov(stat), contrasts)
-  if (is.list(stat)){
-    coef<-list(contrast=coef,
-               replicates=crossprod(stat$replicates, contrasts))
-  }
-  class(coef)<-"svrepstat"
-  attr(coef,"statistic")<-"contrast"
-  coef
 }
 
 
