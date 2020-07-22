@@ -17,12 +17,12 @@ svyquantile(x, design, quantiles, ...)
 \method{svyquantile}{survey.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","score"),
                       na.rm = FALSE,  se = TRUE,
-                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
+                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf6","hf7","hf8"),
                       df = NULL, ...)
 \method{svyquantile}{svyrep.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","quantile"),
                       na.rm = FALSE, se = TRUE,
-                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
+                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf6","hf7","hf8"),
                       dfd = NULL, return.replicates=FALSE,...)		      
 }
 %- maybe also 'usage' for other objects documented here.
@@ -47,7 +47,8 @@ unweighted data, this definition only pins down the quantile to an
 interval between two observations, and a rule is needed to interpolate.
 The default is the mathematical definition, the lower end of the
 quantile interval; \code{qrule="school"} uses the midpoint of the
-quantile interval; see \code{\link{qrule}} for all the definitions.
+quantile interval; see the vignette "Quantile rules" for all the
+definitions and how to supply your own.
   
 By default, confidence intervals are estimated using Woodruff's (1952) method,
 which involves computing the quantile, estimating a confidence interval
@@ -123,21 +124,6 @@ svyquantile(~api00, bclus1, c(.25,.5,.75),interval.type="quantile")
 svyquantile(~api00+ell, dclus1, c(.25,.5,.75), qrule="math")
 svyquantile(~api00+ell, dclus1, c(.25,.5,.75), qrule="school")
 svyquantile(~api00+ell, dclus1, c(.25,.5,.75), qrule="hf8")
-
-
-data(scd)
-repweights<-2*cbind(c(1,0,1,0,1,0), c(1,0,0,1,0,1), c(0,1,1,0,0,1),
-              c(0,1,0,1,1,0))
-scdrep<-svrepdesign(data=scd, type="BRR", repweights=repweights)
-svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="school",
-interval.type="beta")
-svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="math",
-interval.type="beta")
-svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="shahvaish",
-interval.type="beta")
-svyquantile(~arrests+alive, design=scdrep, quantile=0.5, qrule="shahvaish",
-interval.type="quantile")
-
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

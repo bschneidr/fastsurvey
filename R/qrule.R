@@ -46,6 +46,18 @@ qrule_shahvaish<-function(x,w,p){
     if(qdata$wlow==0) qdata$qlow else qdata$qup
 }
 
+qrule_hf6<-function(x,w,p){
+    if (any(zero<-w==0)){
+        w<-w[!zero]
+        x<-x[!zero]
+    }
+    n<-length(x)
+    padj<-floor(p*n)/(n+1)
+    qdata<-qs(x,w,padj)
+    gamma<-with(qdata, wlow/(wup+wlow))
+    qdata$qlow*(1-gamma)+qdata$qup*gamma
+}
+
 
 qrule_hf4 <- function(x,w,p){
      if (any(zero<-w==0)){
@@ -88,7 +100,9 @@ qrule_hf8 <- function(x,w,p){
     qdata$qlow*(1-gamma)+qdata$qup*gamma
 }
 
-
+last<-function(a) {
+    if (any(a)) max(which(a)) else -Inf
+    }
 
 qs <- function(x, w, p){
     ## already has missings removed, ties handled.
@@ -97,7 +111,7 @@ qs <- function(x, w, p){
     x<-x[ii]
     cumw<-cumsum(w[ii])
 
-    pos<-max(which(cumw<=p*sum(w)))
+    pos<-last(cumw<=p*sum(w))
     posnext<-if(pos==length(x)) pos else pos+1
     
     list(qlow=x[pos], qup=x[posnext], ilow=pos,iup=posnext, wlow=p-cumw[pos]/sum(w),wup=cumw[posnext]/sum(w)-p)

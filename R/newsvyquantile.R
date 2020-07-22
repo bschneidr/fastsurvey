@@ -4,7 +4,7 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
                                        interval.type = c("mean", "beta","xlogit", "asin","score"),
                                        na.rm = FALSE, 
                                        se = TRUE,
-                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
+                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf6","hf7","hf8"),
                                        df = NULL, ...) {
     
    if (inherits(x, "formula")) 
