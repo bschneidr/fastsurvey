@@ -32,6 +32,10 @@
 	twophase() can now take strata= arguments that are character, not just factor
 	or numeric. (for Pam Shaw)
 
+	add reference to Chen & Lumley on tail probabilities for quadratic forms.
+
+	add reference to Breslow et al for calibrate()
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
