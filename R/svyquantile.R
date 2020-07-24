@@ -162,7 +162,7 @@ oldsvyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
     else
         ses<-(cis[2,,]-cis[1,,])/(2*qcrit(alpha/2,lower.tail=FALSE))
     attr(rval,"SE")<-ses
-    class(rval)<-"svyquantile"
+    class(rval)<-c("oldsvyquantile","svyquantile")
     rval
   }
 
