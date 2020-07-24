@@ -17,12 +17,12 @@ svyquantile(x, design, quantiles, ...)
 \method{svyquantile}{survey.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","score"),
                       na.rm = FALSE,  se = TRUE,
-                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf6","hf7","hf8"),
+                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
                       df = NULL, ...)
 \method{svyquantile}{svyrep.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","quantile"),
                       na.rm = FALSE, se = TRUE,
-                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf6","hf7","hf8"),
+                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
                       dfd = NULL, return.replicates=FALSE,...)		      
 }
 %- maybe also 'usage' for other objects documented here.

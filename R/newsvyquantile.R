@@ -4,7 +4,7 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
                                        interval.type = c("mean", "beta","xlogit", "asin","score"),
                                        na.rm = FALSE, 
                                        se = TRUE,
-                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf6","hf7","hf8"),
+                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
                                        df = NULL, ...) {
     
    if (inherits(x, "formula")) 
@@ -40,7 +40,7 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
     w<-weights(design)
     
     rvals<-lapply(x,
-                  function(xi){t(sapply(quantiles,
+                  function(xi){r<-t(sapply(quantiles,
                                       function(p){
                                           qhat<-qrule(xi,w,p)
                                           ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
@@ -50,6 +50,8 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
                                                )
                                       }
                                       ))
+                                      rownames(r)<-quantiles
+                                      r
                   }
                   )
     
@@ -61,7 +63,7 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                        interval.type = c("mean", "beta","xlogit", "asin","quantile"),
                                        na.rm = FALSE, 
                                        se = TRUE,
-                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf7","hf8"),
+                                       qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
                                        df = NULL, return.replicates=FALSE,...) {
     interval.type <- match.arg(interval.type)
     
@@ -143,9 +145,28 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
 }
 
 SE.newsvyquantile<-function(object) {
-    lapply(object, function(v) sapply(v, function(vp) vp$se))
-    }
+    do.call(c,lapply(object,function(ai) ai[,"se"]))    
+}
 
+vcov.newsvyquantile<-function(object) {
+    r<-do.call(c,lapply(object,function(ai) ai[,"se"]))^2
+    v<-matrix(NA,nrow=length(r),ncol=length(r))
+    diag(v)<-r
+    v
+}
+
+coef.newsvyquantile<-function(object){
+    do.call(c,lapply(object,function(ai) ai[,1]))    
+}
+
+
+
+
+confint.newsvyquantile<-function(object){
+    l<-do.call(c,lapply(object,function(ai) ai[,2]))
+    u<-do.call(c,lapply(object,function(ai) ai[,3]))
+    cbind(l,u)
+}
     
 
 woodruffCI<-function(x, qhat,p, design, qrule,alpha,df,method=c("mean","beta","xlogit","asin")){
