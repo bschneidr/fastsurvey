@@ -145,7 +145,7 @@ qrule_hf9<-function(x,w,p){
  }
 
 last<-function(a) {
-    if (any(a)) max(which(a)) else -Inf
+    if (any(a)) max(which(a)) else 1
     }
 
 qs <- function(x, w, p){

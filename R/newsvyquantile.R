@@ -145,11 +145,11 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
 }
 
 SE.newsvyquantile<-function(object) {
-    do.call(c,lapply(object,function(ai) ai[,"se"]))    
+    do.call(c,lapply(object,function(ai) ai[,4]))    
 }
 
 vcov.newsvyquantile<-function(object) {
-    r<-do.call(c,lapply(object,function(ai) ai[,"se"]))^2
+    r<-do.call(c,lapply(object,function(ai) ai[,4]))^2
     v<-matrix(NA,nrow=length(r),ncol=length(r))
     diag(v)<-r
     v

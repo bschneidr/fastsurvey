@@ -2,7 +2,6 @@
 \alias{svyquantile}
 \alias{svyquantile.survey.design}
 \alias{svyquantile.svyrep.design}
-\alias{print.newsvyquantile}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Quantiles under complex sampling.
@@ -17,13 +16,15 @@ svyquantile(x, design, quantiles, ...)
 \method{svyquantile}{survey.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","score"),
                       na.rm = FALSE,  se = TRUE,
-                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
+                      qrule=c("math","school","shahvaish","hf1","hf2","hf3",
+		      "hf4","hf5","hf6","hf7","hf8","hf9"),
                       df = NULL, ...)
 \method{svyquantile}{svyrep.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","quantile"),
                       na.rm = FALSE, se = TRUE,
-                      qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
-                      dfd = NULL, return.replicates=FALSE,...)		      
+                      qrule=c("math","school","shahvaish","hf1","hf2","hf3",
+		      "hf4","hf5","hf6","hf7","hf8","hf9"),
+                      df = NULL, return.replicates=FALSE,...)		      
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -36,6 +37,13 @@ Design object
   \item{quantiles}{
 Numeric vector specifying which quantiles are requested
 }
+\item{alpha}{Specifiea confidence interval coverage}
+\item{interval.type}{See Details below}
+\item{na.rm}{Remove missing values?}
+\item{se}{Return an estimated standard error?}
+\item{qrule}{Rule for defining the quantiles: either a character string specifying one of the built-in rules, or a function}
+\item{df}{Degrees of freedom for confidence interval estimation: \code{NULL} specifies \code{degf(design)}}
+\item{return.replicates}{Return replicate estimates of the quantile (only for \code{interval.type="quantile"})}
   \item{\dots}{
 For future expansion
 }
@@ -47,15 +55,18 @@ unweighted data, this definition only pins down the quantile to an
 interval between two observations, and a rule is needed to interpolate.
 The default is the mathematical definition, the lower end of the
 quantile interval; \code{qrule="school"} uses the midpoint of the
-quantile interval; see the vignette "Quantile rules" for all the
-definitions and how to supply your own.
+quantile interval; \code{"hf1"} to {"hf9"} are weighted analogues of
+\code{type=1} to \code{9} in \code{\link{quantile}}. See the vignette
+"Quantile rules" for details and for how to write your own. 
   
 By default, confidence intervals are estimated using Woodruff's (1952) method,
 which involves computing the quantile, estimating a confidence interval
 for the proportion of observations below the quantile, and then
 transforming that interval using the estimated CDF.  In that context,
 the \code{interval.type} argument specifies how the confidence interval
-for the proportion is computed, matching \code{\link{svyciprop}}.
+for the proportion is computed, matching \code{\link{svyciprop}}. In
+contrast to \code{oldsvyquantile}, \code{NaN} is returned if a confidence
+interval endpoint on the probability scale falls outside \code{[0,1]}.
 
 There are two exceptions. For \code{svydesign} objects,
 \code{interval.type="score"} asks for the Francisco & Fuller confidence
@@ -91,6 +102,13 @@ replicate-weights design and \code{interval.type="quantile"} and
   Francisco CA, Fuller WA (1986) Estimation of the distribution
   function with a complex survey. Technical Report, Iowa State
   University.
+
+  Hyndman, R. J. and Fan, Y. (1996) Sample quantiles in statistical packages,
+  The American Statistician 50, 361–365.
+
+  Shah BV, Vaish AK (2006) Confidence Intervals for Quantile Estimation
+  from Complex Survey Data. Proceedings of the Section on Survey
+  Research Methods. 
   
   Woodruff RS (1952) Confidence intervals for medians and other
   position measures. JASA 57, 622-627.
@@ -101,7 +119,7 @@ replicate-weights design and \code{interval.type="quantile"} and
 \seealso{
   \code{vignette("Quantile rules", package = "survey")}
   \code{\link{oldsvyquantile}}	 
-
+\code{\link{quantile}}
 }
 \examples{
 data(api)

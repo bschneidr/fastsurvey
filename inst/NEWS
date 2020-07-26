@@ -1,4 +1,4 @@
-4.1	svyquantile() has been completely rewritten. The old version is available
+4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
 	as oldsvyquantile() (for David Eduardo Jorquera Petersen)
 
 	svycontrast()'s improvements for statistics with replicates are now also there with
