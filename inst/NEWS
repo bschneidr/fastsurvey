@@ -36,6 +36,8 @@
 
 	add reference to Breslow et al for calibrate()
 
+	add svyqqplot and svyqqmath for quantile-quantile plots
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
