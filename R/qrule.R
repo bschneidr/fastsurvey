@@ -26,6 +26,8 @@ qrule_hf3 <- function(x,w,p){
         w<-w[!zero]
         x<-x[!zero]
     }
+    w<-rowsum(w,x)
+    x<-sort(unique(x))
     qdata<-qs(x,w,p)
     if((qdata$wlow==0)&& (qdata$ilow %%2 ==0)) qdata$qlow else qdata$qup
 }

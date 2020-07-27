@@ -117,7 +117,7 @@ replicate-weights design and \code{interval.type="quantile"} and
 
 
 \seealso{
-  \code{vignette("Quantile rules", package = "survey")}
+  \code{vignette("qrule", package = "survey")}
   \code{\link{oldsvyquantile}}	 
 \code{\link{quantile}}
 }
