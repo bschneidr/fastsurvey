@@ -10,7 +10,7 @@ Quantile-quantile plots either against a specified distribution function or comp
 }
 \usage{
 svyqqplot(formula, design, designx = NULL, na.rm = TRUE, qrule = "hf8", xlab = NULL, ylab = NULL, ...)
-svyqqmath(x, design, null=qnorm, na.rm=TRUE,xlab="Expected",ylab="Observed",...){
+svyqqmath(x, design, null=qnorm, na.rm=TRUE,xlab="Expected",ylab="Observed",...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -63,7 +63,11 @@ svyqqplot(api00~api99, design=dstrat)
 
 dclus1<-svydesign(id=~dnum, weights=~pw, data=apiclus1, fpc=~fpc)
 opar<-par(mfrow=c(1,2))
+
+## sample distributions very different
 qqplot(apiclus1$enroll, apistrat$enroll); abline(0,1)
+
+## estimated population distributions much more similar
 svyqqplot(enroll~enroll, design=dstrat,designx=dclus1,qrule=survey:::qrule_hf8); abline(0,1)
 par(opar)
 
