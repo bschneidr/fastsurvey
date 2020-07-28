@@ -3,7 +3,7 @@ svyquantile<-function(x,design,quantiles,...) UseMethod("svyquantile", design)
 svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
                                        interval.type = c("mean", "beta","xlogit", "asin","score"),
                                        na.rm = FALSE, 
-                                       se = TRUE,
+                                       ci=TRUE, se = ci,
                                        qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
                                        df = NULL, ...) {
     
@@ -40,18 +40,25 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
     w<-weights(design)
     
     rvals<-lapply(x,
-                  function(xi){r<-t(sapply(quantiles,
-                                      function(p){
-                                          qhat<-qrule(xi,w,p)
+                  function(xi){
+                      r<-t(sapply(quantiles,
+                                  function(p){
+                                      qhat<-qrule(xi,w,p)
+                                      if(ci){
                                           ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
                                           names(ci)<-c(round(100*alpha/2,2),round(100-100*alpha/2,2))
                                           c(quantile=qhat,ci=ci,
-                                               se=as.numeric(diff(ci)/(2*qcrit(1-alpha/2)))
-                                               )
+                                            se=as.numeric(diff(ci)/(2*qcrit(1-alpha/2)))
+                                            )
+                                      } else {
+                                          c(quantile=qhat)
                                       }
-                                      ))
-                                      rownames(r)<-quantiles
-                                      r
+                                  }
+                                  ))
+                      if(!ci)
+                          r<-as.matrix(r)
+                      rownames(r)<-quantiles
+                      r
                   }
                   )
     
@@ -62,7 +69,7 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
 svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                        interval.type = c("mean", "beta","xlogit", "asin","quantile"),
                                        na.rm = FALSE, 
-                                       se = TRUE,
+                                       ci=TRUE, se = ci,
                                        qrule=c("math","school","shahvaish","hf1","hf2","hf3","hf4","hf5","hf6","hf7","hf8","hf9"),
                                        df = NULL, return.replicates=FALSE,...) {
     interval.type <- match.arg(interval.type)
@@ -126,16 +133,25 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
               return(rval)
     } else {
         rvals<-lapply(x,
-                      function(xi){ t(sapply(quantiles,
-                                           function(p){
-                                               qhat<-qrule(xi,w,p)
+                      function(xi){
+                          r<- t(sapply(quantiles,
+                                       function(p){
+                                           qhat<-qrule(xi,w,p)
+                                           if(ci){
                                                ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
                                                names(ci)<-c(round(100*alpha/2,2),round(100-100*alpha/2,2))
                                                c(quantile=qhat,ci=ci,
-                                                    se=diff(ci)/(2*qcrit(1-alpha/2))
-                                                    )
-                                           }
-                                           ))
+                                                 se=diff(ci)/(2*qcrit(1-alpha/2))
+                                                 )} else{
+                                                      c(quantile=qhat)
+                                                  }
+                                           
+                                       }
+                                       ))
+                          if(!ci)
+                              r<-as.matrix(r)
+                          rownames(r)<-quantiles
+                          r
                       }
                       )
         class(rvals)<-"newsvyquantile"
@@ -144,25 +160,25 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
     rvals
 }
 
-SE.newsvyquantile<-function(object) {
+SE.newsvyquantile<-function(object,...) {
     do.call(c,lapply(object,function(ai) ai[,4]))    
 }
 
-vcov.newsvyquantile<-function(object) {
+vcov.newsvyquantile<-function(object,...) {
     r<-do.call(c,lapply(object,function(ai) ai[,4]))^2
     v<-matrix(NA,nrow=length(r),ncol=length(r))
     diag(v)<-r
     v
 }
 
-coef.newsvyquantile<-function(object){
+coef.newsvyquantile<-function(object,...){
     do.call(c,lapply(object,function(ai) ai[,1]))    
 }
 
 
 
 
-confint.newsvyquantile<-function(object){
+confint.newsvyquantile<-function(object,...){
     l<-do.call(c,lapply(object,function(ai) ai[,2]))
     u<-do.call(c,lapply(object,function(ai) ai[,3]))
     cbind(l,u)

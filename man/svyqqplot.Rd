@@ -14,7 +14,7 @@ svyqqmath(x, design, null=qnorm, na.rm=TRUE,xlab="Expected",ylab="Observed",...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{formula}{
+  \item{x,formula}{
 A one-sided formula for \code{svyqqmath} or a two-sided formula for \code{svyqqplot}
 }
   \item{design}{
@@ -24,6 +24,7 @@ Survey design object to look up variables
 Survey design object to look up the RHS variable in \code{svyqqplot}, if
 different from the LHS variable
 }
+\item{null}{Quantile function to compare the data quantiles to}
   \item{na.rm}{
 Remove missing values
 }

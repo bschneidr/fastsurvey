@@ -17,12 +17,10 @@
    interval.type=c("Wald","score","betaWald"), na.rm=FALSE,se=ci,
    ties=c("discrete","rounded"), df=NULL,...)
 \method{oldsvyquantile}{svyrep.design}(x, design, quantiles,
-   method ="linear", interval.type=c("probability","quantile"), f = 0,
+   method ="linear", interval.type=c("probability","quantile"), f = 1,
    return.replicates=FALSE, ties=c("discrete","rounded"),na.rm=FALSE,
    alpha=0.05,df=NULL,...)
-   
-\method{SE}{svyquantile}(object,...)
-}
+ }
 %- maybe also `usage' for other objects documented here.
 \arguments{
   \item{x}{A formula, vector or matrix}

@@ -162,7 +162,7 @@ print.regTermTestWW<-function(x,...){
   invisible(x)
 }
 
-svycontrast<-function(stat, contrasts,...) UseMethod("svycontrast")
+svycontrast<-function(stat, contrasts,add=FALSE,...) UseMethod("svycontrast")
 
 match.names <- function(nms,contrasts){
   l<-length(nms)

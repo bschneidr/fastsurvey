@@ -15,13 +15,13 @@ wider range of ways to define the quantile. See the vignette for a list of them.
 svyquantile(x, design, quantiles, ...)
 \method{svyquantile}{survey.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","score"),
-                      na.rm = FALSE,  se = TRUE,
+                      na.rm = FALSE,  ci=TRUE, se = ci,
                       qrule=c("math","school","shahvaish","hf1","hf2","hf3",
 		      "hf4","hf5","hf6","hf7","hf8","hf9"),
                       df = NULL, ...)
 \method{svyquantile}{svyrep.design}(x, design, quantiles, alpha = 0.05,
                       interval.type = c("mean", "beta","xlogit", "asin","quantile"),
-                      na.rm = FALSE, se = TRUE,
+                      na.rm = FALSE, ci = TRUE, se=ci,
                       qrule=c("math","school","shahvaish","hf1","hf2","hf3",
 		      "hf4","hf5","hf6","hf7","hf8","hf9"),
                       df = NULL, return.replicates=FALSE,...)		      
@@ -40,7 +40,7 @@ Numeric vector specifying which quantiles are requested
 \item{alpha}{Specifiea confidence interval coverage}
 \item{interval.type}{See Details below}
 \item{na.rm}{Remove missing values?}
-\item{se}{Return an estimated standard error?}
+\item{ci,se}{Return an estimated confidence interval and standard error?}
 \item{qrule}{Rule for defining the quantiles: either a character string specifying one of the built-in rules, or a function}
 \item{df}{Degrees of freedom for confidence interval estimation: \code{NULL} specifies \code{degf(design)}}
 \item{return.replicates}{Return replicate estimates of the quantile (only for \code{interval.type="quantile"})}
