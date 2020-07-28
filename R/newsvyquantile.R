@@ -56,12 +56,13 @@ svyquantile.survey.design <- function (x, design, quantiles, alpha = 0.05,
                                   }
                                   ))
                       if(!ci)
-                          r<-as.matrix(r)
-                      rownames(r)<-quantiles
+                          colnames(r)<-quantiles
+                      else
+                          rownames(r)<-quantiles
                       r
                   }
                   )
-    
+    attr(rvals,"hasci")<-ci
     class(rvals)<-"newsvyquantile"
     rvals
 }
@@ -149,11 +150,13 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                        }
                                        ))
                           if(!ci)
-                              r<-as.matrix(r)
-                          rownames(r)<-quantiles
+                              colnames(r)<-quantiles
+                          else
+                              rownames(r)<-quantiles
                           r
                       }
                       )
+        attr(rvals,"hasci")<-ci | se
         class(rvals)<-"newsvyquantile"
     }
     
@@ -161,10 +164,12 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
 }
 
 SE.newsvyquantile<-function(object,...) {
+    if(!attr(object,"hasci")) stop("object does not have uncertainty estimates")
     do.call(c,lapply(object,function(ai) ai[,4]))    
 }
 
 vcov.newsvyquantile<-function(object,...) {
+    if(!attr(object,"hasci")) stop("object does not have uncertainty estimates")
     r<-do.call(c,lapply(object,function(ai) ai[,4]))^2
     v<-matrix(NA,nrow=length(r),ncol=length(r))
     diag(v)<-r
@@ -172,13 +177,17 @@ vcov.newsvyquantile<-function(object,...) {
 }
 
 coef.newsvyquantile<-function(object,...){
-    do.call(c,lapply(object,function(ai) ai[,1]))    
+    if(attr(object,"hasci")) 
+        do.call(c,lapply(object,function(ai) ai[,1]))    
+    else
+        do.call(c,lapply(object,function(ai) ai[1,]))    
 }
 
 
 
 
 confint.newsvyquantile<-function(object,...){
+    if(!attr(object,"hasci")) stop("object does not have uncertainty estimates")
     l<-do.call(c,lapply(object,function(ai) ai[,2]))
     u<-do.call(c,lapply(object,function(ai) ai[,3]))
     cbind(l,u)
