@@ -13,7 +13,7 @@
 }
 \usage{
 \method{oldsvyquantile}{survey.design}(x, design, quantiles, alpha=0.05,
-   ci=FALSE, method = "linear", f = 0,
+   ci=FALSE, method = "linear", f = 1,
    interval.type=c("Wald","score","betaWald"), na.rm=FALSE,se=ci,
    ties=c("discrete","rounded"), df=NULL,...)
 \method{oldsvyquantile}{svyrep.design}(x, design, quantiles,
@@ -38,7 +38,6 @@
   \item{return.replicates}{Return the replicate means?}
   \item{na.rm}{Remove \code{NA}s?}
   \item{...}{arguments for future expansion}
-  \item{object}{Object returned by \code{svyquantile.survey.design}}
 }
 \details{
    The definition of the CDF and thus of the quantiles is ambiguous in

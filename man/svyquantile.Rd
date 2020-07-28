@@ -104,7 +104,7 @@ replicate-weights design and \code{interval.type="quantile"} and
   University.
 
   Hyndman, R. J. and Fan, Y. (1996) Sample quantiles in statistical packages,
-  The American Statistician 50, 361–365.
+  The American Statistician 50, 361-365.
 
   Shah BV, Vaish AK (2006) Confidence Intervals for Quantile Estimation
   from Complex Survey Data. Proceedings of the Section on Survey

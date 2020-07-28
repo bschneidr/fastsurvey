@@ -169,7 +169,7 @@ oldsvyquantile.survey.design<-function(x,design,quantiles,alpha=0.05,
 
 
 oldsvyquantile.svyrep.design<-function(x,design,quantiles,method="linear",
-                                                   interval.type=c("probability","quantile"),f=0,
+                                                   interval.type=c("probability","quantile"),f=1,
                                                    return.replicates=FALSE,
                                                    ties=c("discrete","rounded"),na.rm=FALSE,
                                                    alpha=0.05,df=NULL,...){
