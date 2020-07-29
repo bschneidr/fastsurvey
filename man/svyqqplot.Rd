@@ -9,8 +9,9 @@ Quantile-quantile plots for survey data
 Quantile-quantile plots either against a specified distribution function or comparing two variables from the same or different designs.
 }
 \usage{
-svyqqplot(formula, design, designx = NULL, na.rm = TRUE, qrule = "hf8", xlab = NULL, ylab = NULL, ...)
-svyqqmath(x, design, null=qnorm, na.rm=TRUE,xlab="Expected",ylab="Observed",...)
+svyqqplot(formula, design, designx = NULL, na.rm = TRUE, qrule = "hf8",
+    xlab = NULL, ylab = NULL, ...)
+svyqqmath(x, design, null=qnorm, na.rm=TRUE, xlab="Expected",ylab="Observed",...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
