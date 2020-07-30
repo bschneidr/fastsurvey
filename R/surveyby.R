@@ -201,6 +201,7 @@ SE.svyby <-function(object,...){
     aa<-attr(object,"svyby")
     if (!aa$vars) stop("Object does not contain variances")
     vartype<-attr(object,"svyby")$vartype
+    vartype <- c("se","ci","ci","cv","cvpct","var")[c("se","ci","ci","cv","cvpct","var") %in% vartype]
     if (pos<-match("se",vartype,0))
         object[,max(aa$margins)+aa$nstats*pos+(1:aa$nstats)]
     else if (pos<-match("var",vartype,0))
