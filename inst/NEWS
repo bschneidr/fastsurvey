@@ -40,6 +40,9 @@
 
 	SE.svyby would grab confidence interval limits instead of SEs if vartype=c("ci","se").
 
+	svylogrank(method="small") was wrong (though method="score" and method="large" are ok),
+	because of problems in obtaining the at-risk matrix from coxph.detail.
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
