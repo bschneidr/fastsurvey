@@ -41,7 +41,7 @@
 	SE.svyby would grab confidence interval limits instead of SEs if vartype=c("ci","se").
 
 	svylogrank(method="small") was wrong (though method="score" and method="large" are ok),
-	because of problems in obtaining the at-risk matrix from coxph.detail.
+	because of problems in obtaining the at-risk matrix from coxph.detail. (for Zhiwen Yao)
 
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
