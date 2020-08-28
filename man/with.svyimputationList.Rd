@@ -48,6 +48,10 @@ results<-with(designs, svymean(~drkfre))
 MIcombine(results)
 
 summary(MIcombine(results))
+
+repdesigns<-as.svrepdesign(designs, type="boot", replicates=50)
+MIcombine(with(repdesigns, svymean(~drkfre)))
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

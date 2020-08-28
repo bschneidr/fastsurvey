@@ -65,6 +65,8 @@ as.svrepdesign.svyimputationList<-function(design,type=c("auto","JK1","JKn","BRR
                            })
     }
     rval<-list(designs=repdesigns, call=sys.call(-1))
+    class(rval)<-"svyimputationList"
+    rval
 }
 
 
