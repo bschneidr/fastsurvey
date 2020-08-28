@@ -37,6 +37,38 @@ svrepdesign.imputationList<-function(variables=NULL, repweights,weights,data,mse
   rval
 }
 
+as.svrepdesign.svyimputationList<-function(design,type=c("auto","JK1","JKn","BRR","bootstrap","subbootstrap","mrbbootstrap","Fay"),
+                                           fay.rho=0, fpc=NULL, fpctype=NULL, separate.replicates=FALSE,...,compress=TRUE,
+                                           mse=getOption("survey.replicates.mse")){
+
+    if (inherits(design$design[[1]], "svyrep.design")){
+        warning("already a replicate-weights design")
+        return(design)
+    }
+    
+    pwts<-weights(design$designs[[1]], "sampling")
+    same.weights<-all(sapply(design$designs, function (d) isTRUE(all.equal(pwts, weights(d,"sampling")))))
+
+    if (!same.weights && separate.replicates){
+        repdesigns<-lapply(design$designs,
+                           function(d) as.svrepdesign(d, type=type,fay.rho=fay.rho, fpc=fpc,fpctype=fpctype,
+                                                      ..., compress=compress, mse=mse))
+    } else {
+        design1<-design$designs[[1]]
+        repdesign1<-as.svrepdesign(design1, type=type,fay.rho=fay.rho, fpc=fpc,fpctype=fpctype,
+                                   ..., compress=compress, mse=mse)
+
+        repdesigns<-lapply(design$designs,
+                           function(d) {
+                               repdesign1$variables<-d$variables
+                               repdesign1
+                           })
+    }
+    rval<-list(designs=repdesigns, call=sys.call(-1))
+}
+
+
+
 svydesign.DBimputationList<-function(ids, probs = NULL, strata = NULL, 
              variables = NULL, fpc = NULL, data, nest = FALSE, 
              check.strata = !nest,  weights = NULL, ...){

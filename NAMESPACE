@@ -50,6 +50,8 @@ S3method(svydesign, default)
 S3method(svydesign, imputationList)
 S3method(svydesign, character)
 S3method(svydesign, DBimputationList)
+S3method(as.svrepdesign, default)
+S3method(as.svrepdesign, svyimputationList)
 
 S3method(close, DBIsvydesign)
 S3method(open, DBIsvydesign)

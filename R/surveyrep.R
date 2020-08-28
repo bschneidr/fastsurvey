@@ -297,7 +297,8 @@ brrweights<-function(strata,psu, match=NULL, small=c("fail","split","merge"),
 ## Designs with replication weights rather than survey structure.
 ##
 
-as.svrepdesign<- function(design,type=c("auto","JK1","JKn","BRR","bootstrap","subbootstrap","mrbbootstrap","Fay"),
+as.svrepdesign<- function(design,...) UseMethod("as.svrepdesign")
+as.svrepdesign.default<-function(design,type=c("auto","JK1","JKn","BRR","bootstrap","subbootstrap","mrbbootstrap","Fay"),
                           fay.rho=0, fpc=NULL, fpctype=NULL,...,compress=TRUE, mse=getOption("survey.replicates.mse")){
 
   type<-match.arg(type)
