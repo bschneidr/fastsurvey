@@ -33,9 +33,11 @@ A list of the results from applying the analysis to each design object.
 library(mitools)
 data.dir<-system.file("dta",package="mitools")
 files.men<-list.files(data.dir,pattern="m.\\\\.dta$",full=TRUE)
-men<-imputationList(lapply(files.men, foreign::read.dta))
+men<-imputationList(lapply(files.men, foreign::read.dta,
+	warn.missing.labels=FALSE))
 files.women<-list.files(data.dir,pattern="f.\\\\.dta$",full=TRUE)
-women<-imputationList(lapply(files.women, foreign::read.dta))
+women<-imputationList(lapply(files.women, foreign::read.dta,
+	warn.missing.labels=FALSE))
 men<-update(men, sex=1)
 women<-update(women,sex=0)
 all<-rbind(men,women)
