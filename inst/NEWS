@@ -45,6 +45,8 @@
 
 	added as.svrepdesign.svyimputationList (for Ángel Rodríguez Laso)
 
+	logLik.svyglm used to return the deviance and now divides it by -2
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
