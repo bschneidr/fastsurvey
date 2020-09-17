@@ -43,7 +43,8 @@
 	svylogrank(method="small") was wrong (though method="score" and method="large" are ok),
 	because of problems in obtaining the at-risk matrix from coxph.detail. (for Zhiwen Yao)
 
-	added as.svrepdesign.svyimputationList (for Ángel Rodríguez Laso)
+	added as.svrepdesign.svyimputationList and withReplicates.svyimputationList
+	(for Ángel Rodríguez Laso)
 
 	logLik.svyglm used to return the deviance and now divides it by -2
 

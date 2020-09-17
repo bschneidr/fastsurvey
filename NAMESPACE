@@ -304,6 +304,7 @@ S3method(as.matrix, svrepvar)
 S3method(withReplicates, svyrep.design)
 S3method(withReplicates, svrepvar)
 S3method(withReplicates, svrepstat)
+S3method(withReplicates, svyimputationList)
 
 S3method(dim,repweights_compressed)
 S3method(dim,survey.design)

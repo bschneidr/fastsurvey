@@ -191,7 +191,18 @@ with.svyimputationList<-function (data, expr, fun, ..., multicore=getOption("sur
       attr(results, "call") <- sys.call(-1)
     }
     results
-  }
+}
+
+withReplicates.svyimputationList<-function(design, theta,...,return.replicates=FALSE){
+	if (!inherits(design$designs[[1]],"svyrep.design")) 
+		stop("not a replicate-weights design")
+		
+   m<-match.call()
+   m[[1]]<-as.name("withReplicates")	
+   rval<-eval(bquote(with(design, .(m))))
+   attr(rval,"call")<-m
+   rval
+}
 
 
 with.svyDBimputationList<-function (data, expr,  ..., multicore=getOption("survey.multicore")) {

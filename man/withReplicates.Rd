@@ -18,6 +18,7 @@ withReplicates(design, theta,..., return.replicates=FALSE)
      scale.weights=FALSE, return.replicates=FALSE)
 \method{withReplicates}{svrepvar}(design, theta,  ...,  return.replicates=FALSE)
 \method{withReplicates}{svrepstat}(design, theta,  ...,  return.replicates=FALSE)
+\method{withReplicates}{svyimputationList}(design, theta,  ...,  return.replicates=FALSE)
 \method{vcov}{svyrep.design}(object, replicates, centre,...)
 }
 %- maybe also `usage' for other objects documented here.
@@ -62,6 +63,8 @@ matrix as its first argument, and an expression will be evaluated with
 For the \code{svrepstat} method a function will get the point estimate, and an expression will be evaluated with
 \code{.replicate} set to each replicate.  The method can only be used
 when the \code{svrepstat} object includes replicates.
+
+The \code{svyimputationList} method runs \code{withReplicates} on each imputed design (which must be replicate-weight designs).
 
 }
 \value{
