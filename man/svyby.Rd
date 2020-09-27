@@ -29,6 +29,7 @@ keep.names = TRUE,verbose=FALSE, vartype=c("se","ci","ci","cv","cvpct","var"),
 \method{coef}{svyby}(object,...)
 \method{confint}{svyby}(object,  parm, level = 0.95,df =Inf,...)
 unwtd.count(x, design, ...)
+svybys(formula,  bys,  design, FUN, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -77,6 +78,8 @@ unwtd.count(x, design, ...)
     interval, use \code{degf(design)} for number of PSUs minus number of
   strata}
 \item{object}{An object of class \code{"svyby"}}
+\item{bys}{one-sided formula with each term specifying a grouping
+  (rather than being combined to give a grouping }
 }
 
 \value{
@@ -98,7 +101,10 @@ The variance type "ci" asks for confidence intervals, which are produced
   Parallel processing with \code{multicore=TRUE} is useful only for
   fairly large problems and on computers with sufficient memory. The
   \code{multicore} package is incompatible with some GUIs, although the
-  Mac Aqua GUI appears to be safe. 
+  Mac Aqua GUI appears to be safe.
+
+  The variant \code{svybys} creates a separate table for each term in
+  \code{bys} rather than creating a joint table. 
 
   }
 
@@ -183,6 +189,11 @@ vcov(ratios)
 ## empty groups
 svyby(~api00,~comp.imp+sch.wide,design=dclus1,svymean)
 svyby(~api00,~comp.imp+sch.wide,design=dclus1,svymean,drop.empty.groups=FALSE)
+
+## Multiple tables
+svybys(~api00,~comp.imp+sch.wide,design=dclus1,svymean)
+
+
 
 }
 \keyword{survey}% at least one, from doc/KEYWORDS

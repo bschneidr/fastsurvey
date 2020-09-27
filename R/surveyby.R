@@ -452,3 +452,14 @@ svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.va
   class(rval)<-c("svyby","data.frame")
   rval
 }
+
+
+svybys<-function(formula,  bys,  design, FUN, ...){
+  tms <- attr(terms(bys),"variables")[-1]	
+  
+  lapply(tms, function(tm){
+      eval(bquote(svyby(.(formula),by=~.(tm),
+                        design=.(design), FUN=.(FUN), ...)))
+  })
+  
+}
