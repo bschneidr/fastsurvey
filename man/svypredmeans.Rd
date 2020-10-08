@@ -16,8 +16,9 @@ svypredmeans(adjustmodel, groupfactor)
 A generalised linear model fit by \code{\link{svyglm}} with the adjustment variable but without the factor for which predictive means are wanted
 }
   \item{groupfactor}{
-A one-sided formula specifying the factor for which predictive means are wanted. Can use, eg, \code{~interaction(race,sex)} for combining variables}
-
+A one-sided formula specifying the factor for which predictive means are wanted. Can use, eg, \code{~interaction(race,sex)} for combining variables.
+This does not have to be a factor, but it will be modelled linearly if it isn't}
+\item{predictat}{A vector of the values of \code{groupfactor} where you want predictions.  If \code{groupfactor} is a factor, these must be values in the data, but if it is numeric you can interpolate/extrapolate}
 }
 
 \value{
@@ -45,11 +46,17 @@ data(nhanes)
 nhanes_design <- svydesign(id=~SDMVPSU, strata=~SDMVSTRA, weights=~WTMEC2YR, nest=TRUE,data=nhanes)
 agesexmodel<-svyglm(HI_CHOL~agecat+RIAGENDR, design=nhanes_design,family=quasibinomial)
 ## high cholesterol by race/ethnicity, adjusted for demographic differences
-means<-svypredmeans(agesexmodel, ~race)
+means<-svypredmeans(agesexmodel, ~factor(race))
 means
 ## relative risks compared to non-Hispanic white
 svycontrast(means,quote(`1`/`2`))
 svycontrast(means,quote(`3`/`2`))
+
+data(api)
+dstrat<-svydesign(id=~1,strata=~stype, weights=~pw, data=apistrat, fpc=~fpc)
+demog_model <- svyglm(api00~mobility+ell+hsg+meals, design=dstrat)
+svypredmeans(demog_model,~enroll, predictat=c(100,300,1000,3000))
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
