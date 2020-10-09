@@ -53,6 +53,8 @@
 
 	added predictat= option to svypredmeans for Steven Johnston.
 
+	Fixed bug in postStratify.svyrep.design, was reweighting all reps the same (Steven Johnston)
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
