@@ -134,7 +134,7 @@ of Statistics 12:46-60.
 Sribney WM (1998) "Two-way contingency tables for survey or clustered
 data" Stata Technical Bulletin 45:33-49.
 
-Thomas, DR, Rao, JNK (1990) "Small-sample comparison of level and power
+Thomas, DR, Rao, JNK (1987) "Small-sample comparison of level and power
 for simple goodness-of-fit statistics under cluster sampling" JASA 82:630-636
 
 }
