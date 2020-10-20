@@ -87,7 +87,7 @@ and used by the SUDAAN software package. It is a Wald test based on the
 differences between the observed cells counts and those expected under
 independence. The adjustment given by \code{statistic="adjWald"} reduces
 the statistic when the number of PSUs is small compared to the number of
-degrees of freedom of the test. Thomas and Rao (1990) compare these
+degrees of freedom of the test. Thomas and Rao (1987) compare these
 tests and find the adjustment benefical.
 
 \code{statistic="lincom"} replaces the numerator of the Rao-Scott F with
