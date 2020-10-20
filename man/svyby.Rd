@@ -1,5 +1,6 @@
 \name{svyby}
 \alias{svyby}
+\alias{svybys}
 \alias{svyby.default}
 \alias{SE.svyby}
 \alias{deff.svyby}

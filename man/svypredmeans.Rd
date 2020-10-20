@@ -8,7 +8,7 @@ Predictive marginal means
 Predictive marginal means for a generalised linear model, using the method of Korn and Graubard (1999) and matching the results of SUDAAN. The predictive marginal mean for one level of a factor is the probability-weighted average of the fitted values for the model on new data where all the observations are set to that level of the factor but have whatever values of adjustment variables they really have.
 }
 \usage{
-svypredmeans(adjustmodel, groupfactor)
+svypredmeans(adjustmodel, groupfactor, predictat=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
