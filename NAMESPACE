@@ -16,7 +16,7 @@ export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
        svyfactanal, svypredmeans, svyprcomp, trimWeights,stratsample,svylogrank,
        svyranktest,svystandardize,
        psrsq, svysurvreg, cal_names, svycralpha, svyivreg, svynls,
-       oldsvyquantile,svyqqplot, svyqqmath, svybys)
+       oldsvyquantile,svyqqplot, svyqqmath, svybys, svygofchisq)
 
 S3method(svyloglin,survey.design)
 S3method(svyloglin,svyrep.design)

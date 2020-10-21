@@ -57,6 +57,8 @@
 
 	Fix date for Thomas & Rao (1987) (Neil Diamond)
 
+	Add svygofchisq() for one-sample chisquared goodness of fit (for Natalie Gallagher)
+
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
