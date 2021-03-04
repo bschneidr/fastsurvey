@@ -1278,17 +1278,23 @@ summary.svyglm<-function (object, correlation = FALSE, df.resid=NULL,...)
 }
 
 
-confint.svyglm<-function(object,parm,level=0.95,method=c("Wald","likelihood"),ddf=Inf,...){
-  method<-match.arg(method)
-  if(method=="Wald"){
-      tlevel <- 1 - 2*pnorm(qt((1 - level)/2, df = ddf))
-      ci<-confint.default(object,parm=parm,level=tlevel,...)
-      a <- (1 - level)/2
-      a <- c(a, 1 - a)
-      pct <- format.perc(a, 3)
-      colnames(ci)<-pct
-      return(ci)
-  }
+confint.svyglm<-function(object,parm,level=0.95,method=c("Wald","likelihood"),ddf=NULL,...){
+    method<-match.arg(method)
+    if(method=="Wald"){        
+        if (is.null(ddf))
+            ddf <- object$df.residual
+        if (ddf<=0) {
+            ci<-confint.default(object,parm=parm,level=.95,...)*NaN
+        } else {
+            tlevel <- 1 - 2*pnorm(qt((1 - level)/2, df = ddf))
+            ci<-confint.default(object,parm=parm,level=tlevel,...)
+        }
+        a <- (1 - level)/2
+        a <- c(a, 1 - a)
+        pct <- format.perc(a, 3)
+        colnames(ci)<-pct
+        return(ci)
+    }
   pnames <- names(coef(object))
   if (missing(parm)) 
     parm <- seq_along(pnames)
@@ -1296,9 +1302,11 @@ confint.svyglm<-function(object,parm,level=0.95,method=c("Wald","likelihood"),dd
     parm <- match(parm, pnames, nomatch = 0)
   lambda<-diag(object$cov.unscaled[parm,parm,drop=FALSE])/diag(object$naive.cov[parm,parm,drop=FALSE])
   if(is.null(ddf)) ddf<-object$df.residual
-  if (ddf==Inf)
+  if (ddf==Inf){
       alpha<-pnorm(qnorm((1-level)/2)*sqrt(lambda))/2
-  else {
+  }  else if (ddf<=0) {
+      stop("zero or negative denomintor df")
+  } else {
       alpha<-pnorm(qt((1-level)/2,df=ddf)*sqrt(lambda))/2
   }
   rval<-vector("list",length(parm))

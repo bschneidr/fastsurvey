@@ -2,6 +2,21 @@
 deviance.svycoxph<-function(object,...) 2 * (object$ll[1] - object$ll[2])
 deviance.coxph<-function(object,...) 2 * (object$loglik[1] - object$loglik[2])
 
+explicit1<-function(formula){
+    if (length(formula)==1) 
+        return(formula==1)
+    
+    if (!(formula[[1]]=="+" || formula[[1]]=="*" || formula[[1]]=="/" || formula[[1]]=="^"|| formula[[1]]=="~"))
+        return(FALSE)
+    
+    if (length(formula)==3){
+        (formula[[2]]==1) || explicit1(formula[[2]]) || explicit1(formula[[3]])
+    } else {
+        (formula[[2]]==1) || explicit1(formula[[2]])
+    }
+    
+}
+
 regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","WorkingWald","LRT"), lrt.approximation="saddlepoint"){
 
   method<-match.arg(method)
@@ -11,20 +26,30 @@ regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","Wo
     tt<-lapply(tt,sort)
     sapply(tt,paste,collapse=":")
   }
+  
+  if(inherits(test.terms,"formula")){
+      test_intercept<-explicit1(test.terms)
+      test.terms<-attr(terms(test.terms),"term.labels")
+  } else test_intercept<-FALSE
     
-  
-  if(inherits(test.terms,"formula"))
-    test.terms<-attr(terms(test.terms),"term.labels")
-  
   okbeta<-!is.na(coef(model,na.rm=FALSE)) ## na.rm for svyglm
   tt<-attr(terms(model),"term.labels")
   aa<-attr(model.matrix(model),"assign")[okbeta]
-  if((inherits(model,"coxph")|| inherits(model,"svyloglin") || inherits(model,"svyolr"))  && attr(terms(model),"intercept"))
-    aa<-aa[-1]
+  if((inherits(model,"coxph")|| inherits(model,"svyloglin") || inherits(model,"svyolr"))  && attr(terms(model),"intercept")){
+      aa<-aa[-1]
+  }
+    
   index<-which(aa %in% match(canonicalOrder(test.terms),canonicalOrder(tt)))
   if (any(is.na(index)))
     stop("Terms didn't match:",canonicalOrder(test.terms),canonicalOrder(tt))
-  
+
+    if (test_intercept){
+        if (attr(terms(model),"intercept"))
+            index<-unique(c(1,index))
+        else
+            stop("model does not have an intercept")
+    }
+    
   beta<-coef(model)[index]
 
   if (!is.null(null))
@@ -67,7 +92,13 @@ regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","Wo
       V0<-solve(model$Hess)
     } else stop("method='LRT' not supported for this model")
     V0<-V0[index,index]
-    test.formula<-make.formula(test.terms)[[2]]
+    
+    if (test_intercept){
+        test.formula<-make.formula(c(1,test.terms))[[2]]
+    } else {
+        test.formula<-make.formula(test.terms)[[2]]
+    }
+    
     if (!("formula") %in% names(model$call))
       names(model$call)[[2]]<-"formula"
 

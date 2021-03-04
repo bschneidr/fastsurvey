@@ -59,6 +59,16 @@
 
 	Add svygofchisq() for one-sample chisquared goodness of fit (for Natalie Gallagher)
 
+	confint.svyglm(method="Wald") now uses t distribution with design df by default.
+	(for Ehsan Karim)
+
+	confint.svyglm() checks for zero/negative degrees of freedom
+
+	mrb bootstrap now doesn't throw an error when there's a single PSU in a stratum
+	(Steve White)
+
+	oldsvyquantile() bug with producing replicate-weight confidence intervals for
+	multiple quantiles (Ben Schneider)
 
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
