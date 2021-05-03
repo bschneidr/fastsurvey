@@ -99,11 +99,11 @@ regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","Wo
         test.formula<-make.formula(test.terms)[[2]]
     }
     
-    if (!("formula") %in% names(model$call))
+    if (!("formula" %in% names(model$call)))
       names(model$call)[[2]]<-"formula"
 
     if (method=="LRT"){
-        model0<-eval(bquote(update(model, .~.-(.(test.formula)))))
+        model0<-eval(bquote(update(.(model), .~.-(.(test.formula)))),environment(formula(model)))
         chisq<-deviance(model0)-deviance(model)
     } else {
         chisq<-beta%*%solve(V0)%*%beta

@@ -12,7 +12,7 @@ A method for the \code{\link{anova}} function, for use on \code{\link{svyglm}} o
 \usage{
 \method{anova}{svyglm}(object, object2 = NULL, test = c("F", "Chisq"), 
  method = c("LRT", "Wald"), tolerance = 1e-05, ..., force = FALSE)
-\method{AIC}{svyglm}(object,...,k=2)
+\method{AIC}{svyglm}(object,...,k=2, null_has_intercept=TRUE)
 \method{BIC}{svyglm}(object,...,maximal)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -35,6 +35,8 @@ A method for the \code{\link{anova}} function, for use on \code{\link{svyglm}} o
   \item{\dots}{
   For \code{AIC} and \code{BIC}, optionally more \code{svyglm} objects
 }
+\item{null_has_intercept}{Does the null model for AIC have an intercept or
+  not? }
   \item{force}{
    Force the tests to be done by explicit projection even if the models
    are symbolically nested (eg, for debugging)
