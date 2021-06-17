@@ -1079,9 +1079,11 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
 
       subset<-substitute(subset)
       subset<-eval(subset, model.frame(design), parent.frame())
-      if (!is.null(subset))
+    if (!is.null(subset)){
+        if (any(is.na(subset)))
+            stop("subset must not contain NA values")
         design<-design[subset,]
-      
+      }
       data<-model.frame(design)
 
       g<-match.call()
@@ -1091,6 +1093,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
       g$var <- NULL
     g$rescale <- NULL
     g$deff<-NULL
+    g$subset <- NULL  ## done it already
       g$family<-family
       if (is.null(g$weights))
         g$weights<-quote(.survey.prob.weights)

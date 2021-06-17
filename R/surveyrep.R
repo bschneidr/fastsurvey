@@ -1157,7 +1157,10 @@ svrepglm<-svyglm.svyrep.design<-function(formula, design, subset=NULL,family=sta
     .Deprecated("svyglm")
   
   subset<-substitute(subset)
-  subset<-eval(subset, design$variables, parent.frame())
+    subset<-eval(subset, design$variables, parent.frame())
+    if (any(is.na(subset)))
+        stop("subset must not contain NA values")
+
   if (!is.null(subset))
     design<-design[subset,]
 

@@ -73,6 +73,8 @@
 	regTermTest(,method="LRT") didn't work if the survey design object and model were
 	defined in a function (for Keiran Shao)
 
+	svyglm() has clearer error message when the subset= argument contains NAs (for Pam Shaw)
+
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
 	svyby() to estimate covariances between domains, which could previously only be
