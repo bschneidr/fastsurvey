@@ -35,7 +35,7 @@ regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","Wo
   okbeta<-!is.na(coef(model,na.rm=FALSE)) ## na.rm for svyglm
   tt<-attr(terms(model),"term.labels")
   aa<-attr(model.matrix(model),"assign")[okbeta]
-  if((inherits(model,"coxph")|| inherits(model,"svyloglin") || inherits(model,"svyolr"))  && attr(terms(model),"intercept")){
+  if((inherits(model,"svyloglin") || inherits(model,"svyolr"))  && attr(terms(model),"intercept")){
       aa<-aa[-1]
   }
     
