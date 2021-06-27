@@ -64,6 +64,9 @@
 
 	confint.svyglm() checks for zero/negative degrees of freedom
 
+
+	confint.svyglm() checks for zero/negative degrees of freedom
+
 	mrb bootstrap now doesn't throw an error when there's a single PSU in a stratum
 	(Steve White)
 
@@ -74,6 +77,7 @@
 	defined in a function (for Keiran Shao)
 
 	svyglm() has clearer error message when the subset= argument contains NAs (for Pam Shaw)
+	and when the weights contain NAs (for Paige Johnson)
 
 	regTermTest was dropping the first term for coxph() models (Adam Elder)
 

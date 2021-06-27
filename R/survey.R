@@ -1098,7 +1098,9 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
       if (is.null(g$weights))
         g$weights<-quote(.survey.prob.weights)
       else 
-        g$weights<-bquote(.survey.prob.weights*.(g$weights))
+          g$weights<-bquote(.survey.prob.weights*.(g$weights))
+    if(any(is.na(g$weights)))
+        stop("weights must not contain NA values")
       g$data<-quote(data)
       g[[1]]<-quote(glm)      
 
