@@ -81,6 +81,8 @@
 
 	regTermTest was dropping the first term for coxph() models (Adam Elder)
 
+	svydesign() is much faster for very large datasets with character ids or strata.
+
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
 	svyby() to estimate covariances between domains, which could previously only be
