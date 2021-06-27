@@ -1099,8 +1099,6 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
         g$weights<-quote(.survey.prob.weights)
       else 
           g$weights<-bquote(.survey.prob.weights*.(g$weights))
-    if(any(is.na(g$weights)))
-        stop("weights must not contain NA values")
       g$data<-quote(data)
       g[[1]]<-quote(glm)      
 
@@ -1108,6 +1106,11 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
       ## (unless the user doesn't want to)
       if (rescale)
           data$.survey.prob.weights<-(1/design$prob)/mean(1/design$prob)
+      else
+          data$.survey.prob.weights<-(1/design$prob)
+
+      if(any(is.na(data$.survey.prob.weights)))
+        stop("weights must not contain NA values")
       if (!all(all.vars(formula) %in% names(data))) 
 	stop("all variables must be in design= argument")
     g<-with(list(data=data), eval(g))
