@@ -16,8 +16,8 @@ svyttest(formula, design,  ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{formula}{Formula, \code{outcome~group} for two-sample,
-    \code{outcome~0} or \code{outcome~1} for one-sample. \code{group}
-    must be a factor or character with two levels, or be coded 0/1 }
+    \code{outcome~0} or \code{outcome~1} for one-sample. The \code{group} variable 
+    must be a factor or character with two levels, or be coded 0/1 or 1/2}
   \item{design}{survey design object}
   \item{\dots}{for methods }
 }
