@@ -1119,7 +1119,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
       
       nas<-g$na.action
       if (length(nas))
-	design<-design[-nas,]
+         design<-design[-nas,]
 
       g$cov.unscaled<-svy.varcoef(g,design)
       g$df.residual <- degf(design)+1-length(coef(g)[!is.na(coef(g))])
@@ -1141,7 +1141,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
     }
 
     if (influence){
-        estfun<-model.matrix(g)*resid(g,"working")*g$weights
+        estfun< model.matrix(g)*naa_shorter(nas, resid(g,"working"))*g$weights
         if (g$rank<NCOL(estfun)){
             estfun<-estfun[,g$qr$pivot[1:g$rank]]
         }
@@ -1176,7 +1176,8 @@ vcov.svyglm<-function(object,...) {
 
 svy.varcoef<-function(glm.object,design){
     Ainv<-summary(glm.object)$cov.unscaled
-    estfun<-model.matrix(glm.object)*resid(glm.object,"working")*glm.object$weights
+    nas<-glm.object$na.action
+    estfun<-model.matrix(glm.object)*naa_shorter(nas, resid(glm.object,"working"))*glm.object$weights
     if (glm.object$rank<NCOL(estfun)){
       estfun<-estfun[,glm.object$qr$pivot[1:glm.object$rank]]
     }

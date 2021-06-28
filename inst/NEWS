@@ -83,6 +83,8 @@
 
 	svydesign() is much faster for very large datasets with character ids or strata.
 
+	svyglm() now works with na.action=na.exclude (for Terry Therneau)
+
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
 	svyby() to estimate covariances between domains, which could previously only be

@@ -57,3 +57,5 @@ twophase.R: separately verifiable examples of twophase studies
 
 quantile-chile.R: example of interpolating for quantiles, from Chilean 
 	stats agency
+
+na_action.R: check that svyglm works with na.action=na.exclude

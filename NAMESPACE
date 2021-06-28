@@ -468,4 +468,3 @@ S3method(print, svynls)
 S3method(summary, svynls)
 S3method(coef,svynls)
 S3method(vcov,svynls)
-
