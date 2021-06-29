@@ -37,7 +37,7 @@ Design object
   \item{quantiles}{
 Numeric vector specifying which quantiles are requested
 }
-\item{alpha}{Specifiea confidence interval coverage}
+\item{alpha}{Specified confidence interval coverage}
 \item{interval.type}{See Details below}
 \item{na.rm}{Remove missing values?}
 \item{ci,se}{Return an estimated confidence interval and standard error?}
