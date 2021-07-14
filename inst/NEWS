@@ -85,6 +85,10 @@
 
 	svyglm() now works with na.action=na.exclude (for Terry Therneau)
 
+	extractAIC.svylm does the design-based AIC for the two-parameter Gaussian model, so
+	estimating the variance parameter as well as the regression parameters.
+	(for Benmei Liu and Barry Graubard)
+
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
 	svyby() to estimate covariances between domains, which could previously only be

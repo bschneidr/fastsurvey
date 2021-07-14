@@ -85,7 +85,7 @@ AIC.svycoxph<-function (object, ..., k = 2)
 ## dAIC=-2\max_{\beta,\sigma^2}\log\ell +2p= n\log\mathrm{RSS}-n\log n +n +n\log 2\pi +2p\bar\delta
 
 
-extractAIC.svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
+extractAIC.svylm<-extractAIC.svreplm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
     sfit <- summary(fit)
     n<-sfit$df.null
     Nhat<-sum(w<-fit$prior.weights)
@@ -116,7 +116,7 @@ extractAIC.svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
     eff.p<-sum(diag(Delta_mu))+Deltasigma2
     aic <- minus2ellhat + k*eff.p
         
-    c(eff.p=eff.p, AIC=aic,deltabar=deltabar)
+    c(eff.p=eff.p, AIC=aic,deltabar=deltabar)/sigma2hat
 }
 
 

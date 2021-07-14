@@ -1270,6 +1270,9 @@ svrepglm<-svyglm.svyrep.design<-function(formula, design, subset=NULL,family=sta
     full$replicates<-betas
   }  
   class(full)<-c("svrepglm", "svyglm", class(full))
+  if(all.equal(family(g),gaussian()))  ## for AIC
+      class(g)<-c("svyreplm",class(g))
+    
   full$call<-sys.call(-1)
   if(!("formula" %in% names(full$call))) {
     if (is.null(names(full$call)))
