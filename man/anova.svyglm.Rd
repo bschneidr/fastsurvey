@@ -2,6 +2,7 @@
 \alias{anova.svyglm}
 \alias{AIC.svyglm}
 \alias{BIC.svyglm}
+\alias{extractAIC.svylm}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Model comparison for glms.
@@ -14,12 +15,12 @@ A method for the \code{\link{anova}} function, for use on \code{\link{svyglm}} o
  method = c("LRT", "Wald"), tolerance = 1e-05, ..., force = FALSE)
 \method{AIC}{svyglm}(object,...,k=2, null_has_intercept=TRUE)
 \method{BIC}{svyglm}(object,...,maximal)
-\method{extractAIC}{svylm}(object,scale,k=2, null_has_intercept=TRUE)
+\method{extractAIC}{svylm}(fit,scale,k=2,..., null_has_intercept=TRUE)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{
+  \item{object,fit}{
   A \code{\link{svyglm}} object.
 }
   \item{object2}{
