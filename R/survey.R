@@ -1148,7 +1148,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
         attr(g, "influence")<-estfun%*%g$naive.cov
     }
 
-    if(all.equal(family(g),gaussian()))  ## for AIC
+    if(isTRUE(all.equal(stats::family(g),gaussian())))  ## for AIC
         class(g)<-c("svylm",class(g))
     g$survey.design<-design 
     g
