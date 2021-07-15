@@ -13,6 +13,7 @@ AIC.svyglm<-function(object,...,k=2,null_has_intercept=TRUE){
     }
 }
 extractAIC.svyglm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
+    if(is.svylm(fit)) return(extractAIC_svylm(fit,...))
     if (length(attr(terms(fit),"factors"))){
         ftest<-delete.response(formula(fit))
         if (!null_has_intercept)
@@ -84,8 +85,9 @@ AIC.svycoxph<-function (object, ..., k = 2)
 ##  special-case the Gaussian
 ## dAIC=-2\max_{\beta,\sigma^2}\log\ell +2p= n\log\mathrm{RSS}-n\log n +n +n\log 2\pi +2p\bar\delta
 
+is.svylm<-function(it) {inherits(it,"svyglm") && isTRUE(all.equal(stats::family(it),gaussian()))}
 
-extractAIC.svylm<-extractAIC.svreplm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
+extractAIC_svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
     sfit <- summary(fit)
     n<-sfit$df.null
     Nhat<-sum(w<-fit$prior.weights)
