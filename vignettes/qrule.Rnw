@@ -2,11 +2,14 @@
 \usepackage{url}
 %\VignetteIndexEntry{Quantile rules}
 \usepackage{Sweave}
-\usepackage[normalem]{ulem}
 \author{Thomas Lumley}
 \title{Estimating  quantiles}
 
+\newlength{\wdth}
+\newcommand{\strike}[1]{\settowidth{\wdth}{#1}\rlap{\rule[.5ex]{\wdth}{.4pt}}#1}
+
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 \maketitle
 
 The $p$th quantile is defined as the value where the estimated cumulative
@@ -29,7 +32,7 @@ Rules in the \texttt{svyquantile()} function can be divided into three classes
 These are based on the discrete empirical CDF that puts weight
 proportional to the weight $w_k$ on values $x_k$. 
 
-$$\hat F(x) = \frac{\sum_i w_i}{\sum_i \{x_i\leq x\}w_i}$$
+$$\hat F(x) = \frac{\sum_i \{x_i\leq x\}w_i}{\sum_i w_i}$$
 
 \paragraph{The mathematical inverse}
 
@@ -43,13 +46,13 @@ The school definition of the median for an even number of observations
 is the average of the middle two observations.  We extend this to say
 that the $p$th quantile is $q_{\mathrm{low}}=\hat F^{-1}(p)$ if $\hat F(q_{\mathrm{low}})=p$
 and otherwise is the the average of $\hat F^{-1}(p)$ and the next
-higher observation. This is the same as  \texttt{type=2} in \texttt{quantile}.
+higher observation. This is \texttt{school} and \texttt{hf2} and is the same as  \texttt{type=2} in \texttt{quantile}.
 
 
 \paragraph{Nearest even order statistic}
 The $p$th quantile is whichever of $\hat F^{-1}(p)$ and the next
 higher observation is at an even-numbered position when the distinct
-data values are sorted.   This is the same as  \texttt{type=3} in \texttt{quantile}.
+data values are sorted.   This is \texttt{hf3} and is the same as  \texttt{type=3} in \texttt{quantile}.
 
 \subsection*{Continuous rules}
 These construct the empirical CDF as a piecewise-linear function and
@@ -90,6 +93,6 @@ denominator, such as
 $$p_k = (C^*_k-w^*_k/3)/(C^*_n+2/3).$$
 
 Comparing these would be 
-\sout{a worthwhile}\dots\sout{an interesting}... a research question for
+\strike{a worthwhile}\dots\strike{an interesting}... a research question for
 simulation.
 \end{document}
