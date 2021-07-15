@@ -89,6 +89,11 @@
 	estimating the variance parameter as well as the regression parameters.
 	(for Benmei Liu and Barry Graubard)
 
+	svydesign(, pps=poisson_sampling()) for Poisson sampling, and ppscov() for
+	specifying PPS design with weighted or unweighted covariance of sampling indicators
+	(for Claudia Rivera Rodriguez)
+
+
 4.0	Some (and eventually nearly all) functions now return influence functions when
 	called with a survey.design2 object and the influence=TRUE option.  These allow
 	svyby() to estimate covariances between domains, which could previously only be
