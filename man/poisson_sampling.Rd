@@ -26,7 +26,7 @@ Object of class \code{ppsdcheck}
 }
 \examples{
 data(api)
-apipop$prob<-apipop$api00/1000
+apipop$prob<-with(apipop, 200*api00/sum(api00))
 insample<-rbinom(nrow(apipop),1,apipop$prob)
 apipois<-apipop[insample,]
 despois<-svydesign(id=~1, prob=~prob, pps=poisson_sampling(apipois$prob), data=apipois)
