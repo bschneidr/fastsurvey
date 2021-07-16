@@ -350,6 +350,7 @@ S3method(calibrate,svyrep.design)
 S3method(calibrate,twophase)
 S3method(calibrate,twophase2)
 S3method(calibrate, DBIsvydesign)
+S3method(calibrate, pps)
 
 S3method(estWeights,data.frame)
 S3method(estWeights,twophase)

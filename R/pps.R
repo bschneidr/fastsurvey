@@ -295,7 +295,7 @@ ppsvar<-function(x,design){
       if (inherits(psvar, "greg_calibration")) {
         if (psvar$stage==0){
           ## G-calibration at population level
-          y<-qr.resid(psvar$qr,y/psvar$w)*psvar$w
+          y<-qr.resid(psvar$qr,x/psvar$w)*psvar$w
         } else {
           ## G-calibration within clusters
           stop("calibration within clusters not yet available for PPS designs")
