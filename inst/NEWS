@@ -1,3 +1,5 @@
+4.1-2   deffs in svyglm.svyrep.dsign (Ben Schneider)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

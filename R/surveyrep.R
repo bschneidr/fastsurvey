@@ -1437,7 +1437,7 @@ svyratio.svyrep.design<-svrepratio<-function(numerator=formula,denominator, desi
         vars[i,j]<-svrVar(allstats$replicates[,i]/allstats$replicates[,nn+j],
                           design$scale, design$rscales,mse=design$mse,coef=rval$ratio[i,j])
         if (deff=="replace" || deff)
-          deffs[i,j]<-deff(svytotal(numerator[,i]-rval[i,j]*denominator[,j],design,deff=deff))
+          deffs[i,j]<-deff(svytotal(numerator[,i]-rval$ratio[i,j]*denominator[,j],design,deff=deff))
       }
     }
   }
