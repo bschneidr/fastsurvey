@@ -1,4 +1,6 @@
-4.1-2   deffs in svyglm.svyrep.dsign (Ben Schneider)
+4.2	deffs in svyglm.svyrep.design (Ben Schneider)
+
+	svynls() allows for prior (eg precision) weights
 
 4.1-1	CRAN
 
