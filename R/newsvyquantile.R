@@ -142,7 +142,7 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                                ci<-ci_fun(xi,qhat,p,design,qrule,alpha,df)
                                                names(ci)<-c(round(100*alpha/2,2),round(100-100*alpha/2,2))
                                                c(quantile=qhat,ci=ci,
-                                                 se=diff(ci)/(2*qcrit(1-alpha/2))
+                                                 se=unname(diff(ci)/(2*qcrit(1-alpha/2)))
                                                  )} else{
                                                       c(quantile=qhat)
                                                   }
