@@ -5,12 +5,17 @@ svynls<-function(formula, design, start, weights=NULL, ...){
 }
 
 
-var_power<-function(d){
-    function(res,mu){
-        dispersion<-sum(res^2) /sum(mu^d)
-        variance<-dispersion*mu^d
-        1/variance
-    }
+var_power<-function(d,iterations=2){
+    rval <-list(
+        precision_weights=function(res,mu){
+            dispersion<-sum(res^2) /sum(mu^d)
+            variance<-dispersion*mu^d
+            1/variance
+        },
+        iterations=iterations
+    )
+    class(rval)<-"svynls_weights"
+    rval
 }
 
 
