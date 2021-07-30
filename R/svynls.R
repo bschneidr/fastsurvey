@@ -5,14 +5,16 @@ svynls<-function(formula, design, start, weights=NULL, ...){
 }
 
 
-var_power<-function(d,iterations=2){
-    rval <-list(
+var_power<-function(d, maxit=3){
+    dispersion<-0
+    rval<-list(
         precision_weights=function(res,mu){
-            dispersion<-sum(res^2) /sum(mu^d)
-            variance<-dispersion*mu^d
+            dispersion<<-sum((res^2)^d) /sum(abs(mu)^d)
+            variance<-dispersion*abs(mu)^d
             1/variance
         },
-        iterations=iterations
+        iterations=maxit,
+        name=paste0("weights: variance =",signif(dispersion,3),"mu^",d)
     )
     class(rval)<-"svynls_weights"
     rval
@@ -40,9 +42,22 @@ svynls.svyrep.design<-function(formula, design, start, weights=NULL, ..., return
     
     meanweight<-mean(weights(design, "sampling"))
     dat$.survey.prob.weight<-prior.weights*weights(design, "sampling")/meanweight
-
+    if (inherits(weights, "svynls_weights")){
+        maxit<-weights$iterations
+    } else {
+        maxit<-0
+    }
     
     first<-nls(formula,dat, weights=.survey.prob.weight,start=start, ...)
+
+    for(i in seq_len(maxit)){
+        prior.weights<-weights$precision_weights(fitted(fit), resid(fit))
+        dat$.survey.prob.weight<-prior.weights*weights(design, "sampling")/meanweight
+        first<-nls(formula, dat, weights=.survey.prob.weight,start=start,
+                   ...)
+        first$precision_weights<-prior.weights
+    }
+
     theta<-coef(first)
     
     repwts<-weights(design,"analysis")
@@ -86,9 +101,24 @@ svynls.survey.design2<-function(formula, design, start, weights=NULL, ..., influ
     
     meanweight<-mean(weights(design, "sampling"))
     w<-prior.weights*weights(design, "sampling")/meanweight
+
+    if (inherits(weights, "svynls_weights")){
+        maxit<-weights$iterations
+    } else {
+        maxit<-0
+    }
     dat$.survey.prob.weight<-w    
     fit<-nls(formula, dat, weights=.survey.prob.weight,start=start,
              ...)
+    for(i in seq_len(maxit)){
+        precwt<-weights$precision_weights(fitted(fit), resid(fit))
+        w<-precwt*weights(design, "sampling")/meanweight
+        dat$.survey.prob.weight<-w    
+        fit<-nls(formula, dat, weights=.survey.prob.weight,start=start,
+                 ...)
+        fit$precision_weights<-precwt
+    }
+
     
     v0<-summary(fit)$cov.unscaled
     theta<-coef(fit)
