@@ -4,6 +4,8 @@
 
 	improved names in svyquantile.svyrep.design (Ben Scheider)
 
+	trimWeights() could get into an infinite recursion (Ingmar Sturm)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

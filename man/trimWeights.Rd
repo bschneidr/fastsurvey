@@ -29,7 +29,7 @@ trimWeights(design, upper = Inf, lower = -Inf, ...)
   \item{strict}{
     The reapportionment of the `trimmings' from the weights can push
     other weights over the limits. If \code{trim=TRUE} the function
-    calls itself recursively to prevent this.
+    repeats the trimming iteratively to prevent this.
   }
   \item{compress}{
     Compress the replicate weights after trimming.
