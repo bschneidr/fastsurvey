@@ -6,6 +6,7 @@ svynls<-function(formula, design, start, weights=NULL, ...){
 
 
 var_power<-function(d, maxit=3){
+    ## this should use svytotal
     dispersion<-0
     rval<-list(
         precision_weights=function(res,mu){

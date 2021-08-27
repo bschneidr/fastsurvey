@@ -458,7 +458,6 @@ do_trimWeights<-function(pw, upper,lower, has_trimmed){
     pwnew<-pmax(lower,pmin(pw, upper))
     trimmings<-pw-pwnew
     can_trim<-!outside & !has_trimmed
-    print(table(can_trim))
     if (!any(can_trim)){
         warning("trimming failed")
     } else {
