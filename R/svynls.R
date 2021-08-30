@@ -34,7 +34,7 @@ utils::globalVariables(c(".survey.prob.weight", ".survey.repwt"))
 
 svynls.svyrep.design<-function(formula, design, start, weights=NULL, ..., return.replicates=FALSE){
     has_vars<- intersect(all.vars(formula),colnames(design))
-    dat<-model.frame(design)[,all.vars(formula)]
+    dat<-model.frame(design)[,has_vars]
 
     if (is.numeric(weights))
         prior.weights<-weights
@@ -52,7 +52,7 @@ svynls.svyrep.design<-function(formula, design, start, weights=NULL, ..., return
     first<-nls(formula,dat, weights=.survey.prob.weight,start=start, ...)
 
     for(i in seq_len(maxit)){
-        prior.weights<-weights$precision_weights(fitted(fit), resid(fit))
+        prior.weights<-weights$precision_weights(fitted(first), resid(first))
         dat$.survey.prob.weight<-prior.weights*weights(design, "sampling")/meanweight
         first<-nls(formula, dat, weights=.survey.prob.weight,start=start,
                    ...)
@@ -66,7 +66,7 @@ svynls.svyrep.design<-function(formula, design, start, weights=NULL, ..., return
     
     for(i in ncol(repwts)){
           dat$.survey.repwt<-prior.weights*repwts[,i]/meanweight
-          model<-nls(formula,dat, .survey.repwt,start=theta, ...)
+          model<-nls(formula,dat, weights=.survey.repwt,start=theta, ...)
           thetas[i, ] <- coef(model)
     }
 

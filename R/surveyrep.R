@@ -300,7 +300,9 @@ brrweights<-function(strata,psu, match=NULL, small=c("fail","split","merge"),
 as.svrepdesign<- function(design,...) UseMethod("as.svrepdesign")
 as.svrepdesign.default<-function(design,type=c("auto","JK1","JKn","BRR","bootstrap","subbootstrap","mrbbootstrap","Fay"),
                           fay.rho=0, fpc=NULL, fpctype=NULL,...,compress=TRUE, mse=getOption("survey.replicates.mse")){
-
+    if(!is.null(design$postStrata)){
+        stop("postStratify, rake, or calibrate the design *after* adding replicate weights")
+        }
   type<-match.arg(type)
 
   if (type=="auto"){

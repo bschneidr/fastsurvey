@@ -484,7 +484,7 @@ trimWeights.survey.design2<-function(design, upper=Inf, lower= -Inf, strict=FALS
   design
 }
 
-trimWeights.svyrep.design<-function(design, upper=Inf, lower= -Inf, compress=FALSE,...){
+trimWeights.svyrep.design<-function(design, upper=Inf, lower= -Inf, strict=FALSE, compress=FALSE,...){
   pw<-weights(design,"sampling")
   outside<-pw<lower | pw>upper
   if (any(outside)) {
@@ -501,16 +501,18 @@ trimWeights.svyrep.design<-function(design, upper=Inf, lower= -Inf, compress=FAL
   rw<-weights(design, "analysis")
   outside<-rw<lower | rw>upper
   if (any(outside)) {
-    rwnew<-pmax(lower,pmin(rw, upper))
+    rwnew<-matrix(pmax(lower,pmin(rw, upper)),nrow=nrow(rw))
     trimmings<-rw-rwnew
-    rwnew<-rwnew[!outside]+t(t(!outside)+colSums(trimmings)/colSums(!outside))
+    rwnew<-rwnew+t(t(!outside)*colSums(trimmings)/colSums(!outside))
     if (compress)
       design$repweights<-compressWeights(rwnew)
     else
       design$repweights<-rwnew
     design$combined.weights<-TRUE
   }
-  
+  design$call<-sys.call()
+  design$call[[1]]<-as.name(.Generic)
+
   design
 }
 

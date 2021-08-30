@@ -8,6 +8,11 @@
 
 	data(myco) from Rao, Scott, and Skinner (originally from Clayton & Hills)
 
+	as.svrepdesign now throws an error with post-stratified/raked/calibrated
+	designs -- create replicates *first*, then calibrate (for Lauren Kennedy)
+
+	trimWeights now works with replicate-weights designs
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
