@@ -6,6 +6,8 @@
 
 	trimWeights() could get into an infinite recursion (Ingmar Sturm)
 
+	data(myco) from Rao, Scott, and Skinner (originally from Clayton & Hills)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
