@@ -47,6 +47,8 @@ rakecheck.R: check that raking by iterative post-stratification agrees with
 
 regpredict.R: ratio and regression estimation of a total.
 
+rss_scores.R:  Score test example from Rao, Scott, and Skinner (1998)
+
 scoping.R: check that svyglm and svycoxph work inside functions.
 
 survcurve.R: check that svykm and predict.coxph give the same result

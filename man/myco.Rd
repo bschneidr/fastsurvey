@@ -28,7 +28,7 @@ population study conducted in a region of Malawi (Clayton and Hills,
 tuberculosis protects against leprosy (the causative agents are both species of
 _Mycobacterium_). Rao et al have a typographical error: the number of
 non-cases in the population in the 25-30 age stratum is given as 4981
-but 5981 matches both the computational output and the data given by Clayton
+but 5981 matches both the computational output and the data as given by Clayton
 and Hills.
 }
 

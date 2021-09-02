@@ -13,6 +13,8 @@
 
 	trimWeights now works with replicate-weights designs
 
+	score tests for svyglm (with Keiran Shao)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
