@@ -12,7 +12,7 @@ fisherinf<-function(beta, model, X=model.matrix(model)){
 
 
 
-scores<-function(model, newbeta, X=model.matrix(model)){
+scores<-function(model, newbeta, X=model.matrix(model),fullrank=TRUE){
     design<-model$survey.design
     out<-newbeta==0
     eta<-X %*%newbeta
@@ -30,14 +30,21 @@ scores<-function(model, newbeta, X=model.matrix(model)){
     I_rss98<-fisherinf(newbeta, model, X) ## equation 3.3, Rao, Scott, and Skinner 1998
     Atwiddle<-I_rss98[out,!out]%*%solve(I_rss98[!out,!out]) #equation 3.2, ibid
     Uout_in<-Uout-Uin%*%t(Atwiddle)
-    
+
+    if(fullrank){
+        rankcheck<-qr(Uout_in)
+        if (rankcheck$rank<NCOL(Uout_in)){
+            warning(paste(NCOL(Uout_in)-rankcheck$rank,"linear dependency removed"))
+            Uout_in<-Uout_in[, rankcheck$pivot[1:rankcheck$rank],drop=FALSE]
+            }
+    }
     svytotal( Uout_in, design)
 }
 
 
 pseudoscore<-function(model,newbeta,ddf, X=model.matrix(model)){
 
-    s<-scores(model, newbeta,X)
+    s<-scores(model, newbeta,X, fullrank=TRUE)
     np<-length(coef(s))
     Qtest<-coef(s)%*%solve(vcov(s),coef(s))
     if (is.null(ddf)) ddf<-model$df.resid
@@ -45,20 +52,19 @@ pseudoscore<-function(model,newbeta,ddf, X=model.matrix(model)){
         warning("negative or zero ddf set to 1")
         ddf<-1
     }
-    ndf<-qr(vcov(s))$rank
-    if(ndf<np) warning(paste("df reduced from",np,"to",ndf,"due to linear dependencies"))
+
     if (is.finite(ddf)) {
-        p<-pf(Qtest,ndf,ddf,lower.tail=FALSE)
+        p<-pf(Qtest,np,ddf,lower.tail=FALSE)
     } else{
-       p<- pchisq(Qtest,ndf,lower.tail=FALSE)
+       p<- pchisq(Qtest,np,lower.tail=FALSE)
         }
-    c(X2=Qtest, df=ndf, ddf=ddf, p=p)
+    c(X2=Qtest, df=np, ddf=ddf, p=p)
 }
 
 
 workingscore<-function(model,newbeta,ddf, lrt.approximation, X=model.matrix(model)){
 
-    s<-scores(model, newbeta,X)
+    s<-scores(model, newbeta,X, fullrank=TRUE)
     I<-fisherinf(newbeta,model,X)
     out<-newbeta==0
     V<-I[out,out,drop=FALSE]-I[out,!out,drop=FALSE]%*%solve(I[!out,!out,drop=FALSE],I[!out,out,drop=FALSE])
@@ -91,7 +97,7 @@ svyscoretest<-function(model, drop.terms=NULL, add.terms=NULL, method=c("working
 }
 
 
-scoretest_addterms.svyglm<-function(model,add.terms, method=method,ddf=ddf, lrt.approximation=lrt.approximation,...){
+scoretest_addterms.svyglm<-function(model,add.terms, method=method,ddf=ddf, lrt.approximation=lrt.approximation,fullrank,...){
     Xin<-model.matrix(model)
     design<-model$survey.design
     bigformula<-eval(bquote(update(.(formula(model)), .~.+.(add.terms[[-1]]))))
@@ -100,17 +106,16 @@ scoretest_addterms.svyglm<-function(model,add.terms, method=method,ddf=ddf, lrt.
     newbeta<-rep(0,NCOL(Xbig))
     idx<-match(colnames(Xin), colnames(Xbig))
     newbeta[idx]=coef(model)  
-    s<-scores(model, newbeta, Xbig)
     
     switch(method, 
            working=workingscore(model,newbeta, lrt.approximation=lrt.approximation,ddf=ddf, X=Xbig),
            pseudoscore=pseudoscore(model,newbeta,ddf=ddf, X=Xbig),
-           individual=s)
+           individual=scores(model, newbeta, Xbig,fullrank=fullrank))
     }
 
 
 svyscoretest.svyglm<-function(model,drop.terms=NULL, add.terms=NULL, method=c("working","pseudoscore","individual"),
-                              ddf=NULL,lrt.approximation="satterthwaite",...){
+                              ddf=NULL,lrt.approximation="satterthwaite",fullrank=TRUE,...){
     if(!xor(is.null(drop.terms),is.null(add.terms))){
         stop("One of 'drop.terms' and 'add.terms' must be non-NULL")
     }
@@ -127,7 +132,9 @@ svyscoretest.svyglm<-function(model,drop.terms=NULL, add.terms=NULL, method=c("w
         drop.terms<-attr(terms(drop.terms),"term.labels")
     } else{
         test_intercept<-FALSE
-        return(scoretest_addterms.svyglm(model,add.terms, method=method,ddf=ddf, lrt.approximation=lrt.approximation,...))
+        if (!fullrank && (method!="individual"))
+            warning("fullrank=FALSE only applies to method='individual'")
+        return(scoretest_addterms.svyglm(model,add.terms, method=method,ddf=ddf, lrt.approximation=lrt.approximation,fullrank=fullrank,...))
     }
     
     okbeta<-!is.na(coef(model,na.rm=FALSE)) ## na.rm for svyglm

@@ -17,7 +17,7 @@ svyscoretest(model, drop.terms=NULL, add.terms=NULL,
 method=c("working","pseudoscore","individual"),ddf=NULL,
 lrt.approximation = "satterthwaite", ...)
 \S3method{svyscoretest}{svyglm}(model, drop.terms=NULL, add.terms=NULL,
-method=c("working","pseudoscore","individual"), ddf=NULL,lrt.approximation = "satterthwaite", ...)
+method=c("working","pseudoscore","individual"), ddf=NULL,lrt.approximation = "satterthwaite",fullrank=TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -41,6 +41,9 @@ method=c("working","pseudoscore","individual"), ddf=NULL,lrt.approximation = "sa
 For the working score, the method for computing/approximating the null
 distribution: see \code{\link{pchisqsum}}
   }
+\item{fullrank}{If \code{FALSE} and \code{method="individual"}, keep
+  even linearly dependent columns of the
+  efficient score}
   \item{\dots}{
     for future expansion
 }
@@ -88,6 +91,8 @@ svyscoretest(m_full, ~Scar)
 
 svyscoretest(m_full,add.terms= ~I((Age+7.5)^-2):Scar)
 svyscoretest(m_full,add.terms= ~factor(Age), method="pseudo")
+svyscoretest(m_full,add.terms= ~factor(Age),method="individual",fullrank=FALSE)
+
 svyscoretest(m_full,add.terms= ~factor(Age),method="individual")
 
 }
