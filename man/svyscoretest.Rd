@@ -85,4 +85,9 @@ dmyco<-svydesign(id=~1, strata=~interaction(Age,leprosy),weights=~wt,data=myco)
 
 m_full<-svyglm(leprosy~I((Age+7.5)^-2)+Scar, family=quasibinomial, design=dmyco)
 svyscoretest(m_full, ~Scar)
+
+svyscoretest(m_full,add.terms= ~I((Age+7.5)^-2):Scar)
+svyscoretest(m_full,add.terms= ~factor(Age), method="pseudo")
+svyscoretest(m_full,add.terms= ~factor(Age),method="individual")
+
 }
