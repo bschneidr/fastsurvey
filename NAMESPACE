@@ -479,3 +479,4 @@ S3method(svyscoretest,svyglm)
 
 S3method(unwrap,default)
 S3method(unwrap2, default)
+S3method(unwrap2, newsvyquantile)
