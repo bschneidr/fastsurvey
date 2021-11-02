@@ -15,6 +15,9 @@
 
 	score tests for svyglm (with Keiran Shao)
 
+	svyby(), and thus svyboxplot(), didn't handle the new quantile functions
+	correctly when standard error/ci weren't requested (Stephanie Zimmer, Raymond Pan)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

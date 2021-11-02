@@ -3,6 +3,43 @@
 ##
 svyby<-function(formula, by, design,...) UseMethod("svyby",design)
 
+
+unwrap<-function(x,nvartype) UseMethod("unwrap",x)
+unwrap2<-function(x) UseMethod("unwrap2",x)
+
+unwrap2.default <- function(x){
+    if(!is.null(attr(x, "deff")))
+        c(statistic = unclass(x),
+          DEff = deff(x))
+    else c(statistic = unclass(x))
+}
+
+
+unwrap2.newsvyquantile <- function(x){
+    rval<-do.call(rbind,x)
+    rownames(rval)<-names(x)
+    rval
+}
+
+
+
+unwrap.default <-function(x,nvartype){
+    rval<-c(coef(x))
+    nvar<-length(rval)
+    rval<-c(rval,c(se=SE(x),
+                   ci_l=confint(x)[,1],
+                   ci_u=confint(x)[,2],
+                   cv=cv(x,warn=FALSE),
+                   `cv%`=cv(x,warn=FALSE)*100,
+                   var=SE(x)^2)[rep((nvartype-1)*(nvar),each=nvar)+(1:nvar)])
+    if(!is.null(attr(x,"deff")))
+        rval<-c(rval,DEff=deff(x))
+    rval
+}
+
+
+
+
 svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
                         keep.names=TRUE, verbose=FALSE, vartype=c("se","ci","ci","cv","cvpct","var"),
                         drop.empty.groups=TRUE, covmat=FALSE, return.replicates=FALSE, na.rm.by=FALSE,
@@ -58,19 +95,6 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
   if(any(is.na(nvartype))) stop("invalid vartype")
   
   if (keep.var){
-      unwrap <-function(x){
-        rval<-c(coef(x))
-        nvar<-length(rval)
-        rval<-c(rval,c(se=SE(x),
-                       ci_l=confint(x)[,1],
-                       ci_u=confint(x)[,2],
-                       cv=cv(x,warn=FALSE),
-                       `cv%`=cv(x,warn=FALSE)*100,
-                       var=SE(x)^2)[rep((nvartype-1)*(nvar),each=nvar)+(1:nvar)])
-        if(!is.null(attr(x,"deff")))
-          rval<-c(rval,DEff=deff(x))
-        rval
-      }
 
       ## In dire need of refactoring (or rewriting)
       ## but it seems to work.
@@ -91,7 +115,7 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
                               deff=deff,...)
                         }
                       })
-      rval<-t(sapply(results, unwrap))
+      rval<-t(sapply(results, unwrap,nvartype=nvartype))
       if ((covmat && inherits(design, "svyrep.design")) || return.replicates) {
           replicates<-do.call(cbind,lapply(results,"[[","replicates"))
           attr(replicates,"scale")<-design$scale
@@ -111,12 +135,6 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
         }
       }      
     } else {
-      unwrap2 <- function(x){
-          if(!is.null(attr(x, "deff")))
-              c(statistic = unclass(x),
-                DEff = deff(x))
-          else c(statistic = unclass(x))
-      }
       rval<-sapply(uniques,
                    function(i) {
                      if(verbose) print(as.character(byfactor[i]))
@@ -303,20 +321,6 @@ svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.va
   if(any(is.na(nvartype))) stop("invalid vartype")
   
   if (keep.var){
-      unwrap <-function(x){
-        rval<-c(coef(x))
-        nvar<-length(rval)
-        rval<-c(rval,c(se=SE(x),
-                       ci_l=confint(x)[,1],
-                       ci_u=confint(x)[,2],
-                       cv=cv(x,warn=FALSE),
-                       `cv%`=cv(x,warn=FALSE)*100,
-                       var=SE(x)^2)[rep((nvartype-1)*(nvar),each=nvar)+(1:nvar)])
-        if(!is.null(attr(x,"deff")))
-          rval<-c(rval,DEff=deff(x))
-        rval
-      }
-
       ## In dire need of refactoring (or rewriting)
       ## but it seems to work.
       results<-(if (multicore) parallel::mclapply else lapply)(uniques,
@@ -339,7 +343,7 @@ svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.va
               attr(r,"index")<-idx
               r
           })
-      rval<-t(sapply(results, unwrap))
+      rval<-t(sapply(results, unwrap,nvartype=nvartype))
       if (covmat || influence) {
           ## do the influence function thing here
           infs<-lapply(results,attr, "influence")
@@ -367,12 +371,7 @@ svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.va
         }
       }      
     } else {
-      unwrap2 <- function(x){
-          if(!is.null(attr(x, "deff")))
-              c(statistic = unclass(x),
-                DEff = deff(x))
-          else c(statistic = unclass(x))
-      }
+
       rval<-sapply(uniques,
                    function(i) {
                      if(verbose) print(as.character(byfactor[i]))
