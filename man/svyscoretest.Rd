@@ -17,7 +17,8 @@ svyscoretest(model, drop.terms=NULL, add.terms=NULL,
 method=c("working","pseudoscore","individual"),ddf=NULL,
 lrt.approximation = "satterthwaite", ...)
 \S3method{svyscoretest}{svyglm}(model, drop.terms=NULL, add.terms=NULL,
-method=c("working","pseudoscore","individual"), ddf=NULL,lrt.approximation = "satterthwaite",fullrank=TRUE, ...)
+method=c("working","pseudoscore","individual"), ddf=NULL,
+lrt.approximation = "satterthwaite",fullrank=TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

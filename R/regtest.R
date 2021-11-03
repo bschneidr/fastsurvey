@@ -340,12 +340,12 @@ svycontrast.svrepstat<-function(stat, contrasts,add=FALSE,...){
           contrasts<-addLin(contrasts, names(coef(stat)))
      
       coef<-contrast(coef(stat), vcov(stat), contrasts)
+      attr(coef,"statistic")<-"contrast"
       if (is.list(stat)){
           coef<-list(contrast=coef,
-                     replicates=crossprod(stat$replicates, contrasts))
+                     replicates=tcrossprod(stat$replicates, contrasts))
       }
       class(coef)<-"svrepstat"
-      attr(coef,"statistic")<-"contrast"
       coef
   }
 }
@@ -388,9 +388,11 @@ svycontrast.default<-svycontrast.svystat
 svycontrast.svyby<-function(stat, contrasts,...){
 
     if(!is.null(r<-attr(stat, "replicates"))){
-        repstat<-list(stat=coef(stat), replicates=r)
-        attr(repstat,"var")<-vcov(stat)
-        class(repstat)<-c("svrepstat",class(stat))
+        s<-coef(stat)
+        attr(s,"var")<-vcov(stat)
+        attr(s,"statistic")<-attr(stat,"svyby")$statistic
+        repstat<-list(stat=s, replicates=r)
+        class(repstat)<-"svrepstat"
         svycontrast(repstat, contrasts,...)
     } else NextMethod() ## default
    

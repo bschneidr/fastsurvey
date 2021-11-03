@@ -18,6 +18,9 @@
 	svyby(), and thus svyboxplot(), didn't handle the new quantile functions
 	correctly when standard error/ci weren't requested (Stephanie Zimmer, Raymond Pan)
 
+	svycontrast() threw an error on the output of svyby() with return.replicates=TRUE
+	(Alena Stern)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
