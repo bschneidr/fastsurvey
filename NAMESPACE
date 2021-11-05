@@ -271,6 +271,9 @@ S3method(summary,svyglm)
 S3method(summary,svymle)
 S3method(summary,svytable)
 
+S3method(deviance, coxph)
+S3method(deviance, svycoxph)
+
 S3method(print,summary.survey.design)
 S3method(print,summary.survey.design2)
 S3method(print,summary.twophase)

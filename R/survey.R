@@ -961,7 +961,11 @@ svycoxph.survey.design<-function(formula,design, subset=NULL, rescale=TRUE, ...)
       dbeta<-matrix(0,ncol=NCOL(dbeta.subset),nrow=nrow(design))
       dbeta[is.finite(design$prob),]<-dbeta.subset
     }
-    g$inv.info<-g$var
+
+    if (!is.null(g$naive.var)) ## newer versions of survival switch to robust=TRUE with non-integer weights
+        g$inv.info<-g$naive.var
+    else
+        g$inv.info<-g$var
     
     if (inherits(design,"survey.design2"))
       g$var<-svyrecvar(dbeta, design$cluster,
@@ -1009,42 +1013,42 @@ model.frame.svycoxph<-function(formula,...){
     with(list(data=data), eval(f))
 }
 
-model.matrix.svycoxph<-function (object, data = NULL, contrast.arg = object$contrasts, 
-    ...) 
-{
-    if (!is.null(object[["x"]])) 
-        object[["x"]]
-    else {
-        if (is.null(data)) 
-            data <- model.frame(object, ...)
-        else data <- model.frame(object, data = data, ...)
-        Terms <- object$terms
-        attr(Terms, "intercept") <- 1
-        strats <- attr(Terms, "specials")$strata
-        cluster <- attr(Terms, "specials")$cluster
-        dropx <- NULL
-        if (length(cluster)) {
-            tempc <- untangle.specials(Terms, "cluster", 1:10)
-            ord <- attr(Terms, "order")[tempc$terms]
-            if (any(ord > 1)) 
-                stop("Cluster can not be used in an interaction")
-            dropx <- tempc$terms
-        }
-        if (length(strats)) {
-            temp <- untangle.specials(Terms, "strata", 1)
-            dropx <- c(dropx, temp$terms)
-        }
-        if (length(dropx)) {
-            newTerms <- Terms[-dropx]
-            X <- model.matrix(newTerms, data, contrasts = contrast.arg)
-        }
-        else {
-            newTerms <- Terms
-            X <- model.matrix(Terms, data, contrasts = contrast.arg)
-        }
-        X
-    }
-}
+## model.matrix.svycoxph<-function (object, data = NULL, contrast.arg = object$contrasts, 
+##     ...) 
+## {
+##     if (!is.null(object[["x"]])) 
+##         object[["x"]]
+##     else {
+##         if (is.null(data)) 
+##             data <- model.frame(object, ...)
+##         else data <- model.frame(object, data = data, ...)
+##         Terms <- object$terms
+##         attr(Terms, "intercept") <- 1
+##         strats <- attr(Terms, "specials")$strata
+##         cluster <- attr(Terms, "specials")$cluster
+##         dropx <- NULL
+##         if (length(cluster)) {
+##             tempc <- untangle.specials(Terms, "cluster", 1:10)
+##             ord <- attr(Terms, "order")[tempc$terms]
+##             if (any(ord > 1)) 
+##                 stop("Cluster can not be used in an interaction")
+##             dropx <- tempc$terms
+##         }
+##         if (length(strats)) {
+##             temp <- untangle.specials(Terms, "strata", 1)
+##             dropx <- c(dropx, temp$terms)
+##         }
+##         if (length(dropx)) {
+##             newTerms <- Terms[-dropx]
+##             X <- model.matrix(newTerms, data, contrasts = contrast.arg)
+##         }
+##         else {
+##             newTerms <- Terms
+##             X <- model.matrix(Terms, data, contrasts = contrast.arg)
+##         }
+##         X
+##     }
+## }
 
 print.svycoxph<-function(x,...){
     print(x$survey.design, varnames=FALSE, design.summaries=FALSE,...)

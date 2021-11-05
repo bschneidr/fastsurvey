@@ -2,6 +2,7 @@
 deviance.svycoxph<-function(object,...) 2 * (object$ll[1] - object$ll[2])
 deviance.coxph<-function(object,...) 2 * (object$loglik[1] - object$loglik[2])
 
+
 explicit1<-function(formula){
     if (length(formula)==1) 
         return(formula==1)

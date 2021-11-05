@@ -21,6 +21,17 @@
 	svycontrast() threw an error on the output of svyby() with return.replicates=TRUE
 	(Alena Stern)
 
+	Fix regTermTest for svycoxph for the methods lookup changes in R 4.0
+	(and consequential change to marginpred)
+
+	We don't provide model.matrix.svycoxph any more;
+	use the inherited model.matrix.coxph
+
+	Recent survival::coxph() switches to robust variances with non-integer weights
+	so check for model$naive.var before model$var
+
+
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
@@ -105,6 +116,7 @@
 	and when the weights contain NAs (for Paige Johnson)
 
 	regTermTest was dropping the first term for coxph() models (Adam Elder)
+	(this was in R>=4.0)
 
 	svydesign() is much faster for very large datasets with character ids or strata.
 
