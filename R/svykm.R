@@ -252,7 +252,7 @@ confint.svykm<-function(object, parm, level=0.95,...){
 
 
 predict.svycoxph<-function(object, newdata, se=FALSE,
-                           type=c("lp", "risk", "expected", "terms","curve"),
+                           type=c("lp", "risk", "terms","curve"),
                            ...){
   
   type<-match.arg(type)

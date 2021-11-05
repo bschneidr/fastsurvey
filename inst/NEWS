@@ -24,13 +24,13 @@
 	Fix regTermTest for svycoxph for the methods lookup changes in R 4.0
 	(and consequential change to marginpred)
 
-	We don't provide model.matrix.svycoxph any more;
-	use the inherited model.matrix.coxph
+	We don't provide model.matrix.svycoxph any more;use the inherited
+	survival:::model.matrix.coxph
 
 	Recent survival::coxph() switches to robust variances with non-integer weights
 	so check for model$naive.var before model$var
 
-
+	Disable the pass-through from predict.svycoxph to predict.coxph for type="expected"
 
 4.1-1	CRAN
 
