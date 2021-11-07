@@ -36,6 +36,9 @@
 	svyby( svyvar) would throw an error on domains with only one observation
 	(for Dirk Schumacher)
 
+	svyvar() computes sample size 'n' in the same way for na.rm=TRUE as for a domain
+	(for Raymond Pan)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

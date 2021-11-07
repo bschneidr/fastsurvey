@@ -690,7 +690,7 @@ svyvar.survey.design<-function(x, design, na.rm=FALSE,...){
 	else if(typeof(x) %in% c("expression","symbol"))
             x<-eval(x, design$variables)
         
-	n<-sum(weights(design,"sampling")!=0)
+	n<-sum((weights(design,"sampling")!=0) & (rowSums(is.na(as.matrix(x)))==0))
 	xbar<-svymean(x,design, na.rm=na.rm)
     if(NCOL(x)==1) {
         if(n==1){
