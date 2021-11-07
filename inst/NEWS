@@ -2,7 +2,7 @@
 
 	svynls() allows for prior (eg precision) weights (for Gary Nelson)
 
-	improved names in svyquantile.svyrep.design (Ben Scheider)
+	improved names in svyquantile.svyrep.design (Ben Schneider)
 
 	trimWeights() could get into an infinite recursion (Ingmar Sturm)
 
@@ -31,6 +31,10 @@
 	so check for model$naive.var before model$var
 
 	Disable the pass-through from predict.svycoxph to predict.coxph for type="expected"
+	(Bryan Shepherd)
+
+	svyby( svyvar) would throw an error on domains with only one observation
+	(for Dirk Schumacher)
 
 4.1-1	CRAN
 

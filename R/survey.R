@@ -692,7 +692,14 @@ svyvar.survey.design<-function(x, design, na.rm=FALSE,...){
         
 	n<-sum(weights(design,"sampling")!=0)
 	xbar<-svymean(x,design, na.rm=na.rm)
-	if(NCOL(x)==1) {
+    if(NCOL(x)==1) {
+        if(n==1){
+            v<-NA
+            attr(v,"statistic")<-NA
+            attr(v,"var")<-NA
+            class(v)<-"svystat"
+            return(v)
+        }
             x<-x-xbar
             v<-svymean(x*x*n/(n-1),design, na.rm=na.rm)
             attr(v,"statistic")<-"variance"
