@@ -16,7 +16,9 @@ export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
        svyfactanal, svypredmeans, svyprcomp, trimWeights,stratsample,svylogrank,
        svyranktest,svystandardize,
        psrsq, svysurvreg, cal_names, svycralpha, svyivreg, svynls, svyscoretest,
-       oldsvyquantile,svyqqplot, svyqqmath, svybys, svygofchisq, poisson_sampling,ppscov)
+       oldsvyquantile,svyqqplot, svyqqmath, svybys, svygofchisq,
+       poisson_sampling,ppscov,
+       xdesign)
 
 S3method(svyloglin,survey.design)
 S3method(svyloglin,svyrep.design)
@@ -483,3 +485,12 @@ S3method(svyscoretest,svyglm)
 S3method(unwrap,default)
 S3method(unwrap2, default)
 S3method(unwrap2, newsvyquantile)
+
+
+S3method(svyxvar,xdesign)
+S3method(svymean, xdesign)
+S3method(svyglm, xdesign)
+S3method(print,xdesign)
+S3method(degf, xdesign)
+S3method(update,xdesign)
+S3method(transform, xdesign)

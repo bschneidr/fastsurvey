@@ -1152,7 +1152,7 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
     }
 
     if (influence){
-        estfun< model.matrix(g)*naa_shorter(nas, resid(g,"working"))*g$weights
+        estfun<- model.matrix(g)*naa_shorter(nas, resid(g,"working"))*g$weights
         if (g$rank<NCOL(estfun)){
             estfun<-estfun[,g$qr$pivot[1:g$rank]]
         }
