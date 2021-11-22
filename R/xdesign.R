@@ -174,7 +174,7 @@ print.xdesign<- function (x, varnames = FALSE, ...)
 subset.xdesign<-function(x, subset,...) 
 {
     e <- substitute(subset)
-    r <- eval(e, x$variables, parent.frame())
+    r <- eval(e, x$design$variables, parent.frame())
     r <- r & !is.na(r)
     x <- x[r, ]
     x$call <- sys.call(-1)
