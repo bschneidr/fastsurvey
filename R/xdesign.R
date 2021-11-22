@@ -161,3 +161,26 @@ print.xdesign<- function (x, varnames = FALSE, ...)
 }
 
 ## subset, svyby
+## should subsetting preserve design like for surveys? Probably not.
+
+"[.xdesign"<-function(x,i,...){
+    x$design<-x$design[i,...]
+    x$call <- sys.call(-1)
+    if (!missing(i))
+        x$adjacency<-x$adjacency[i,i]
+    x
+}
+
+subset.xdesign<-function(x, subset,...) 
+{
+    e <- substitute(subset)
+    r <- eval(e, x$variables, parent.frame())
+    r <- r & !is.na(r)
+    x <- x[r, ]
+    x$call <- sys.call(-1)
+    x
+}
+
+
+dim.xdesign<-function(x,...) dim(x$design)
+dimnames.xdesign<-function(x,...) dimnames(x$design)

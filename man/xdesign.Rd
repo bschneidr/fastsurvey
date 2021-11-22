@@ -48,6 +48,11 @@ list of formulas specifying cluster identifiers for each clustering dimension (o
 }
 }
 \details{
+  Subsetting for these objects actually drops observations; it is not
+    equivalent to just setting weights to zero as for survey
+    designs. So, for example, a subset of a balanced design will not be
+    a balanced design.
+  
   The \code{overlap} option controls double-counting of some variance
     terms. Suppose there are two clustering dimensions, \code{~a} and
     \code{~b}. If we compute variance matrices clustered on \code{a} and
