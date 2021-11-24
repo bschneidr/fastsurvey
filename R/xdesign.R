@@ -88,6 +88,8 @@ svyxvar.xdesign<-function(design, infl,...){
 tr<-function(mat) sum(diag(mat))
 tr2<-function(mat) sum(mat)
 
+## FIXME: bias correction doesn't quite agree with svymean. Modify?
+
 degf.xdesign<-function(design,...){
     tr(design$adjacency)^2/tr2(design$adjacency)
 }
@@ -184,3 +186,17 @@ subset.xdesign<-function(x, subset,...)
 
 dim.xdesign<-function(x,...) dim(x$design)
 dimnames.xdesign<-function(x,...) dimnames(x$design)
+
+
+svyby.xdesign<-function(formula, by, design, ..., influence=TRUE){
+    if (!influence) stop("xdesign objects need influence=TRUE")
+        
+    rval<-svyby(formula, by, design$design,...,influence=TRUE)
+
+    varmat<-svyxvar(design, attr(rval,"influence"))
+    attr(rval,"var")<-varmat
+    rval$se<-sqrt(diag(varmat))
+    rval$call<-sys.call(-1)
+
+    rval
+}
