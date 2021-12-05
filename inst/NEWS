@@ -39,7 +39,9 @@
 	svyvar() computes sample size 'n' in the same way for na.rm=TRUE as for a domain
 	(for Raymond Pan)
 
-	xdesign() for crossed designs (which aren't strictly surveys, but are basically similar) 
+	xdesign() for crossed designs (which aren't strictly surveys, but are basically similar)
+
+	removed redundant loop in saddlepoint approximation to pchisqsum (Qiaolan Deng)
 
 4.1-1	CRAN
 
