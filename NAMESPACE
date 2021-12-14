@@ -19,7 +19,7 @@ export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
        psrsq, svysurvreg, cal_names, svycralpha, svyivreg, svynls, svyscoretest,
        oldsvyquantile,svyqqplot, svyqqmath, svybys, svygofchisq,
        poisson_sampling,ppscov,
-       xdesign, arma_onestage, arma_multistage)
+       xdesign, arma_onestage, arma_multistage, multistage_rcpp)
 
 S3method(svyloglin,survey.design)
 S3method(svyloglin,svyrep.design)
