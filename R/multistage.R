@@ -302,6 +302,8 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
   x<-as.matrix(x)
   cal<-NULL
   
+  use_rcpp <- TRUE
+  
   ## Remove post-stratum means, which may cut across clusters
   ## Also center the data using any "g-calibration" models
   if(!is.null(postStrata)){
@@ -313,6 +315,7 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
         } else {
           ## G-calibration within clusters
           cal<-c(cal, list(psvar))
+          use_rcpp <- FALSE
         }
       } else if (inherits(psvar, "raking")){
         ## raking by iterative proportional fitting
@@ -336,9 +339,15 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
     }
   }
   
-  multistage(x, clusters,stratas,fpcs$sampsize, fpcs$popsize,
-             lonely.psu=getOption("survey.lonely.psu"),
-             one.stage=one.stage,stage=1,cal=cal)
+  if (use_rcpp) {
+    multistage_rcpp(x, clusters,stratas,fpcs$sampsize, fpcs$popsize,
+                    lonely.psu=getOption("survey.lonely.psu"),
+                    one.stage=one.stage,stage=1,cal=cal)
+  } else {
+    multistage(x, clusters,stratas,fpcs$sampsize, fpcs$popsize,
+               lonely.psu=getOption("survey.lonely.psu"),
+               one.stage=one.stage,stage=1,cal=cal)
+  }
 }
 
 multistage<-function(x, clusters,  stratas, nPSUs, fpcs,
@@ -376,6 +385,62 @@ multistage<-function(x, clusters,  stratas, nPSUs, fpcs,
       v<-v+v.sub[[i]]
   }
   dimnames(v)<-list(colnames(x),colnames(x))
+  v
+}
+
+multistage_rcpp <- function(x, clusters,  stratas, nPSUs, fpcs,
+                            lonely.psu=getOption("survey.lonely.psu"),
+                            one.stage=FALSE, stage, cal){
+  
+  lonely.psu <- switch(lonely.psu, 
+                       certainty = 'certainty',
+                       remove    = 'remove',
+                       adjust    = 'adjust',
+                       average   = 'average',
+                       fail      = 'fail',
+                       stop("Can't handle lonely.psu=",lonely.psu)
+  )
+  use_singleton_method_for_domains <- isTRUE(getOption("survey.adjust.domain.lonely"))
+  
+  # Prepare the inputs to pass to Rcpp function
+  if (is.data.frame(clusters)) {
+    for (j in seq_len(ncol(clusters))) {
+      if (!is.numeric(clusters[[j]]))
+      clusters[[j]] <- as.numeric(clusters[[j]])
+    }
+  }
+  clusters <- as.matrix(clusters)
+  
+  if (is.data.frame(stratas)) {
+    for (j in seq_len(ncol(stratas))) {
+      if (!is.numeric(stratas[[j]]))
+      stratas[[j]] <- as.numeric(stratas[[j]])
+    }
+  }
+  stratas <- as.matrix(stratas)
+  
+  if (is.null(fpcs)) {
+    strata_pop_sizes <- matrix(Inf,
+                               nrow = nrow(nPSUs),
+                               ncol = ncol(nPSUs))
+  } else {
+    strata_pop_sizes <- as.matrix(fpcs)
+  }
+  
+  strata_samp_sizes <- as.matrix(nPSUs)
+  
+  # Call the Rcpp function
+  v <- arma_multistage(Y = as.matrix(x),
+                       samp_unit_ids = clusters,
+                       strata = stratas,
+                       strata_samp_sizes = strata_samp_sizes,
+                       strata_pop_sizes = strata_pop_sizes,
+                       singleton_method = lonely.psu,
+                       use_singleton_method_for_domains = getOption("survey.adjust.domain.lonely"),
+                       use_only_first_stage = one.stage,
+                       stage = stage)
+  
+  dimnames(v) <- list(colnames(x),colnames(x))
   v
 }
 
