@@ -6,7 +6,8 @@ Author: Thomas Lumley
 Maintainer: "Thomas Lumley" <t.lumley@auckland.ac.nz>
 License: GPL-2 | GPL-3
 Depends: R (>= 3.5.0), grid, methods, Matrix, survival
-Imports: stats, graphics, splines, lattice, minqa, numDeriv, mitools (>= 2.4)
+Imports: stats, graphics, splines, lattice, minqa, numDeriv, mitools (>= 2.4), Rcpp (>= 0.12.8)
+LinkingTo: Rcpp, RcppArmadillo
 Suggests: foreign, MASS, KernSmooth, hexbin,
         RSQLite, quantreg, parallel,
         CompQuadForm, DBI, AER
