@@ -1076,9 +1076,7 @@ extractAIC.svycoxph<-function(fit,...){
     stop("No AIC for survey models")
 }
 
-anova.svycoxph<-function(object,...){
-    stop("No anova method for survey models")
-}
+
 
 svyglm<-function(formula, design,subset=NULL,family=stats::gaussian(),start=NULL, ...){
   .svycheck(design)
