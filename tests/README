@@ -61,3 +61,5 @@ quantile-chile.R: example of interpolating for quantiles, from Chilean
 	stats agency
 
 na_action.R: check that svyglm works with na.action=na.exclude
+
+svyivreg-var.R:  check that summary.svyivreg is finding the right variances

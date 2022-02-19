@@ -43,6 +43,8 @@
 
 	removed redundant loop in saddlepoint approximation to pchisqsum (Qiaolan Deng)
 
+	fix in summary(svyivreg) for variances (Chandler McClellan)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
