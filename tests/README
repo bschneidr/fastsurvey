@@ -63,3 +63,5 @@ quantile-chile.R: example of interpolating for quantiles, from Chilean
 na_action.R: check that svyglm works with na.action=na.exclude
 
 svyivreg-var.R:  check that summary.svyivreg is finding the right variances
+
+svyolr-rake-subset.R: make sure subsets of calibrated designs get handled correctly 

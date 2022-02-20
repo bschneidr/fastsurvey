@@ -138,7 +138,8 @@ svyolr.survey.design2<-function (formula, design,  start, ...,  na.action=na.omi
     }
     else warning("an intercept is needed and assumed")
 
-    wt <- weights(design)
+    keep<-weights(design)!=0
+    wt <- weights(design)[keep]
 
 
     offset <- model.offset(m)
@@ -229,6 +230,12 @@ svyolr.survey.design2<-function (formula, design,  start, ...,  na.action=na.omi
     fit$call[[1]]<-as.name(.Generic)
     
     inffun<- gmini(res$par, logdiff=FALSE)%*%solve(H)
+    if(any(!keep)){ ## subsets of raked designs 
+        inffun1<-matrix(0,ncol=NCOL(inffun), nrow=length(keep))
+        inffun1[keep,]<-inffun
+        inffun<-inffun1
+    }
+    
     fit$var<-svyrecvar(inffun, design$cluster, 
                      design$strata, design$fpc,
                      postStrata = design$postStrata)
