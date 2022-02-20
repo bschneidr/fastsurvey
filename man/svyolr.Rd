@@ -2,6 +2,7 @@
 \alias{svyolr}
 \alias{svyolr.survey.design2}
 \alias{svyolr.svyrep.design}
+\alias{predict.svyolr}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Proportional odds and related models }
 \description{
@@ -14,6 +15,7 @@ svyolr(formula, design, ...)
     "probit", "cloglog", "cauchit"))
 \method{svyolr}{svyrep.design}(formula,design,...,return.replicates=FALSE, 
     multicore=getOption("survey.multicore"))
+\method{predict}{svyolr}(object, newdata, type = c("class", "probs"), ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,7 +28,11 @@ svyolr(formula, design, ...)
   \item{multicore}{Use \code{multicore} package to distribute computation of replicates across multiple
     processors?}			   
   \item{method}{Link function}
-  \item{return.replicates}{return the individual replicate-weight estimates}
+  \item{return.replicates}{return the individual replicate-weight
+    estimates}
+  \item{object}{object of class \code{svyolr}}
+  \item{newdata}{new data for predictions}
+  \item{type}{return vector of most likely class or matrix of probabilities}
 }
 \value{
   An object of class \code{svyolr}
@@ -46,6 +52,10 @@ m
 
 ## Use regTermTest for testing multiple parameters
 regTermTest(m, ~avg.ed+stype, method="LRT")
+
+## predictions
+summary(predict(m, newdata=apiclus2))
+summary(predict(m, newdata=apiclus2, type="probs"))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

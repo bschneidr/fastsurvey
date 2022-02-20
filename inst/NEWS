@@ -47,6 +47,8 @@
 
 	svyolr() didn't run for subsets of raked/calibrated designs (Antony Damico)
 
+	add predict.svyolr (for Vincent Arel-Bundock)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

@@ -153,6 +153,7 @@ S3method(dotchart, default)
 
 S3method(predict, svyglm)
 S3method(predict, svrepglm)
+S3method(predict, svyolr)
 S3method(predict, svyratio)
 S3method(predict, svyratio_separate)
 S3method(coef,svyratio)

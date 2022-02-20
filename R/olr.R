@@ -349,3 +349,46 @@ model.frame.svyolr<-function(formula, ...){
 	  mf	
 	}
 
+## taken from MASS::predict.polr
+predict.svyolr<-function (object, newdata, type = c("class", "probs"), ...) 
+{
+    type <- match.arg(type)
+    if (missing(newdata)) 
+        Y <- object$fitted
+    else {
+        newdata <- as.data.frame(newdata)
+        Terms <- delete.response(object$terms)
+        m <- model.frame(Terms, newdata, na.action = function(x) x, 
+            xlev = object$xlevels)
+        if (!is.null(cl <- attr(Terms, "dataClasses"))) 
+            .checkMFClasses(cl, m)
+        X <- model.matrix(Terms, m, contrasts = object$contrasts)
+        xint <- match("(Intercept)", colnames(X), nomatch = 0L)
+        if (xint > 0L) 
+            X <- X[, -xint, drop = FALSE]
+        n <- nrow(X)
+        q <- length(object$zeta)
+        eta <- drop(X %*% object$coefficients)
+        pfun <- switch(object$method, logistic = plogis, probit = pnorm, 
+            loglog = pgumbel, cloglog = pGumbel, cauchit = pcauchy)
+        cumpr <- matrix(pfun(matrix(object$zeta, n, q, byrow = TRUE) - 
+            eta), , q)
+        Y <- t(apply(cumpr, 1L, function(x) diff(c(0, x, 1))))
+        dimnames(Y) <- list(rownames(X), object$lev)
+    }
+    if (missing(newdata) && !is.null(object$na.action)) 
+        Y <- napredict(object$na.action, Y)
+    if (type == "class") 
+        factor(max.col(Y), levels = seq_along(object$lev), labels = object$lev)
+    else drop(Y)
+}
+
+## taken from MASS::pGumbel
+pGumbel<-function (q, loc = 0, scale = 1, lower.tail = TRUE) 
+{
+    q <- (q - loc)/scale
+    p <- exp(-exp(q))
+    if (lower.tail) 
+        1 - p
+    else p
+}
