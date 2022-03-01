@@ -49,6 +49,8 @@
 
 	add predict.svyolr (for Vincent Arel-Bundock)
 
+	add anova.svycoxph (for Bryan Shepherd)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

@@ -212,10 +212,14 @@ anova.svyglm<-function(object, object2=NULL,test=c("F","Chisq"),method=c("LRT","
 }	
 
 
-
+get_cox_strata<-function(object){
+    t<-untangle.specials(terms(object),"strata", order=1)
+    if (length(t$vars)==0) return(NULL)
+    m<-model.frame(object)
+    strata(m[t$vars], shortlabel = TRUE)
+}
 
 anova.svycoxph<-function(object, object2=NULL,test=c("F","Chisq"),method=c("LRT","Wald"),tolerance=1e-5,...,force=FALSE){
-  stop("being edited")
   test<-match.arg(test)
   method<-match.arg(method)
   if(is.null(object2)) ## sequential tests
@@ -244,18 +248,18 @@ anova.svycoxph<-function(object, object2=NULL,test=c("F","Chisq"),method=c("LRT"
   if (any(sapply(suppressWarnings(summary(lm(X~Z))), "[[","sigma")/(tolerance+SD(X))>tolerance)) stop("models not nested")
   
   XX<-matrix(nrow=nrow(Z),ncol=ncol(Z))
-  xform<-lm(Z[,1]~X+0)
+  xform<-lm(Z[,1]~X)
   XX[,1]<-resid(xform)
   for(i in 2:ncol(Z)){
-    XX[,i]<-resid(xform<-lm(Z[,i]~X+Z[,1:(i-1)]+0))
+    XX[,i]<-resid(xform<-lm(Z[,i]~X+Z[,1:(i-1)]))
   }
+  colnames(XX)<-paste0("_X_",colnames(Z))
   colkeep<-colMeans(abs(XX))/(tolerance+colMeans(abs(Z))) > tolerance	
   XX<-XX[,colkeep,drop=FALSE]	
   index<-ncol(X)+(1:ncol(XX)) 
   
   ## and now need to refit the model
-  ## ugly, but svyglm demands that all variables are in the design argument.
-  ## We do know the fitted values at convergence, so one iteration suffices.
+  ## ugly, but svycoxph demands that all variables are in the design argument.
   ### FIXME
    pweights<-weights(object$survey.design,"sampling")
   y<-object$y
@@ -264,18 +268,29 @@ anova.svycoxph<-function(object, object2=NULL,test=c("F","Chisq"),method=c("LRT"
     if (length(pweights)!=length(y)) stop("number of observations does not match design")
   }
   pweights<-pweights/mean(pweights)
-  beta<-if(bigger==1) coef(object) else coef(object2)
-  refit<-coxph.fit(cbind(X,XX),y, init=c(beta,rep(0,ncol(XX))),weights=pweights, control=coxph.control())
-  Ainv<- if(is.null(refit$naive.var)) refit$var else refit$naive.var
+  beta<-if(bigger==1) coef(object2) else coef(object)
+    coxstrat<-get_cox_strata(object)
+    coxstrat2<-get_cox_strata(object2)
+    offs<-if(bigger==1) object$offset else object2$offset
+    if (length(offs)==0) offs<-NULL else stop("models with offset not yet implemented")
+    
+    if(!all(coxstrat==coxstrat2)) stop("Cox model strata must match")
+    refit1<-coxph.fit(cbind(X,XX),y,coxstrat, offs, init=c(beta,rep(0,NCOL(XX))),
+                     control=coxph.control(),weights=pweights,method=object$method,
+                     rownames=names(resid(object)),resid=TRUE)
+  refit<-if(bigger==1) object else object2
+  refit[names(refit1)]<-refit1
+  
+    design<-object$survey.design
+    Ainv<- if(is.null(refit$naive.var)) refit$var else refit$naive.var
   dbeta.subset <- resid(refit, "dfbeta", weighted = TRUE)
   if (nrow(design) == NROW(dbeta.subset)) {
       estfun <- as.matrix(dbeta.subset)
-  }
-  else {
+  } else {
       estfun <- matrix(0, ncol = NCOL(dbeta.subset), nrow = nrow(design))
       estfun[is.finite(design$prob), ] <- dbeta.subset
   }
-  design<-object$survey.design
+
   if (inherits(design, "survey.design2")) 
     V<-svyrecvar(estfun, design$cluster, design$strata, 
                  design$fpc, postStrata = design$postStrata)
@@ -290,7 +305,7 @@ anova.svycoxph<-function(object, object2=NULL,test=c("F","Chisq"),method=c("LRT"
   } else stop("not implemented for this type of design")
   
   V<-V[index,index]
-  df<-min(object$df.residual, object2$df.residual)
+  df<-min(object$degf.resid, object2$degf.resid)
 
   deviance.coxph<-function(object,...) -2*object$loglik[2]
   if(method=="LRT"){
