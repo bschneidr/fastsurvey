@@ -40,10 +40,23 @@ unwrap.default <-function(x,nvartype){
 
 
 
+strings_to_factors<-function(formula,  design){
+    allv<-intersect(all.vars(formula), colnames(design))
+    vclass<-sapply(model.frame(design)[,allv,drop=FALSE], class)
+    if (!any(vclass=="character")) return(design)
+    vfix<-names(vclass)[vclass=="character"]
+    l<-as.list(vfix)
+    names(l)<-vfix
+    fl<-lapply(l, function(li) bquote(factor(.(as.name(li)))))
+    expr<-bquote(update(design, ..(fl)), splice=TRUE)
+    eval(expr)
+}
+
+
 svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
                         keep.names=TRUE, verbose=FALSE, vartype=c("se","ci","ci","cv","cvpct","var"),
                         drop.empty.groups=TRUE, covmat=FALSE, return.replicates=FALSE, na.rm.by=FALSE,
-                        na.rm.all=FALSE, 
+                        na.rm.all=FALSE, stringsAsFactors=TRUE,
                         multicore=getOption("survey.multicore")){
 
   if (inherits(by, "formula"))
@@ -55,7 +68,10 @@ svyby.default<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
     if (!inherits(design,"svyrep.design"))
       stop("return.replicates=TRUE not implemented for this design type")
   }
-   
+    
+    if(stringsAsFactors){
+        design<-strings_to_factors(formula,design)
+    }
     
   if (multicore && !requireNamespace("parallel",quietly=TRUE))
     multicore<-FALSE
@@ -274,7 +290,7 @@ vcov.svyby<-function(object,...){
 svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.var=TRUE,
                         keep.names=TRUE, verbose=FALSE, vartype=c("se","ci","ci","cv","cvpct","var"),
                         drop.empty.groups=TRUE, covmat=FALSE, influence=covmat, na.rm.by=FALSE,
-                        na.rm.all=FALSE, 
+                        na.rm.all=FALSE, stringsAsFactors=TRUE,
                         multicore=getOption("survey.multicore")){
 
   if (inherits(by, "formula"))
@@ -282,6 +298,9 @@ svyby.survey.design2<-function(formula, by, design, FUN,..., deff=FALSE, keep.va
   else
     byfactors<-as.data.frame(by)
 
+    if (stringsAsFactors){
+        design<-strings_to_factors(formula, design)
+    }
 
   if (multicore && !requireNamespace("parallel",quietly=TRUE))
     multicore<-FALSE
