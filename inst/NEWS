@@ -54,6 +54,8 @@
 	add stringsToFactors=TRUE to svyby to ensure factors have same levels in domains
 	(for various people including Stephanie Zimmer)
 
+	more complicated svyby example in ?svycontrast
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
