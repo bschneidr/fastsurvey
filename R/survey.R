@@ -1211,8 +1211,7 @@ svy.varcoef<-function(glm.object,design){
     else if (inherits(design, "pps"))
       ppsvar(estfun%*%Ainv, design)
     else
-      svyCprod(estfun%*%Ainv,design$strata,design$cluster[[1]],design$fpc, design$nPSU,
-                  design$certainty,design$postStrata)
+      vcov(svytotal(estfun%*%Ainv/weights(design,"sampling"), design))
   }
 
 residuals.svyglm<-function(object,type = c("deviance", "pearson", "working", 

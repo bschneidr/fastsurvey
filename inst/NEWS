@@ -56,6 +56,8 @@
 
 	more complicated svyby example in ?svycontrast
 
+	svyranktest() gave an error for multiple groups with replicate weights (Kasuki Yoshida)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
