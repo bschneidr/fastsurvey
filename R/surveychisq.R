@@ -463,6 +463,15 @@ svychisqzero<-function(formula,design,na.rm){
     m0<-svyglm(ff0, des)
     test<-svyscoretest(m0, add.terms=ff1,method="pseudo")
 
+    ## rescaling: the weights matter because score test uses svytotal
+    test["X2"]<-test["X2"]/nr/nr
+    if (is.finite(test["ddf"])) {
+        p<-pf(test["X2"], test["df"],test["ddf"],lower.tail=FALSE)
+    } else{
+       p<- pchisq(test["X2"], test["df"],lower.tail=FALSE)
+    }
+    test["p"]<-p
+
     ## formatting
     warn<-options(warn=-1) ## turn off the small-cell count warning.
     pearson<- chisq.test(svytable(formula,design,Ntotal=nrow(design)),

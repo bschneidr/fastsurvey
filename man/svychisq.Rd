@@ -101,10 +101,10 @@ especially useful when the p-value is very small (as in large-scale
 multiple testing problems).
 
 \code{statistic="wls-score"} is an experimental implementation of the
-weighted least squares score test of Lipsitz et al (2015), which works
-even when there are zero cells in the table. It is not identical to that
-paper, for example, I think the denominator degrees of
-freedom need to be reduced by JK for a JxK table, not (J-1)(K-1).
+weighted least squares score test of Lipsitz et al (2015). It is not
+identical to that paper, for example, I think the denominator degrees
+of freedom need to be reduced by JK for a JxK table, not (J-1)(K-1). And
+it's very close to the "adjWald" test.
 
 For designs using replicate weights the code is essentially the same as
 for designs with sampling structure, since the necessary variance
