@@ -461,5 +461,18 @@ svychisqzero<-function(formula,design,na.rm){
     ff0<-eval(bquote(yind~factor(k)+factor(.(cols))))
     ff1<-eval(bquote(~factor(k):factor(.(cols))))
     m0<-svyglm(ff0, des)
-    svyscoretest(m0, add.terms=ff1,method="pseudo")
+    test<-svyscoretest(m0, add.terms=ff1,method="pseudo")
+
+    ## formatting
+    warn<-options(warn=-1) ## turn off the small-cell count warning.
+    pearson<- chisq.test(svytable(formula,design,Ntotal=nrow(design)),
+                         correct=FALSE)
+    options(warn)
+    pearson$statistic<-test["X2"]
+    pearson$parameter<-c(ndf=test["df"],ddf=test["ddf"])
+    pearson$p.value<-test["p"]
+    attr(pearson$statistic,"names")<-"F"
+    pearson$data.name<-deparse(sys.call(-1))
+    pearson$method<-"Design-based WLS score test of association"
+    pearson
 }
