@@ -62,13 +62,16 @@ pseudoscore<-function(model,newbeta,ddf, X=model.matrix(model)){
 }
 
 
+sigma.svyglm<-function(object,...) coef(summary(object)$dispersion)
+sigma.svrepglm<-function(object,...) summary(object)$dispersion
+
 workingscore<-function(model,newbeta,ddf, lrt.approximation, X=model.matrix(model)){
 
     s<-scores(model, newbeta,X, fullrank=TRUE)
     I<-fisherinf(newbeta,model,X)
     out<-newbeta==0
     V<-I[out,out,drop=FALSE]-I[out,!out,drop=FALSE]%*%solve(I[!out,!out,drop=FALSE],I[!out,out,drop=FALSE])
-    phi<-coef(summary(model)$dispersion)
+    phi<- sigma(model)^2 #coef(summary(model)$dispersion)
     mwt<-mean(weights(model$survey.design))
     Qtest<-coef(s)%*%solve(V,coef(s))/phi/mwt
     Vmis<-solve(V,vcov(s))/phi/mwt

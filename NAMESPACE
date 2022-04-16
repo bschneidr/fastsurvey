@@ -506,3 +506,6 @@ S3method(dimnames, xdesign)
 S3method(estfuns, coxph)
 S3method(estfuns, glm)
 S3method(estfuns, lm)
+
+S3method(sigma, svyglm)
+S3method(sigma, svrepglm)

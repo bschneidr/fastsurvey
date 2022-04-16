@@ -58,6 +58,8 @@
 
 	svyranktest() gave an error for multiple groups with replicate weights (Kasuki Yoshida)
 
+	**Experimental** chisquared test for tables with zeros (CrossValidated question #571328)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
