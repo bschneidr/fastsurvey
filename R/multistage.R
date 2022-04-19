@@ -18,7 +18,7 @@ detibble<-function(data) {
 
 svydesign.default<-function(ids,probs=NULL,strata=NULL,variables=NULL, fpc=NULL,
                     data=NULL, nest=FALSE, check.strata=!nest,weights=NULL,pps=FALSE,
-                            variance=c("HT","YG"),...){
+                            calibrate.formula=NULL,variance=c("HT","YG"), ...){
 
   data<-detibble(data)
     
@@ -222,6 +222,10 @@ svydesign.default<-function(ids,probs=NULL,strata=NULL,variables=NULL, fpc=NULL,
     rval$call<-sys.call(-1)
     rval$pps<-pps
     class(rval)<-c("survey.design2","survey.design")
+    if (!is.null(calibrate.formula)){
+        rval<-recalibrate(rval, calibrate.formula)
+        rval$call<-sys.call(-1)
+    }
     rval
 }
 

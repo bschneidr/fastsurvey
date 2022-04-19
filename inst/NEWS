@@ -58,7 +58,10 @@
 
 	svyranktest() gave an error for multiple groups with replicate weights (Kasuki Yoshida)
 
-	**Experimental** chisquared test for tables with zeros (CrossValidated question #571328)
+	Additional chisquared test for tables with zeros (CrossValidated question #571328)
+
+	svydesign() has a 'calibrate.formula' option to tell R that your weights have
+	already been calibrated/raked/post-stratified (for Tobias Schoch)
 
 4.1-1	CRAN
 
