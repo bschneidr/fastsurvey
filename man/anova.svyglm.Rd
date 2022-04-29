@@ -17,7 +17,8 @@ A method for the \code{\link{anova}} function, for use on
 \usage{
 \method{anova}{svyglm}(object, object2 = NULL, test = c("F", "Chisq"), 
  method = c("LRT", "Wald"), tolerance = 1e-05, ..., force = FALSE)
-\method{anova}{svycoxph}(object, object2=NULL,test=c("F","Chisq"),method=c("LRT","Wald"),tolerance=1e-5,...,force=FALSE)
+\method{anova}{svycoxph}(object, object2=NULL,test=c("F","Chisq"),
+ method=c("LRT","Wald"),tolerance=1e-5,...,force=FALSE)
 \method{AIC}{svyglm}(object,...,k=2, null_has_intercept=TRUE)
 \method{BIC}{svyglm}(object,...,maximal)
 \method{extractAIC}{svyglm}(fit,scale,k=2,..., null_has_intercept=TRUE)
