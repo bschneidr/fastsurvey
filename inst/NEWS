@@ -63,6 +63,8 @@
 	svydesign() has a 'calibrate.formula' option to tell R that your weights have
 	already been calibrated/raked/post-stratified (for Tobias Schoch)
 
+	svycontrast() didn't work on svrepglm objects without replicates (Thomas Loughlin)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available

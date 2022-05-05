@@ -342,7 +342,7 @@ svycontrast.svrepstat<-function(stat, contrasts,add=FALSE,...){
      
       coef<-contrast(coef(stat), vcov(stat), contrasts)
       attr(coef,"statistic")<-"contrast"
-      if (is.list(stat)){
+      if (is.list(stat) && !is.null(stat$replicates)){
           coef<-list(contrast=coef,
                      replicates=tcrossprod(stat$replicates, contrasts))
       }
