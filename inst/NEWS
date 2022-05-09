@@ -65,6 +65,8 @@
 
 	svycontrast() didn't work on svrepglm objects without replicates (Thomas Loughlin)
 
+	error in svycoxph with rescale=FALSE (Jing Zhang)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
