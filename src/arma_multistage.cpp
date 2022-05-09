@@ -82,11 +82,14 @@ arma::mat arma_onestage(arma::mat Y,
       }
     } else {
       df = n_h - 1;
-      if (use_singleton_method_for_domains[0] & h_num_observations == 1) {
+      if (use_singleton_method_for_domains[0] & (h_num_observations == 1)) {
         n_singleton_strata += 1;
         any_singleton_strata = TRUE;
       }
     }
+    
+    // By default, variance is computed by recentering mean PSU within stratum
+    bool recenter_around_grand_mean = FALSE;
     
     if ((n_h > 1) | (singleton_method[0] == "adjust")) {
       // Subset variables of interest to stratum
@@ -97,13 +100,23 @@ arma::mat arma_onestage(arma::mat Y,
       // Initialize variance-covariance of PSU totals
       arma::mat cov_mat(n_col_y, n_col_y, arma::fill::zeros);
       
+      // Recenter around mean of PSUs from all strata, if necessary
+      if (n_h == 1) {
+        recenter_around_grand_mean = TRUE;
+      } else if (h_num_observations == 1) {
+        if ((singleton_method[0] == "adjust") & use_singleton_method_for_domains[0]) {
+          recenter_around_grand_mean = TRUE;
+        }
+      }
+      
       // If there's no clustering, simply get each row's contribution
       // to stratum's variance-covariance matrix
       if (!h_has_clusters) {
         
         for (int i=0; i < h_num_observations; ++i ) {
           arma::rowvec Yhi = Y_h.row(i);
-          if (n_h > 1) {
+          
+          if (!recenter_around_grand_mean) {
             Yhi.each_row() -= mean_Yhi;
           } else {
             Yhi.each_row() -= Y_means;
@@ -121,7 +134,8 @@ arma::mat arma_onestage(arma::mat Y,
         for (arma::uword i=0; i < h_distinct_samp_unit_ids.n_elem; ++i ) {
           arma::uvec unit_indices = arma::find(samp_unit_ids.elem(h_indices) == h_distinct_samp_unit_ids[i]);
           arma::rowvec Yhi = sum(Y_h.rows(unit_indices), 0);
-          if (n_h > 1) {
+          
+          if (!recenter_around_grand_mean) {
             Yhi.each_row() -= mean_Yhi;
           } else {
             Yhi.each_row() -= Y_means;
