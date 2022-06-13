@@ -1503,7 +1503,7 @@ vcov.svyrep.design<-function (object, replicates, centre, ...)
 {
     if (object$mse) 
         svrVar(replicates, scale = object$scale, rscales = object$rscales, 
-            mse = object$mse, centre)
+            mse = object$mse, coef=centre)
     else svrVar(replicates, scale = object$scale, rscales = object$rscales, 
         mse = object$mse)
 }
