@@ -10,7 +10,7 @@ arma::mat arma_onestage(arma::mat Y,
                         arma::colvec strata_pop_sizes,
                         Rcpp::CharacterVector singleton_method,
                         Rcpp::LogicalVector use_singleton_method_for_domains,
-                        int stage) {
+                        int stage) {                 
   
   // Determine dimensions of result
   size_t n_col_y = Y.n_cols;
@@ -72,26 +72,36 @@ arma::mat arma_onestage(arma::mat Y,
     // and determine denominator to use for
     // estimating variance of PSU totals
     arma::uword df;
+    bool h_is_singleton_stratum = false;
+    
     if (n_h < 2) {
+      h_is_singleton_stratum = true;
       n_singleton_strata += 1;
       df = 1;
+    } else {
+      if (use_singleton_method_for_domains[0] & (h_num_distinct_samp_unit_ids < 2)) {
+        if ((singleton_method[0] == "average") | (singleton_method[0] == "adjust") | (singleton_method[0] == "fail")) {
+          h_is_singleton_stratum = true;
+          n_singleton_strata += 1;
+        }
+      }
+      df = n_h - 1;
+    }
+    
+    if (h_is_singleton_stratum) {
+      any_singleton_strata = true;
       if (singleton_method[0] == "fail") {
         Rcpp::String error_msg("At least one stratum contains only one PSU at stage ");
         error_msg += stage;
         Rcpp::stop(error_msg);
       }
-    } else {
-      df = n_h - 1;
-      if (use_singleton_method_for_domains[0] & (h_num_observations == 1)) {
-        n_singleton_strata += 1;
-        any_singleton_strata = TRUE;
-      }
     }
     
-    // By default, variance is computed by recentering mean PSU within stratum
+    // By default, variance is computed by recentering around mean PSU within stratum.
+    // But for `singleton_method = 'adjust'`, we instead recenter around mean PSU regardless of stratum.
     bool recenter_around_grand_mean = FALSE;
     
-    if ((n_h > 1) | (singleton_method[0] == "adjust")) {
+    if ((!h_is_singleton_stratum) | (singleton_method[0] == "adjust")) {
       // Subset variables of interest to stratum
       // and calculate means for stratum
       arma::mat Y_h = Y.rows(h_indices);
@@ -160,13 +170,13 @@ arma::mat arma_onestage(arma::mat Y,
     }
   }
   
-  if (any_singleton_strata & (singleton_method[0] == "average")) {
+  if ((singleton_method[0] == "average") & any_singleton_strata) {
     int n_nonsingleton_strata = H - n_singleton_strata;
     double scaling_factor;
     if (n_nonsingleton_strata > 0) {
       scaling_factor = static_cast<double>(H)/static_cast<double>(n_nonsingleton_strata);
     } else {
-      scaling_factor = 1;
+      scaling_factor = R_NaN;
     }
     result *= scaling_factor;
   }
