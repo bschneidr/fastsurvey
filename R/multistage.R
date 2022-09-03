@@ -302,6 +302,8 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
   x<-as.matrix(x)
   cal<-NULL
   
+  use_rcpp <- TRUE
+  
   ## Remove post-stratum means, which may cut across clusters
   ## Also center the data using any "g-calibration" models
   if(!is.null(postStrata)){
@@ -313,6 +315,7 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
         } else {
           ## G-calibration within clusters
           cal<-c(cal, list(psvar))
+          use_rcpp <- FALSE
         }
       } else if (inherits(psvar, "raking")){
         ## raking by iterative proportional fitting
@@ -336,10 +339,16 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
     }
   }
   
+  if (use_rcpp) {
+    multistage_rcpp(x, clusters,stratas,fpcs$sampsize, fpcs$popsize,
+                    lonely.psu=getOption("survey.lonely.psu"),
+                    one.stage=one.stage,stage=1,cal=cal)
+  } else {
     multistage(x, clusters,stratas,fpcs$sampsize, fpcs$popsize,
                lonely.psu=getOption("survey.lonely.psu"),
                one.stage=one.stage,stage=1,cal=cal)
   }
+}
 
 multistage<-function(x, clusters,  stratas, nPSUs, fpcs,
                     lonely.psu=getOption("survey.lonely.psu"),
