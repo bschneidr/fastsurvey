@@ -1,10 +1,10 @@
 ## 
 ## Check that multistage() and multistage_rcpp() give same results
-## for different options. Also compare speed.
+## for different options.
 ##
 
 # Create a stratified, multistage design ----
-  library(fastsurvey)
+  library(survey)
   data(mu284)
   
   ## Create three strata, the third of which has only one PSU
@@ -49,26 +49,26 @@
   
   ##_ Check for lonely PSUs caused by design ----
   for (i in seq_len(nrow(design_lonely_psu_comparisons))) {
-      survey.lonely.psu <- design_lonely_psu_comparisons[['survey.lonely.psu']][i]
-      one.stage <- design_lonely_psu_comparisons[['one.stage']][i]
-      options('survey.lonely.psu' = survey.lonely.psu)
-      
-      x <- as.matrix(dmu284_strat_w_lonely$variables[,c('y1','y2')] / dmu284_strat_w_lonely$prob)
-      
-      base_r_result <- fastsurvey:::multistage(x = x,
-                                               clusters = dmu284_strat_w_lonely$cluster,
-                                               stratas = dmu284_strat_w_lonely$strata,
-                                               nPSUs = dmu284_strat_w_lonely$fpc$sampsize, fpcs = dmu284_strat_w_lonely$fpc$popsize,
-                                               lonely.psu=getOption("survey.lonely.psu"),
-                                               one.stage=one.stage, stage = 1, cal = NULL)
-      
-      rcpp_result <- fastsurvey::multistage_rcpp(x = x,
-                                                 clusters = dmu284_strat_w_lonely$cluster,
-                                                 stratas = dmu284_strat_w_lonely$strata,
-                                                 nPSUs = dmu284_strat_w_lonely$fpc$sampsize, fpcs = dmu284_strat_w_lonely$fpc$popsize,
-                                                 lonely.psu=getOption("survey.lonely.psu"),
-                                                 one.stage=one.stage, stage = 1, cal = NULL)
-      
+    survey.lonely.psu <- design_lonely_psu_comparisons[['survey.lonely.psu']][i]
+    one.stage <- design_lonely_psu_comparisons[['one.stage']][i]
+    options('survey.lonely.psu' = survey.lonely.psu)
+    
+    x <- as.matrix(dmu284_strat_w_lonely$variables[,c('y1','y2')] / dmu284_strat_w_lonely$prob)
+    
+    base_r_result <- survey:::multistage(x = x,
+                                         clusters = dmu284_strat_w_lonely$cluster,
+                                         stratas = dmu284_strat_w_lonely$strata,
+                                         nPSUs = dmu284_strat_w_lonely$fpc$sampsize, fpcs = dmu284_strat_w_lonely$fpc$popsize,
+                                         lonely.psu=getOption("survey.lonely.psu"),
+                                         one.stage=one.stage, stage = 1, cal = NULL)
+    
+    rcpp_result <- survey:::multistage_rcpp(x = x,
+                                            clusters = dmu284_strat_w_lonely$cluster,
+                                            stratas = dmu284_strat_w_lonely$strata,
+                                            nPSUs = dmu284_strat_w_lonely$fpc$sampsize, fpcs = dmu284_strat_w_lonely$fpc$popsize,
+                                            lonely.psu=getOption("survey.lonely.psu"),
+                                            one.stage=one.stage, stage = 1, cal = NULL)
+    
       design_lonely_psu_comparisons[['results_match']][i] <- isTRUE(all.equal(base_r_result, rcpp_result))
   }
   
@@ -81,32 +81,35 @@
   
   domain_lonely_psu_comparisons <- expand.grid('survey.lonely.psu' = lonely_psu_options,
                                                'survey.adjust.domain.lonely' = c(FALSE, TRUE),
+                                               'one.stage' = one_stage_options,
                                                stringsAsFactors = FALSE)
   domain_lonely_psu_comparisons[['results_match']] <- NA
   
   for (i in seq_len(nrow(domain_lonely_psu_comparisons))) {
       
-      options('survey.lonely.psu' = domain_lonely_psu_comparisons[['survey.lonely.psu']][i])
-      options('survey.adjust.domain.lonely' = domain_lonely_psu_comparisons[['survey.adjust.domain.lonely']][i])
-      
-      x <- as.matrix(dmu284_strat_domain_lonely_psu$variables[,c('y1','y2')] / dmu284_strat_domain_lonely_psu$prob)
-      base_r_result <- fastsurvey:::multistage(x = x,
-                                               clusters = dmu284_strat_domain_lonely_psu$cluster,
-                                               stratas = dmu284_strat_domain_lonely_psu$strata,
-                                               nPSUs = dmu284_strat_domain_lonely_psu$fpc$sampsize,
-                                               fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
-                                               lonely.psu=getOption("survey.lonely.psu"),
-                                               one.stage=FALSE, stage = 1, cal = NULL)
-      
-      rcpp_result <- fastsurvey::multistage_rcpp(x = x,
-                                                 clusters = dmu284_strat_domain_lonely_psu$cluster,
-                                                 stratas = dmu284_strat_domain_lonely_psu$strata,
-                                                 nPSUs = dmu284_strat_domain_lonely_psu$fpc$sampsize,
-                                                 fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
-                                                 lonely.psu=getOption("survey.lonely.psu"),
-                                                 one.stage=FALSE, stage = 1, cal = NULL)
-      
-      domain_lonely_psu_comparisons[['results_match']][i] <- isTRUE(all.equal(base_r_result, rcpp_result))
+    options('survey.lonely.psu' = domain_lonely_psu_comparisons[['survey.lonely.psu']][i])
+    options('survey.adjust.domain.lonely' = domain_lonely_psu_comparisons[['survey.adjust.domain.lonely']][i])
+    one.stage <- domain_lonely_psu_comparisons[['one.stage']][i]
+    
+    
+    x <- as.matrix(dmu284_strat_domain_lonely_psu$variables[,c('y1','y2')] / dmu284_strat_domain_lonely_psu$prob)
+    base_r_result <- survey:::multistage(x = x,
+                                         clusters = dmu284_strat_domain_lonely_psu$cluster,
+                                         stratas = dmu284_strat_domain_lonely_psu$strata,
+                                         nPSUs = dmu284_strat_domain_lonely_psu$fpc$sampsize,
+                                         fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
+                                         lonely.psu=getOption("survey.lonely.psu"),
+                                         one.stage=one.stage, stage = 1, cal = NULL)
+    
+    rcpp_result <- survey:::multistage_rcpp(x = x,
+                                            clusters = dmu284_strat_domain_lonely_psu$cluster,
+                                            stratas = dmu284_strat_domain_lonely_psu$strata,
+                                            nPSUs = dmu284_strat_domain_lonely_psu$fpc$sampsize,
+                                            fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
+                                            lonely.psu=getOption("survey.lonely.psu"),
+                                            one.stage=one.stage, stage = 1, cal = NULL)
+    
+    domain_lonely_psu_comparisons[['results_match']][i] <- isTRUE(all.equal(base_r_result, rcpp_result))
   }
   
   print(domain_lonely_psu_comparisons)
