@@ -2,6 +2,7 @@ import(stats,graphics,splines,grid, survival,lattice,methods,Matrix)
 importFrom("grDevices", "col2rgb", "grey", "rgb")
 importFrom("utils", "getS3method")
 importFrom("mitools","withPV")
+importFrom(Rcpp, sourceCpp)
 export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
        rake, calibrate, estWeights, as.svydesign2, svyplot, svyhist,
        svyboxplot, svyby, cv, SE, deff, svycoxph, svyglm, svyquantile,
@@ -526,3 +527,4 @@ S3method(postStratify,pps)
 S3method(svycontrast,svyolr)
 S3method(svylogrank,twophase2)
 S3method(svytotal,xdesign)
+useDynLib(survey)
