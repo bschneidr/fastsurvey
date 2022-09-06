@@ -2,7 +2,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=FALSE)]]
 arma::mat arma_onestage(arma::mat Y,
                         arma::colvec samp_unit_ids,
                         arma::colvec strata_ids,
@@ -184,7 +184,7 @@ arma::mat arma_onestage(arma::mat Y,
   return result;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=FALSE)]]
 arma::mat arma_multistage(arma::mat Y,
                           arma::mat samp_unit_ids,
                           arma::mat strata_ids,
