@@ -10,166 +10,169 @@ arma::mat arma_onestage(arma::mat Y,
                         arma::colvec strata_pop_sizes,
                         Rcpp::CharacterVector singleton_method,
                         Rcpp::LogicalVector use_singleton_method_for_domains,
-                        int stage) {                 
+                        int stage) { 
+  
+  arma::uword number_of_data_rows = samp_unit_ids.n_elem;
+  arma::uvec row_indices = arma::linspace<arma::uvec>(0L, number_of_data_rows - 1L, number_of_data_rows);
   
   // Determine dimensions of result
   size_t n_col_y = Y.n_cols;
   arma::mat result(n_col_y, n_col_y, arma::fill::zeros);
   
-  // Get distinct strata ids and their length, H
-  arma::colvec distinct_strata_ids = unique(strata_ids);
-  arma::uword H = distinct_strata_ids.n_elem;
-  
   // Check for singleton strata
   bool any_singleton_strata = min(strata_samp_sizes) < 2;
-  arma::uword n_singleton_strata = 0;
   
   // If `singleton_method = "adjust", get mean of all sampling units
   arma::rowvec Y_means;
+  Y_means = Y_means.zeros(n_col_y);
   if (any_singleton_strata | use_singleton_method_for_domains[0]) {
     if (singleton_method[0] == "adjust") {
       
-      // Get number of distinct sampling units
       int n = 0;
-      for (arma::uword h = 0; h < H; ++h) {
-        arma::uvec h_indices = arma::find(strata_ids==distinct_strata_ids[h]);
-        arma::uvec first_h_index = h_indices.head(1);
-        n += min(strata_samp_sizes.elem(first_h_index));
+      bool at_end_of_stratum;
+      arma::uword next_row_index = 0;
+      for (arma::uvec::iterator row_index = row_indices.begin(); row_index != row_indices.end(); ++row_index) {
+        Y_means += Y.row(*row_index);
+        if (next_row_index < number_of_data_rows) {
+          at_end_of_stratum = strata_ids(*row_index) != strata_ids(next_row_index);
+        } else {
+          at_end_of_stratum = true;
+        }
+        if (at_end_of_stratum) {
+          n += strata_samp_sizes(*row_index);
+        }
       }
       // Calculate average across all sampling units of all strata
-      Y_means = sum(Y, 0) / n;
+      Y_means = Y_means / n;
     }
   }
   
-  // Get information from each stratum:
-  // - Number of sampling units, in sample and population
-  // - Sampling fraction, if applicable
-  // - Contribution to sampling variance
-  for (arma::uword h = 0; h < H; ++h) {
+  // Initialize count of singleton strata
+  int n_singleton_strata = 0;
+  
+  // Initialize stratum-level summaries
+  int H = 0;
+  arma::rowvec Ybar_h;
+  Ybar_h = Ybar_h.zeros(n_col_y);
+  double n_h_in_data = 0;
+  double scale;
+  arma::mat h_sum_of_squares(n_col_y, n_col_y, arma::fill::zeros);
+  arma::mat cov_h(n_col_y, n_col_y, arma::fill::zeros);
+  
+  // Initialize sample unit total
+  arma::rowvec Yhi;
+  Yhi = Yhi.zeros(n_col_y);
+  
+  // Initialize checks for end of stratum or end of samp unit
+  
+  bool at_end_of_stratum = true;
+  bool at_end_of_samp_unit = true;
+  
+  // Iterate over each row and its following row,
+  // in the process iterating over strata and sampling units within strata
+  arma::uword next_row_index = 0;
+  
+  for (arma::uvec::iterator row_index = row_indices.begin(); row_index != row_indices.end(); ++row_index) {
     
-    // Determine which rows of data correspond to the current stratum
-    arma::uvec h_indices = arma::find(strata_ids==distinct_strata_ids[h]);
-    arma::uvec first_h_index = h_indices.head(1);
-    int h_num_observations = h_indices.n_elem;
+    // Determine whether the current row is the last observation in a stratum or sampling unit
+    next_row_index = (*(row_index+1));
     
-    // Get counts of sampling units in stratum, and corresponding sampling rate
-    int n_h = min(strata_samp_sizes.elem(first_h_index));
-    double N_h = static_cast<double>(min(strata_pop_sizes.elem(first_h_index)));
-    double f_h;
-    if (arma::is_finite(N_h)) {
-      f_h = static_cast<double>(n_h) /  N_h;
+    if (next_row_index < number_of_data_rows) {
+      
+      at_end_of_stratum = strata_ids(*row_index) != strata_ids(next_row_index);
+      if (!at_end_of_stratum) {
+        at_end_of_samp_unit = samp_unit_ids(*row_index) != samp_unit_ids(next_row_index);
+      } else {
+        at_end_of_samp_unit = true;
+      }
     } else {
-      f_h = 0.0;
+      at_end_of_stratum = true;
+      at_end_of_samp_unit = true;
     }
     
-    // Determine whether there's clustering
-    bool h_has_clusters = false;
-    arma::colvec h_distinct_samp_unit_ids = unique(samp_unit_ids.elem(h_indices));
-    int h_num_distinct_samp_unit_ids = h_distinct_samp_unit_ids.n_elem;
-    h_has_clusters = h_num_observations != h_num_distinct_samp_unit_ids;
+    // Get contribution to sampling unit's total
+    Yhi += Y.row(*row_index);
     
-    // Increment count of singleton strata
-    // and determine denominator to use for
-    // estimating variance of PSU totals
-    arma::uword df;
-    bool h_is_singleton_stratum = false;
+    // Add contribution of sampling unit
+    // to the stratum's sum of squares
+    if (at_end_of_samp_unit) {
+      Ybar_h += Yhi;
+      n_h_in_data += 1;
+      h_sum_of_squares += (arma::trans(Yhi)*Yhi);
+      Yhi = Yhi.zeros();
+    }
     
-    if (n_h < 2) {
-      h_is_singleton_stratum = true;
-      n_singleton_strata += 1;
-      df = 1;
-    } else {
-      if (use_singleton_method_for_domains[0] & (h_num_distinct_samp_unit_ids < 2)) {
-        if ((singleton_method[0] == "average") | (singleton_method[0] == "adjust") | (singleton_method[0] == "fail")) {
-          h_is_singleton_stratum = true;
+    if (at_end_of_stratum) {
+      
+      H += 1;
+      
+      // Determine sampling fraction
+      double n_h = static_cast<double>(strata_samp_sizes(*row_index));
+      double N_h = static_cast<double>(strata_pop_sizes(*row_index));
+      double f_h;
+      if (arma::is_finite(N_h)) {
+        f_h = static_cast<double>(n_h) /  N_h;
+      } else {
+        f_h = 0.0;
+      }
+      
+      // Increment count of singleton strata
+      bool h_is_singleton = false;
+      if (n_h == 1) {
+        h_is_singleton = true;
+        n_singleton_strata += 1;
+        if (singleton_method[0] == "fail") {
+          Rcpp::String error_msg("At least one stratum contains only one PSU at stage ");
+          error_msg += stage;
+          Rcpp::stop(error_msg);
+        }
+      } else if (n_h_in_data == 1) {
+        if (use_singleton_method_for_domains[0] & ((singleton_method[0] == "adjust") | (singleton_method[0] == "average"))) {
+          h_is_singleton = true;
           n_singleton_strata += 1;
         }
       }
-      df = n_h - 1;
+      
+      // Determine scaling factor to use for normalizing sum of squares
+      // and handling finite population correction
+      scale = ((1.0 - f_h) * n_h);
+      
+      // Determine what to do if the stratum is a singleton (has only one sampling unit)
+      if (h_is_singleton) {
+        if (singleton_method[0] == "adjust") {
+          Ybar_h = Y_means;
+        } else {
+          // Reset stratum count and sum variables so they can be used for the next stratum,
+          // then move on to next stratum and row of data
+          Ybar_h = Ybar_h.zeros();
+          h_sum_of_squares = h_sum_of_squares.zeros();
+          cov_h = cov_h.zeros();
+          n_h = 0;
+          n_h_in_data = 0;
+          continue;
+        }
+      } else {
+        Ybar_h = Ybar_h / n_h;
+        scale /= (n_h - 1);
+      }
+      
+      // Get variance-covariance contribution of stratum
+      cov_h = scale * (h_sum_of_squares - n_h*(arma::trans(Ybar_h)*Ybar_h));
+      result += cov_h;
+      
+      // Reset stratum count and sum variables so they can be used for the next stratum
+      Ybar_h = Ybar_h.zeros();
+      h_sum_of_squares = h_sum_of_squares.zeros();
+      cov_h = cov_h.zeros();
+      n_h = 0;
+      n_h_in_data = 0;
     }
     
-    if (h_is_singleton_stratum) {
-      any_singleton_strata = true;
-      if (singleton_method[0] == "fail") {
-        Rcpp::String error_msg("At least one stratum contains only one PSU at stage ");
-        error_msg += stage;
-        Rcpp::stop(error_msg);
-      }
-    }
-    
-    // By default, variance is computed by recentering around mean PSU within stratum.
-    // But for `singleton_method = 'adjust'`, we instead recenter around mean PSU regardless of stratum.
-    bool recenter_around_grand_mean = FALSE;
-    
-    if ((!h_is_singleton_stratum) | (singleton_method[0] == "adjust")) {
-      // Subset variables of interest to stratum
-      // and calculate means for stratum
-      arma::mat Y_h = Y.rows(h_indices);
-      arma::rowvec mean_Yhi = arma::sum(Y_h, 0) / n_h;
-      
-      // Initialize variance-covariance of PSU totals
-      arma::mat cov_mat(n_col_y, n_col_y, arma::fill::zeros);
-      
-      // Recenter around mean of PSUs from all strata, if necessary
-      if (n_h == 1) {
-        recenter_around_grand_mean = TRUE;
-      } else if (h_num_observations == 1) {
-        if ((singleton_method[0] == "adjust") & use_singleton_method_for_domains[0]) {
-          recenter_around_grand_mean = TRUE;
-        }
-      }
-      
-      // If there's no clustering, simply get each row's contribution
-      // to stratum's variance-covariance matrix
-      if (!h_has_clusters) {
-        
-        for (int i=0; i < h_num_observations; ++i ) {
-          arma::rowvec Yhi = Y_h.row(i);
-          
-          if (!recenter_around_grand_mean) {
-            Yhi.each_row() -= mean_Yhi;
-          } else {
-            Yhi.each_row() -= Y_means;
-          }
-          
-          cov_mat += (arma::trans(Yhi)*Yhi);
-        }
-      }
-      
-      // If there is clustering, sum up values in each cluster
-      // and add this sum's contribution to the between sampling-units
-      // variance-covariance matrix
-      if (h_has_clusters) {
-        
-        for (arma::uword i=0; i < h_distinct_samp_unit_ids.n_elem; ++i ) {
-          arma::uvec unit_indices = arma::find(samp_unit_ids.elem(h_indices) == h_distinct_samp_unit_ids[i]);
-          arma::rowvec Yhi = sum(Y_h.rows(unit_indices), 0);
-          
-          if (!recenter_around_grand_mean) {
-            Yhi.each_row() -= mean_Yhi;
-          } else {
-            Yhi.each_row() -= Y_means;
-          }
-          
-          cov_mat += (arma::trans(Yhi)*Yhi);
-        }
-      }
-      
-      // If the data were subsetted, some sampling units
-      // may not have rows of data that appear in inputs.
-      // Make sure these units contribute to the variance.
-      int n_h_missing = n_h - h_num_distinct_samp_unit_ids;
-      if (n_h_missing > 0) {
-        cov_mat += n_h_missing*(arma::trans(mean_Yhi)*mean_Yhi);
-      }
-      
-      cov_mat = cov_mat / df;
-      
-      // Add variance contribution
-      result += ((1.0 - f_h) * n_h) * cov_mat;
-    }
   }
   
+  // If the user specified 'average' method for handling singleton strata,
+  // scale the total variance estimate
+  any_singleton_strata = n_singleton_strata > 0;
   if ((singleton_method[0] == "average") & any_singleton_strata) {
     int n_nonsingleton_strata = H - n_singleton_strata;
     double scaling_factor;
@@ -197,6 +200,28 @@ arma::mat arma_multistage(arma::mat Y,
   
   size_t n_stages = samp_unit_ids.n_cols;
   
+  // First reorder inputs by first-stage sample unit IDs
+  arma::uvec samp_unit_id_order = arma::stable_sort_index(samp_unit_ids.col(0), "ascend");
+  Y = Y.rows(samp_unit_id_order);
+  samp_unit_ids = samp_unit_ids.rows(samp_unit_id_order);
+  strata_ids = strata_ids.rows(samp_unit_id_order);
+  strata_samp_sizes = strata_samp_sizes.rows(samp_unit_id_order);
+  strata_pop_sizes = strata_pop_sizes.rows(samp_unit_id_order);
+  
+  // Next reorder inputs by first-stage strata IDs
+  arma::uvec strata_id_order = arma::stable_sort_index(strata_ids.col(0), "ascend");
+  Y = Y.rows(strata_id_order);
+  samp_unit_ids = samp_unit_ids.rows(strata_id_order);
+  strata_ids = strata_ids.rows(strata_id_order);
+  strata_samp_sizes = strata_samp_sizes.rows(strata_id_order);
+  strata_pop_sizes = strata_pop_sizes.rows(strata_id_order);
+  
+  // Obtain first stage information
+  arma::colvec first_stage_ids = samp_unit_ids.col(0);
+  arma::colvec first_stage_strata = strata_ids.col(0);
+  arma::colvec first_stage_strata_samp_sizes = strata_samp_sizes.col(0);
+  arma::colvec first_stage_strata_pop_sizes = strata_pop_sizes.col(0);
+  
   // If there are later stages of sampling,
   // obtain the necessary columns from inputs,
   // which will be used recursively
@@ -212,12 +237,6 @@ arma::mat arma_multistage(arma::mat Y,
     later_stage_strata_samp_sizes = strata_samp_sizes.tail_cols(n_stages-1);
     later_stage_strata_pop_sizes = strata_pop_sizes.tail_cols(n_stages-1);
   }
-  
-  // Obtain first stage information
-  arma::colvec first_stage_ids = samp_unit_ids.col(0);
-  arma::colvec first_stage_strata = strata_ids.col(0);
-  arma::colvec first_stage_strata_samp_sizes = strata_samp_sizes.col(0);
-  arma::colvec first_stage_strata_pop_sizes = strata_pop_sizes.col(0);
   
   // Calculate first-stage variance
   arma::mat V = arma_onestage(Y = Y,
