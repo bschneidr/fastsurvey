@@ -306,6 +306,7 @@ S3method(print, twophase2)
 S3method(print, calfun)
 S3method(print, svyvar)
 S3method(print, seqanova.svycoxph)
+S3method(print, seqanova.svyglm)
 
 S3method(as.matrix, svyvar)
 S3method(print, svrepvar)

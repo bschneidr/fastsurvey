@@ -104,8 +104,14 @@ regTermTest<-function(model, test.terms, null=NULL, df=NULL, method=c("Wald","Wo
       names(model$call)[[2]]<-"formula"
 
     if (method=="LRT"){
-        model0<-eval(bquote(update(.(model), .~.-(.(test.formula)))),environment(formula(model)))
-        chisq<-deviance(model0)-deviance(model)
+        model0<-eval(bquote(update(.(model), .~.-(.(test.formula)),design=.(model$survey.design),subset=NULL)),
+                     environment(formula(model)))  ## same missing data
+        if (inherits(model,"svyglm")){
+            rescale<-mean(model$prior.weights)/mean(model0$prior.weights)
+        } else if (inherits(model,"svycoxph")){
+            rescale<-mean(model$weights)/mean(model0$weights)
+        } else rescale<-1 ##FIXME -- probably want a generic drop_and_refit function
+        chisq<-deviance(model0)*rescale-deviance(model)
     } else {
         chisq<-beta%*%solve(V0)%*%beta
     }

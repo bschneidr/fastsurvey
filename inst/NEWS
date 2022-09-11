@@ -69,6 +69,9 @@
 
 	error in vcov.svyrep.design with mse=TRUE (shows up in svyVGAM)
 
+	regTermTest(method="LRT") required the two models to use the same observations
+	(of course), but didn't check. It now subsets properly. (for Keiran Shao)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
