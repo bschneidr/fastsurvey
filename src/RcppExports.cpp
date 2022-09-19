@@ -12,4 +12,3 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // arma_onestage
-arma::mat arma_onestage(arma::mat Y, arma::colvec samp_unit_ids, arma::colvec strata_ids, arma::colvec strata_samp_sizes, arma::colvec strata_pop_sizes, Rcpp::CharacterVector singleton_method, Rcpp::LogicalVector use_singleton_method_for_domains, int stage);
