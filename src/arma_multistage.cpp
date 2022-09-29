@@ -90,7 +90,21 @@ arma::mat arma_onestage(const arma::mat& Y,
     n_samp_units_all_strata += strata_samp_sizes(stratum_start);
     if (strata_samp_sizes(stratum_start) < 2) {
       singleton_indicators(h) = 1;
+      break;
     }
+    
+    if (use_singleton_method_for_domains[0] & ((singleton_method[0] == "adjust") | (singleton_method[0] == "average"))) {
+      arma::uword h_row_index = strata_starts(h);
+      // Set singleton indicator equal to 1 unless there are multiple observed sampling units in the stratum
+      singleton_indicators(h) = 1;
+      while ((singleton_indicators(h) == 1) & (h_row_index <= strata_ends(h))) {
+        if (samp_unit_ids(h_row_index) != samp_unit_ids(strata_starts(h))) {
+          singleton_indicators(h) = 0;
+        }
+        h_row_index += 1;
+      }
+    }
+    
     if ((static_cast<int>(strata_ends[h] - strata_starts[h] + 1)) < 2) {
       if (use_singleton_method_for_domains[0] & ((singleton_method[0] == "adjust") | (singleton_method[0] == "average"))) {
         singleton_indicators(h) = 1;
@@ -109,6 +123,7 @@ arma::mat arma_onestage(const arma::mat& Y,
   // Iterate over each stratum
   for (arma::uword h = 0; h < H; ++h) {
     
+    //Rcpp::Rcout << "singleton_indicators(h)=" <<  singleton_indicators(h) << std::endl;
     if ((singleton_indicators(h) == 1) & (singleton_method[0] != "adjust")) {
       break;
     }
@@ -121,7 +136,7 @@ arma::mat arma_onestage(const arma::mat& Y,
     
     n_h = static_cast<double>(strata_samp_sizes(stratum_start));
     N_h = static_cast<double>(strata_pop_sizes(stratum_start));
-    n_obs_h = static_cast<int>(strata_ends[h] - strata_starts[h] + 1);
+    n_obs_h = 0;
     
     if (arma::is_finite(N_h)) {
       f_h = n_h / N_h;
@@ -153,6 +168,7 @@ arma::mat arma_onestage(const arma::mat& Y,
       Yhi += Y.row(*h_row_index);
       
       if (at_end_of_samp_unit) {
+        n_obs_h += 1;
         // Rcpp::Rcout << "Yhi is" << std::endl << Yhi << std::endl;
         Yhi.each_row() -= Ybar_h;
         cov_h += (arma::trans(Yhi)*Yhi);
@@ -180,11 +196,11 @@ arma::mat arma_onestage(const arma::mat& Y,
     // Rcpp::Rcout << "strata_ends(h)" << strata_ends(h) << std::endl;
     // Rcpp::Rcout << "n_h = " << n_h << std::endl;
     // Rcpp::Rcout << "n_obs_h = " << n_obs_h << std::endl;
+    // Rcpp::Rcout << "n_h_missing = " << n_h_missing << std::endl;
     // Rcpp::Rcout << "scale = " << scale << std::endl;
     // Rcpp::Rcout << "Ybar_h = " << std::endl<< Ybar_h << std::endl;
     // Rcpp::Rcout << "Y_means = " << std::endl << Y_means << std::endl;
     // Rcpp::Rcout << "singleton_indicators(h) = " << singleton_indicators(h) << std::endl;
-    // Rcpp::Rcout << "cov_h = " << std::endl << cov_h << std::endl;
     
     result += (scale * cov_h);
     //Rcout << "cov_h is" << std::endl << cov_h << std::endl;
@@ -206,6 +222,7 @@ arma::mat arma_onestage(const arma::mat& Y,
     }
     result *= scaling_factor;
   }
+  //Rcpp::Rcout << "singleton_indicators = " << singleton_indicators << std::endl;
   
   return result;
 }
