@@ -2,9 +2,39 @@
 ## Check that multistage() and multistage_rcpp() give same results
 ## for different options.
 ##
+library(survey)
+
+# Check for a simple random sample ----
+
+  data('api', package = 'survey')
+  api_srs_design <- svydesign(
+    data = apisrs,
+    ids = ~ 1,
+    weights = ~ 1
+  )
+  
+  x <- as.matrix(api_srs_design$variables[,c('api00','api99')] / api_srs_design$prob)
+  
+  base_r_result <- survey:::multistage(x = x,
+                                       clusters = api_srs_design$cluster,
+                                       stratas = api_srs_design$strata,
+                                       nPSUs = api_srs_design$fpc$sampsize, fpcs = api_srs_design$fpc$popsize,
+                                       lonely.psu=getOption("survey.lonely.psu"),
+                                       one.stage=TRUE, stage = 1, cal = NULL)
+  
+  rcpp_result <- survey:::multistage_rcpp(x = x,
+                                          clusters = api_srs_design$cluster,
+                                          stratas = api_srs_design$strata,
+                                          nPSUs = api_srs_design$fpc$sampsize, fpcs = api_srs_design$fpc$popsize,
+                                          lonely.psu=getOption("survey.lonely.psu"),
+                                          one.stage=TRUE, stage = 1, cal = NULL)
+  
+  if (!isTRUE(all.equal(base_r_result, rcpp_result))) {
+    stop("Differences between `multistage()` and `multistage_rcpp()` for SRS")
+  }
 
 # Create a stratified, multistage design ----
-  library(survey)
+  
   data(mu284)
   
   ## Create three strata, the third of which has only one PSU
