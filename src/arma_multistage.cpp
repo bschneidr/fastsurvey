@@ -77,17 +77,16 @@ arma::mat arma_onestage(arma::mat Y,
     // Determine whether the current row is the last observation in a stratum or sampling unit
     next_row_index = (*(row_index+1));
     
-    if (next_row_index < number_of_data_rows) {
-      
+    if ((*(row_index)) == (number_of_data_rows - 1)) {
+      at_end_of_stratum = true;
+      at_end_of_samp_unit = true;
+    } else {
       at_end_of_stratum = strata_ids(*row_index) != strata_ids(next_row_index);
       if (!at_end_of_stratum) {
         at_end_of_samp_unit = samp_unit_ids(*row_index) != samp_unit_ids(next_row_index);
       } else {
         at_end_of_samp_unit = true;
       }
-    } else {
-      at_end_of_stratum = true;
-      at_end_of_samp_unit = true;
     }
     
     // Get contribution to sampling unit's total
