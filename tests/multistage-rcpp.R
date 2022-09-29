@@ -32,6 +32,36 @@ library(survey)
   if (!isTRUE(all.equal(base_r_result, rcpp_result))) {
     stop("Differences between `multistage()` and `multistage_rcpp()` for SRS")
   }
+  
+# Check for a stratified simple random sample ----
+  
+  apistrat_design <- svydesign(
+    data = apistrat,
+    id =~ 1,
+    strata =~ stype,
+    weights =~ pw,
+    fpc =~ fpc
+  )
+  
+  x <- as.matrix(apistrat_design$variables[,c('api00','api99')] / apistrat_design$prob)
+  
+  base_r_result <- survey:::multistage(x = x,
+                                       clusters = apistrat_design$cluster,
+                                       stratas = apistrat_design$strata,
+                                       nPSUs = apistrat_design$fpc$sampsize, fpcs = apistrat_design$fpc$popsize,
+                                       lonely.psu=getOption("survey.lonely.psu"),
+                                       one.stage=TRUE, stage = 1, cal = NULL)
+  
+  rcpp_result <- survey:::multistage_rcpp(x = x,
+                                          clusters = apistrat_design$cluster,
+                                          stratas = apistrat_design$strata,
+                                          nPSUs = apistrat_design$fpc$sampsize, fpcs = apistrat_design$fpc$popsize,
+                                          lonely.psu=getOption("survey.lonely.psu"),
+                                          one.stage=TRUE, stage = 1, cal = NULL)
+  
+  if (!isTRUE(all.equal(base_r_result, rcpp_result))) {
+    stop("Differences between `multistage()` and `multistage_rcpp()` for SRS")
+  }
 
 # Create a stratified, multistage design ----
   
