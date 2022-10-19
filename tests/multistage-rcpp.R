@@ -60,7 +60,29 @@ library(survey)
                                           one.stage=TRUE, stage = 1, cal = NULL)
   
   if (!isTRUE(all.equal(base_r_result, rcpp_result))) {
-    stop("Differences between `multistage()` and `multistage_rcpp()` for SRS")
+    stop("Differences between `multistage()` and `multistage_rcpp()` for stratified sample")
+  }
+  
+  ##_ Check whether expected true zeroes are actually computed as zeroes ----
+  
+  x <- as.matrix(model.matrix(~ -1 + stype, data = apistrat_design$variables) / (sum(apistrat_design$prob)/apistrat_design$prob))
+  
+  base_r_result <- survey:::multistage(x = x,
+                                       clusters = apistrat_design$cluster,
+                                       stratas = apistrat_design$strata,
+                                       nPSUs = apistrat_design$fpc$sampsize, fpcs = apistrat_design$fpc$popsize,
+                                       lonely.psu=getOption("survey.lonely.psu"),
+                                       one.stage=TRUE, stage = 1, cal = NULL)
+  
+  rcpp_result <- survey:::multistage_rcpp(x = x,
+                                          clusters = apistrat_design$cluster,
+                                          stratas = apistrat_design$strata,
+                                          nPSUs = apistrat_design$fpc$sampsize, fpcs = apistrat_design$fpc$popsize,
+                                          lonely.psu=getOption("survey.lonely.psu"),
+                                          one.stage=TRUE, stage = 1, cal = NULL)
+  
+  if (!all(rcpp_result == 0) | !all(diag(rcpp_result) >= 0)) {
+    stop("Computations which should equal zero do not.")
   }
 
 # Create a stratified, multistage design ----

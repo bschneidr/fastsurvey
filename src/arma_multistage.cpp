@@ -134,12 +134,12 @@ arma::mat arma_onestage(const arma::mat& Y,
     // Get stratum-wide summary
     arma::uword stratum_start = strata_starts(h);
     
-    n_h = static_cast<double>(strata_samp_sizes(stratum_start));
+    n_h = static_cast<long double>(strata_samp_sizes(stratum_start));
     N_h = static_cast<double>(strata_pop_sizes(stratum_start));
     n_obs_h = 0;
     
     if (arma::is_finite(N_h)) {
-      f_h = n_h / N_h;
+      f_h = static_cast<double>(n_h) / static_cast<double>(N_h);
     } else {
       f_h = 0.0;
     }
@@ -174,7 +174,6 @@ arma::mat arma_onestage(const arma::mat& Y,
         cov_h += (arma::trans(Yhi)*Yhi);
         Yhi = Yhi.zeros();
       }
-      
     }
     
     // If the data were subsetted, some sampling units
@@ -198,7 +197,8 @@ arma::mat arma_onestage(const arma::mat& Y,
     // Rcpp::Rcout << "n_obs_h = " << n_obs_h << std::endl;
     // Rcpp::Rcout << "n_h_missing = " << n_h_missing << std::endl;
     // Rcpp::Rcout << "scale = " << scale << std::endl;
-    // Rcpp::Rcout << "Ybar_h = " << std::endl<< Ybar_h << std::endl;
+    // Rcpp::Rcout << "Ybar_h = " << std::endl << Ybar_h << std::endl;
+    // Rcpp::Rcout << "cov_h = " << std::endl << cov_h << std::endl;
     // Rcpp::Rcout << "Y_means = " << std::endl << Y_means << std::endl;
     // Rcpp::Rcout << "singleton_indicators(h) = " << singleton_indicators(h) << std::endl;
     
@@ -351,5 +351,15 @@ arma::mat arma_multistage(arma::mat Y,
       }
     }
   }
+  // Deal with potential floating-point error
+  V.diag() = arma::abs(V.diag());
+  for (arma::uword i=0; i < V.n_cols; ++i ) {
+    if (std::abs(V(i,i)) < 1e-16) {
+      V.row(i).zeros();
+      V.col(i).zeros();
+    }
+  }
+  
+  // Return result
   return V;
 }
