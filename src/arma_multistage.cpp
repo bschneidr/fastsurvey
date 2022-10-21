@@ -90,6 +90,11 @@ arma::mat arma_onestage(const arma::mat& Y,
     n_samp_units_all_strata += strata_samp_sizes(stratum_start);
     if (strata_samp_sizes(stratum_start) < 2) {
       singleton_indicators(h) = 1;
+      if (singleton_method[0] == "fail") {
+        Rcpp::String error_msg("At least one stratum contains only one PSU at stage ");
+        error_msg += stage;
+        Rcpp::stop(error_msg);
+      }
       break;
     }
     
