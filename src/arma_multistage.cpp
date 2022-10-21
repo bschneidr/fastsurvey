@@ -62,9 +62,6 @@ arma::mat arma_onestage(const arma::mat& Y,
   }
   strata_starts(0) = 0;
   
-  //Rcout << "strata_starts are " << std::endl << strata_starts << std::endl;
-  //Rcout << "strata_ends are " << std::endl << strata_ends << std::endl;
-  
   // Initialize strata summaries
   arma::mat cov_h(n_col_y, n_col_y, arma::fill::zeros);
   double n_h;
@@ -128,13 +125,11 @@ arma::mat arma_onestage(const arma::mat& Y,
   // Iterate over each stratum
   for (arma::uword h = 0; h < H; ++h) {
     
-    //Rcpp::Rcout << "singleton_indicators(h)=" <<  singleton_indicators(h) << std::endl;
     if ((singleton_indicators(h) == 1) & (singleton_method[0] != "adjust")) {
       break;
     }
     
     arma::uvec h_row_indices = arma::linspace<arma::uvec>(strata_starts[h], strata_ends[h], strata_ends[h] - strata_starts[h] + 1);
-    //Rcout << "h_row_indices are " << std::endl << h_row_indices << std::endl;
     
     // Get stratum-wide summary
     arma::uword stratum_start = strata_starts(h);
@@ -174,7 +169,6 @@ arma::mat arma_onestage(const arma::mat& Y,
       
       if (at_end_of_samp_unit) {
         n_obs_h += 1;
-        // Rcpp::Rcout << "Yhi is" << std::endl << Yhi << std::endl;
         Yhi.each_row() -= Ybar_h;
         cov_h += (arma::trans(Yhi)*Yhi);
         Yhi = Yhi.zeros();
@@ -196,20 +190,7 @@ arma::mat arma_onestage(const arma::mat& Y,
       scale /= (n_h - 1);
     }
     
-    // Rcpp::Rcout << "h = " << h << std::endl;
-    // Rcpp::Rcout << "strata_ends(h)" << strata_ends(h) << std::endl;
-    // Rcpp::Rcout << "n_h = " << n_h << std::endl;
-    // Rcpp::Rcout << "n_obs_h = " << n_obs_h << std::endl;
-    // Rcpp::Rcout << "n_h_missing = " << n_h_missing << std::endl;
-    // Rcpp::Rcout << "scale = " << scale << std::endl;
-    // Rcpp::Rcout << "Ybar_h = " << std::endl << Ybar_h << std::endl;
-    // Rcpp::Rcout << "cov_h = " << std::endl << cov_h << std::endl;
-    // Rcpp::Rcout << "Y_means = " << std::endl << Y_means << std::endl;
-    // Rcpp::Rcout << "singleton_indicators(h) = " << singleton_indicators(h) << std::endl;
-    
     result += (scale * cov_h);
-    //Rcout << "cov_h is" << std::endl << cov_h << std::endl;
-    //Rcout << "scale is" << std::endl << scale << std::endl;
     cov_h = cov_h.zeros();
   }
   
@@ -227,7 +208,6 @@ arma::mat arma_onestage(const arma::mat& Y,
     }
     result *= scaling_factor;
   }
-  //Rcpp::Rcout << "singleton_indicators = " << singleton_indicators << std::endl;
   
   return result;
 }
