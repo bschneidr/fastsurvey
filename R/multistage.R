@@ -304,6 +304,8 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
   
   use_rcpp <- TRUE
   
+  use_rcpp <- TRUE
+  
   ## Remove post-stratum means, which may cut across clusters
   ## Also center the data using any "g-calibration" models
   if(!is.null(postStrata)){
@@ -406,7 +408,7 @@ multistage_rcpp <- function(x, clusters,  stratas, nPSUs, fpcs,
   if (is.data.frame(clusters)) {
     for (j in seq_len(ncol(clusters))) {
       if (!is.numeric(clusters[[j]]))
-      clusters[[j]] <- as.numeric(clusters[[j]])
+      clusters[[j]] <- as.numeric(as.factor(clusters[[j]]))
     }
   }
   clusters <- as.matrix(clusters)
@@ -414,7 +416,7 @@ multistage_rcpp <- function(x, clusters,  stratas, nPSUs, fpcs,
   if (is.data.frame(stratas)) {
     for (j in seq_len(ncol(stratas))) {
       if (!is.numeric(stratas[[j]]))
-      stratas[[j]] <- as.numeric(stratas[[j]])
+      stratas[[j]] <- as.numeric(as.factor(stratas[[j]]))
     }
   }
   stratas <- as.matrix(stratas)
