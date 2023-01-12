@@ -72,6 +72,12 @@
 	regTermTest(method="LRT") required the two models to use the same observations
 	(of course), but didn't check. It now subsets properly. (for Keiran Shao)
 
+	svyquantile() didn't pay attention to interval_type for replicate weights (David Jorquera Petersen)
+
+	svyquantile() qrules 5 to 9 now return the single data value when there's
+	just one (David Jorquera Petersen)
+
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
