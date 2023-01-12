@@ -108,7 +108,8 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
         ci_fun<-function(...) repCI(...,return.replicates=return.replicates)
     } else {
         if(return.replicates) warning("return.replicates=TRUE only implemented for interval.type='quantile'")
-        ci_fun<-woodruffCI
+        ci_fun<- function(...) woodruffCI(..., method = interval.type)
+
     }
 
     if ((interval.type=="quantile") && return.replicates){
