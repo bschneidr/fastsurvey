@@ -5,10 +5,17 @@ svyolr<-function(formula, design,...) UseMethod("svyolr",design)
 ##
 
 
-svyolr.svyrep.design<-function(formula,design,...,return.replicates=FALSE,
+svyolr.svyrep.design<-function(formula,design,subset=NULL,...,return.replicates=FALSE,
                                multicore=getOption("survey.multicore")){
- 	environment(formula)<-environment()
- 	df<-model.frame(design)
+    environment(formula)<-environment()
+      subset<-substitute(subset)
+      subset<-eval(subset, model.frame(design), parent.frame())
+      if (!is.null(subset)){
+        if (any(is.na(subset)))
+            stop("subset must not contain NA values")
+        design<-design[subset,]
+       }
+        df<-model.frame(design)
  	pwt<-weights(design,"sampling")
         if (multicore && !requireNamespace("parallel", quietly=TRUE))
           multicore <- FALSE
@@ -34,6 +41,7 @@ svyolr.svyrep.design<-function(formula,design,...,return.replicates=FALSE,
  	rval$var<-svrVar(t(betas),design$scale,design$rscales,mse=design$mse, coef=start)
         rval$df.residual<-degf(design)-length(rval$coefficients)
         rval$deviance<-rval$deviance/mean(pwt)
+        rval$survey.design<-design
  	class(rval)<-"svyolr"
  	rval$call<-sys.call()
         rval$call[[1]]<-as.name(.Generic)
@@ -61,7 +69,7 @@ dgumbel<-function (x, loc = 0, scale = 1, log = FALSE)
 }
 
 
-svyolr.survey.design2<-function (formula, design,  start, ...,  na.action=na.omit, 
+svyolr.survey.design2<-function (formula, design,  start, subset=NULL,...,  na.action=na.omit, 
  method = c("logistic", "probit", "cloglog", "cauchit")) 
 {
     logit <- function(p) log(p/(1 - p))
@@ -118,7 +126,15 @@ svyolr.survey.design2<-function (formula, design,  start, ...,  na.action=na.omi
     dfun <- switch(method, logistic = dlogis, probit = dnorm, 
         cloglog = dgumbel, cauchit = dcauchy)
 
+      subset<-substitute(subset)
+      subset<-eval(subset, model.frame(design), parent.frame())
+      if (!is.null(subset)){
+        if (any(is.na(subset)))
+            stop("subset must not contain NA values")
+        design<-design[subset,]
+       }
 
+    
     m<-model.frame(formula,model.frame(design),na.action=na.pass)
     Terms <- attr(m, "terms")
     m<-na.action(m)
@@ -240,6 +256,7 @@ svyolr.survey.design2<-function (formula, design,  start, ...,  na.action=na.omi
                      design$strata, design$fpc,
                      postStrata = design$postStrata)
     fit$df.residual<-degf(design)-length(beta)
+    fit$survey.design<-design
 
 
     fit$na.action <- attr(m, "na.action")

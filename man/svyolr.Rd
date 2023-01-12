@@ -11,9 +11,9 @@
 }
 \usage{
 svyolr(formula, design, ...)
-\method{svyolr}{survey.design2}(formula, design, start, ..., na.action = na.omit, method = c("logistic", 
+\method{svyolr}{survey.design2}(formula, design, start, subset=NULL,..., na.action = na.omit, method = c("logistic", 
     "probit", "cloglog", "cauchit"))
-\method{svyolr}{svyrep.design}(formula,design,...,return.replicates=FALSE, 
+\method{svyolr}{svyrep.design}(formula,design,subset=NULL,...,return.replicates=FALSE, 
     multicore=getOption("survey.multicore"))
 \method{predict}{svyolr}(object, newdata, type = c("class", "probs"), ...)
 }
@@ -22,6 +22,7 @@ svyolr(formula, design, ...)
   \item{formula}{Formula: the response must be a factor with at least
     three levels}
   \item{design}{survey design object }
+  \item{subset}{subset of the design to use; \code{NULL} for all of it}
   \item{\dots}{dots}
   \item{start}{Optional starting values for optimization}
   \item{na.action}{handling of missing values}
