@@ -354,17 +354,18 @@ print.summary.svyolr<-function (x, digits = x$digits, ...)
 }
 
 model.frame.svyolr<-function(formula, ...){
-	  mcall <- match.call(svyolr, formula$call)
-	  design<- eval(mcall$design)
-	  formula<-eval(mcall$formula)
-	  mf<-model.frame(formula,model.frame(design))
-	  w<-weights(design, type="sampling")
-	  if (is.null(naa<-attr(mf,"na.action")))
-	     mf[["(weights)"]]<-w
-	  else
-	     mf[["(weights)"]]<-w[-naa]
-	  mf	
-	}
+    mcall <- match.call(svyolr, formula$call)
+    e<-environment(formula(formula))
+    formula<-eval(mcall$formula, envir=e)
+    design<- eval(mcall$design, envir=e)
+    mf<-model.frame(formula,model.frame(design))
+    w<-weights(design, type="sampling")
+    if (is.null(naa<-attr(mf,"na.action")))
+        mf[["(weights)"]]<-w
+    else
+        mf[["(weights)"]]<-w[-naa]
+    mf	
+}
 
 ## taken from MASS::predict.polr
 predict.svyolr<-function (object, newdata, type = c("class", "probs"), ...) 

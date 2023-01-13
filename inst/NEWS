@@ -81,6 +81,9 @@
 	svyquantile() qrules 5 to 9 now return the single data value when there's
 	just one (David Jorquera Petersen)
 
+	regTermTest() on svyolr() objects created in a function now finds the
+	design object more reliably. (for Pedro Baldoni)
+
 
 4.1-1	CRAN
 
