@@ -1156,6 +1156,11 @@ svyglm.survey.design<-function(formula,design,subset=NULL, family=stats::gaussia
         if (g$rank<NCOL(estfun)){
             estfun<-estfun[,g$qr$pivot[1:g$rank]]
         }
+        if ( length(nas) && (NROW(data)>NROW(estfun))){
+            estfun1<-matrix(0,ncol=ncol(estfun),nrow=nrow(data))
+            estfun1[-nas,]<-estfun
+            estfun<-estfun1
+            }
         attr(g, "influence")<-estfun%*%g$naive.cov
     }
 

@@ -40,3 +40,6 @@ svyby( ~api99, ~stype, dclus1.na , svymean , na.rm.all = TRUE , na.rm = TRUE , c
 ## <TL> Now some more as tests
 svyby(~api99, ~stype, dclus1.na , svytotal , na.rm = TRUE , covmat = TRUE )
 svyby(~api99, ~stype, dclus1.na , svyratio , na.rm = TRUE , denominator=~api00, covmat = TRUE )
+
+ff<-function(f,d,...,na.rm=TRUE) svyglm(f,d,...)
+svyby(api99~1, ~stype, dclus1.na , ff , na.rm = TRUE , covmat = TRUE )
