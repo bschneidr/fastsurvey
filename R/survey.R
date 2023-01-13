@@ -1658,8 +1658,14 @@ svymle<-function(loglike, gradient=NULL, design, formulas,
     dimnames(rval$sandwich)<-list(parnms,parnms)
   }
 
-  if (influence)
+  if (influence){
+      if (nas && (NROW(data)>NROW(db))){
+          db1<-matrix(0,nrow=NROW(data),ncol=NCOL(db))
+          db1[-nas,]<-db
+          db<-db1
+      }
       attr(rval,"influence")<-db
+      }
   rval$call<-match.call()
   rval$design<-design
   class(rval)<-"svymle"

@@ -1,6 +1,6 @@
-4.2	Handling of influence functions has CHANGED. A function supply influence functions
-        must supply one for every observation it was given in its input: use 0 for
-	observations removed by subsetting. (for Guilherme Jacob)
+4.2	Handling of influence functions has CHANGED. A function that supplies influence
+	functions must supply one for every observation it was given in its input:
+	use 0 for observations removed by subsetting. (for Guilherme Jacob)
 
 	deffs in svyglm.svyrep.design (Ben Schneider)
 
