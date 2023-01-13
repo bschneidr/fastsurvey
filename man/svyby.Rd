@@ -62,7 +62,7 @@ svybys(formula,  bys,  design, FUN, ...)
   \code{by} variables}.
 \item{na.rm.all}{If true, check for groups with no non-missing
   observations for variables defined by \code{formula} and treat these groups
-  as empty}
+  as empty. Doesn't make much sense without \code{na.rm=TRUE}}
 \item{covmat}{If \code{TRUE}, compute covariances between estimates for
   different subsets. Allows \code{\link{svycontrast}} to be used on
   output. Requires that \code{FUN} supports either
