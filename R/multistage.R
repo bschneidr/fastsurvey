@@ -673,7 +673,7 @@ svytotal.survey.design2<-function(x,design, na.rm=FALSE, deff=FALSE,influence=FA
                                    postStrata=design$postStrata)
     attr(total,"statistic")<-"total"
     if (influence){
-         if (na.rm && (length(nas)>length(pweights))) {
+         if (na.rm && (length(nas)>length(design$prob))) {
              infl<-matrix(0,ncol=NCOL(x),nrow=length(nas))
              infl[nas==0,]<-x/design$prob
              attr(total, "influence")<-infl
@@ -867,7 +867,7 @@ svyratio.survey.design2<-function(numerator=formula, denominator, design, separa
     attr(rval,"call")<-sys.call()
 
     if (influence){
-        if (na.rm && (length(nas)>length(pweights))) {
+        if (na.rm && (length(nas)>length(design$prob))) {
             infl<-matrix(0,ncol=NCOL(r),nrow=length(nas))
             infl[nas==0,]<-r/design$prob
         } else {
