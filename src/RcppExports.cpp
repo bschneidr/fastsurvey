@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // arma_onestage
 arma::mat arma_onestage(const arma::mat& Y, const arma::colvec& samp_unit_ids, const arma::colvec& strata_ids, const arma::colvec& strata_samp_sizes, const arma::colvec& strata_pop_sizes, const Rcpp::CharacterVector& singleton_method, const Rcpp::LogicalVector& use_singleton_method_for_domains, const int& stage);
-RcppExport SEXP _survey_arma_onestage(SEXP YSEXP, SEXP samp_unit_idsSEXP, SEXP strata_idsSEXP, SEXP strata_samp_sizesSEXP, SEXP strata_pop_sizesSEXP, SEXP singleton_methodSEXP, SEXP use_singleton_method_for_domainsSEXP, SEXP stageSEXP) {
+RcppExport SEXP _fastsurvey_arma_onestage(SEXP YSEXP, SEXP samp_unit_idsSEXP, SEXP strata_idsSEXP, SEXP strata_samp_sizesSEXP, SEXP strata_pop_sizesSEXP, SEXP singleton_methodSEXP, SEXP use_singleton_method_for_domainsSEXP, SEXP stageSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
@@ -30,7 +30,7 @@ END_RCPP
 }
 // arma_multistage
 arma::mat arma_multistage(arma::mat Y, arma::mat samp_unit_ids, arma::mat strata_ids, arma::mat strata_samp_sizes, arma::mat strata_pop_sizes, Rcpp::CharacterVector singleton_method, Rcpp::LogicalVector use_singleton_method_for_domains, Rcpp::LogicalVector use_only_first_stage, int stage);
-RcppExport SEXP _survey_arma_multistage(SEXP YSEXP, SEXP samp_unit_idsSEXP, SEXP strata_idsSEXP, SEXP strata_samp_sizesSEXP, SEXP strata_pop_sizesSEXP, SEXP singleton_methodSEXP, SEXP use_singleton_method_for_domainsSEXP, SEXP use_only_first_stageSEXP, SEXP stageSEXP) {
+RcppExport SEXP _fastsurvey_arma_multistage(SEXP YSEXP, SEXP samp_unit_idsSEXP, SEXP strata_idsSEXP, SEXP strata_samp_sizesSEXP, SEXP strata_pop_sizesSEXP, SEXP singleton_methodSEXP, SEXP use_singleton_method_for_domainsSEXP, SEXP use_only_first_stageSEXP, SEXP stageSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
@@ -48,12 +48,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_survey_arma_onestage", (DL_FUNC) &_survey_arma_onestage, 8},
-    {"_survey_arma_multistage", (DL_FUNC) &_survey_arma_multistage, 9},
+    {"_fastsurvey_arma_onestage", (DL_FUNC) &_fastsurvey_arma_onestage, 8},
+    {"_fastsurvey_arma_multistage", (DL_FUNC) &_fastsurvey_arma_multistage, 9},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_survey(DllInfo *dll) {
+RcppExport void R_init_fastsurvey(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

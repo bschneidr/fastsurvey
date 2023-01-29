@@ -512,4 +512,4 @@ S3method(estfuns, lm)
 S3method(sigma, svyglm)
 S3method(sigma, svrepglm)
 
-useDynLib(survey)
+useDynLib(fastsurvey)
