@@ -2,6 +2,9 @@
 	functions must supply one for every observation it was given in its input:
 	use 0 for observations removed by subsetting. (for Guilherme Jacob)
 
+	regTermTest(method="LRT") required the two models to use the same observations
+	(of course), but didn't check. It now subsets properly. (for Keiran Shao)
+
 	deffs in svyglm.svyrep.design (Ben Schneider)
 
 	svynls() allows for prior (eg precision) weights (for Gary Nelson)
@@ -73,9 +76,6 @@
 
 	error in vcov.svyrep.design with mse=TRUE (shows up in svyVGAM)
 
-	regTermTest(method="LRT") required the two models to use the same observations
-	(of course), but didn't check. It now subsets properly. (for Keiran Shao)
-
 	svyquantile() didn't pay attention to interval_type for replicate weights (David Jorquera Petersen)
 
 	svyquantile() qrules 5 to 9 now return the single data value when there's
@@ -84,6 +84,7 @@
 	regTermTest() on svyolr() objects created in a function now finds the
 	design object more reliably. (for Pedro Baldoni)
 
+	regTermTest() will now test against null models in svycoxph()
 
 4.1-1	CRAN
 

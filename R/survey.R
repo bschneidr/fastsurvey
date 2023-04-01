@@ -963,35 +963,38 @@ svycoxph.survey.design<-function(formula,design, subset=NULL, rescale=TRUE, ...)
     if (length(nas))
         design<-design[-nas,]
 
-    dbeta.subset<-resid(g,"dfbeta",weighted=TRUE)
-    if (nrow(design)==NROW(dbeta.subset)){
-      dbeta<-as.matrix(dbeta.subset)
-    } else {
-      dbeta<-matrix(0,ncol=NCOL(dbeta.subset),nrow=nrow(design))
-      dbeta[is.finite(design$prob),]<-dbeta.subset
-    }
-
-    if (!is.null(g$naive.var)) ## newer versions of survival switch to robust=TRUE with non-integer weights
-        g$inv.info<-g$naive.var
-    else
-        g$inv.info<-g$var
+    ## if there are betas...
+    if (length(coef(g))>0){
+        dbeta.subset<-resid(g,"dfbeta",weighted=TRUE)
+        if (nrow(design)==NROW(dbeta.subset)){
+            dbeta<-as.matrix(dbeta.subset)
+        } else {
+            dbeta<-matrix(0,ncol=NCOL(dbeta.subset),nrow=nrow(design))
+            dbeta[is.finite(design$prob),]<-dbeta.subset
+        }
+        
+        if (!is.null(g$naive.var)) ## newer versions of survival switch to robust=TRUE with non-integer weights
+            g$inv.info<-g$naive.var
+        else
+            g$inv.info<-g$var
+        if (inherits(design,"survey.design2"))
+            g$var<-svyrecvar(dbeta, design$cluster,
+                             design$strata, design$fpc,
+                             postStrata=design$postStrata)
+        else if (inherits(design, "twophase"))
+            g$var<-twophasevar(dbeta, design)
+        else if(inherits(design, "twophase2"))
+            g$var<-twophase2var(dbeta, design)
+        else if(inherits(design, "pps"))
+            g$var<-ppsvar(dbeta,design)
+        else
+            g$var<-svyCprod(dbeta, design$strata,
+                            design$cluster[[1]], design$fpc,design$nPSU,
+                            design$certainty,design$postStrata)
     
-    if (inherits(design,"survey.design2"))
-      g$var<-svyrecvar(dbeta, design$cluster,
-                    design$strata, design$fpc,
-                    postStrata=design$postStrata)
-    else if (inherits(design, "twophase"))
-      g$var<-twophasevar(dbeta, design)
-    else if(inherits(design, "twophase2"))
-      g$var<-twophase2var(dbeta, design)
-    else if(inherits(design, "pps"))
-      g$var<-ppsvar(dbeta,design)
-    else
-      g$var<-svyCprod(dbeta, design$strata,
-                      design$cluster[[1]], design$fpc,design$nPSU,
-                      design$certainty,design$postStrata)
+        g$wald.test<-coef(g)%*%solve(g$var,coef(g))
+    } else g$var<-matrix(ncol=0,nrow=0)
     
-    g$wald.test<-coef(g)%*%solve(g$var,coef(g))
     g$ll<-g$loglik
     g$loglik<-NULL
     g$rscore<-NULL

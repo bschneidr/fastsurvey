@@ -123,14 +123,22 @@ svyquantile.svyrep.design <- function (x, design, quantiles, alpha = 0.05,
                                            )
                       }
                       )
-              ests<-sapply(rvals, function(v) sapply(v, function(qi) qi$qhat))
+              ests<-sapply(rvals, function(v) sapply(v, function(qi) qi$quantile))
+              ests <- matrix(ests, nrow = length(quantiles), ncol = length(rvals),
+                             dimnames=list(paste("q",round(quantiles,2),sep=""), names(x)))
               attr(ests, "scale") <- design$scale
               attr(ests, "rscales") <- design$rscales
               attr(ests, "mse") <- design$mse
-              reps<-sapply(rvals, function(v) t(sapply(v, function(qi) qi$replicates)))
-              rval<-list(quantile=ests,replicates=reps)
-              
-              attr(rval,"var")<-svrVar(reps, design$scale, design$rscales, mse=design$mse, coef=ests)
+              reps<-sapply(rvals, function(v) sapply(v, function(qi) qi$replicates))
+              reps <- matrix(reps, ncol = nrow(ests) * ncol(ests))
+              colnames(reps) <- as.vector(outer(names(x), paste("q",round(quantiles,2),sep=""), paste))
+
+              rval <- ests
+              attr(rval,"statistic") <- 'quantiles'
+              vv <- svrVar(reps, design$scale, design$rscales, mse=design$mse, coef=ests)
+              attr(rval,"var") <- matrix(diag(vv), nrow = nrow(ests), ncol = ncol(ests),
+                                         dimnames=list(paste("q",round(quantiles,2),sep=""), names(x)))
+              rval<-list(quantile=rval,replicates=reps)
               class(rval)<-"svrepstat"
               return(rval)
     } else {

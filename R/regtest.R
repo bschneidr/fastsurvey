@@ -1,6 +1,6 @@
 ##deviance methods not exported, used by method="LRT"
-deviance.svycoxph<-function(object,...) 2 * (object$ll[1] - object$ll[2])
-deviance.coxph<-function(object,...) 2 * (object$loglik[1] - object$loglik[2])
+deviance.svycoxph<-function(object,...) if(length(object$ll)==2) 2 * (object$ll[1] - object$ll[2]) else 0
+deviance.coxph<-function(object,...) if(length(object$loglik)==2) 2 * (object$loglik[1] - object$loglik[2]) else 0
 
 
 explicit1<-function(formula){
