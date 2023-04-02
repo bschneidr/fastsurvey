@@ -103,8 +103,9 @@ anova.svyloglin<-function(object,object1,...,integrate=FALSE){
   qwX2<-qr(round(wX2sing,11))
   wX2<-wX2sing[,qwX2$pivot[1:qwX2$rank],drop=FALSE]
   Delta<-solve(t(wX2)%*%Psat%*%wX2,t(wX2)%*%V%*%wX2)
-  
-  an<-anova(m0,m1)
+
+  no_tests<-if (getRversion()>="4.3.0") FALSE else NULL
+  an<-anova(m0,m1,test=no_tests)
   dev<-an$Deviance[2]
   if (integrate){
     pdev<-pchisqsum(dev,rep(1,ncol(wX2)), a=eigen(Delta,only.values=TRUE,symmetric=TRUE)$values,

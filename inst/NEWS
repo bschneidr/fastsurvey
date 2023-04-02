@@ -86,6 +86,12 @@
 
 	regTermTest() will now test against null models in svycoxph()
 
+	Fixes to svyquantile: https://github.com/bschneidr/r-forge-survey-mirror/pull/7
+	(Ben Schneider)
+
+	anova.svyloglin was broken by change to anova.glm(test=NULL)
+	(Brian Ripley)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
