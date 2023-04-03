@@ -3,7 +3,12 @@
 	use 0 for observations removed by subsetting. (for Guilherme Jacob)
 
 	regTermTest(method="LRT") required the two models to use the same observations
-	(of course), but didn't check. It now subsets properly. (for Keiran Shao)
+	(of course), but didn't check, so IT WAS WRONG.
+	It now subsets properly. (for Keiran Shao)
+
+	This will probably be the *last* interpreted-R-only version of survey. Future
+	versions will likely incorporate C++ code for faster variance computation and
+	for small-area estimation. 
 
 	deffs in svyglm.svyrep.design (Ben Schneider)
 

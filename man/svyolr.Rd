@@ -11,8 +11,8 @@
 }
 \usage{
 svyolr(formula, design, ...)
-\method{svyolr}{survey.design2}(formula, design, start, subset=NULL,..., na.action = na.omit, method = c("logistic", 
-    "probit", "cloglog", "cauchit"))
+\method{svyolr}{survey.design2}(formula, design, start, subset=NULL,...,
+    na.action = na.omit,method = c("logistic", "probit", "cloglog", "cauchit"))
 \method{svyolr}{svyrep.design}(formula,design,subset=NULL,...,return.replicates=FALSE, 
     multicore=getOption("survey.multicore"))
 \method{predict}{svyolr}(object, newdata, type = c("class", "probs"), ...)
