@@ -33,8 +33,7 @@ and Hills.
 }
 
 \source{
-JNK Rao, AJ Scott, and C
-Rao, J., Scott, A., & Skinner, C. (1998). QUASI-SCORE TESTS WITH SURVEY
+JNK Rao, AJ Scott, and Skinner, C. (1998). QUASI-SCORE TESTS WITH SURVEY
 DATA. Statistica Sinica, 8(4), 1059-1070.
 
 Clayton, D., & Hills, M. (1993). Statistical Models in Epidemiology. OUP
