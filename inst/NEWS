@@ -97,6 +97,9 @@
 	anova.svyloglin was broken by change to anova.glm(test=NULL)
 	(Brian Ripley)
 
+	One-sample svyttest() on logical variable now tests for P(TRUE==0) not P(FALSE==0)
+	(Stephanie Zimmer)
+
 4.1-1	CRAN
 
 4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
