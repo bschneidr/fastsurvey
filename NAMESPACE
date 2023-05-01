@@ -511,11 +511,11 @@ S3method(estfuns, lm)
 S3method(sigma, svyglm)
 S3method(sigma, svrepglm)
 
-S3method(ppsdesign, ppsdcheck)
-S3method(ppsdesign, ppsdelta)
-S3method(ppsdesign, HR)
-S3method(ppsdesign, ppsmat)
-S3method(ppsdesign, character)
+S3method(pps_design, ppsdcheck)
+S3method(pps_design, ppsdelta)
+S3method(pps_design, HR)
+S3method(pps_design, ppsmat)
+S3method(pps_design, character)
 
 S3method(survfit,svycoxph)
 

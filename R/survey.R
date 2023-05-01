@@ -600,7 +600,7 @@ vcov.svystat<-function(object,...){
   as.matrix(attr(object,"var"))
 }
 
-influence.svystat<-function(object,...){
+influence.svystat<-function(model,...){
   attr(object,"influence")
 }
 
