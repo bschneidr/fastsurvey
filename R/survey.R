@@ -601,7 +601,7 @@ vcov.svystat<-function(object,...){
 }
 
 influence.svystat<-function(model,...){
-  attr(object,"influence")
+  attr(model,"influence")
 }
 
 SE.svystat<-function(object,...){
