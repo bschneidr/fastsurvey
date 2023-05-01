@@ -165,13 +165,11 @@ An object of class \code{survey.design}.
 
   \code{mitools} package for using multiple imputations
 
-  \code{\link{svyrecvar}} and \code{\link{svyCprod}} for details of
-  variance estimation
+  \code{\link{svyrecvar}} for details of variance estimation
 
   \code{\link{election}} for examples of PPS sampling without replacement.
 
-  \url{http://faculty.washington.edu/tlumley/survey/} for examples of
-  database-backed objects.
+  
 }
 
 
