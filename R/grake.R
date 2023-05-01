@@ -18,11 +18,6 @@ cal_names.DBIsvydesign<-function(formula, design,...){
     colnames(model.matrix(formula, model.frame(formula,design$variables[0,])))
 }
 
-cal_names.ODBCsvydesign<-function(formula, design,...){
-    design$variables <- getvars(formula, design$db$connection, 
-                                design$db$tablename, updates = design$updates)
-    colnames(model.matrix(formula, model.frame(formula,design$variables[0,])))
-}
 
 cal_names.survey.design<-function(formula,design,...) {
     colnames(model.matrix(formula, model.frame(formula,model.frame(design)[0,])))

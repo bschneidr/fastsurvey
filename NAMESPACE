@@ -510,3 +510,19 @@ S3method(estfuns, lm)
 
 S3method(sigma, svyglm)
 S3method(sigma, svrepglm)
+
+S3method(ppsdesign, ppsdcheck)
+S3method(ppsdesign, ppsdelta)
+S3method(ppsdesign, HR)
+S3method(ppsdesign, ppsmat)
+S3method(ppsdesign, character)
+
+S3method(survfit,svycoxph)
+
+S3method(influence,svystat)
+
+S3method(estWeights,twophase2)
+S3method(postStratify,pps)
+S3method(svycontrast,svyolr)
+S3method(svylogrank,twophase2)
+S3method(svytotal,xdesign)

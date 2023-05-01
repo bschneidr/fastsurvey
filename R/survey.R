@@ -1074,7 +1074,7 @@ summary.svycoxph<-function(object,...){
     NextMethod()
 }
 
-survfit.svycoxph<-function(object,...){
+survfit.svycoxph<-function(formula,...){
     stop("No survfit method for survey models")
 }
 extractAIC.svycoxph<-function(fit,...){

@@ -104,7 +104,7 @@ anova.svyloglin<-function(object,object1,...,integrate=FALSE){
   wX2<-wX2sing[,qwX2$pivot[1:qwX2$rank],drop=FALSE]
   Delta<-solve(t(wX2)%*%Psat%*%wX2,t(wX2)%*%V%*%wX2)
 
-  no_tests<- NULL
+  no_tests<- if (getRversion()>="4.4.0") FALSE else NULL
   an<-anova(m0,m1,test=no_tests)
   dev<-an$Deviance[2]
   if (integrate){
@@ -184,13 +184,4 @@ svyloglin.DBIsvydesign<-function (formula, design, ...)
     rval$call[[1]]<-as.name(.Generic)
     rval
 }
-svyloglin.ODBCsvydesign<-function (formula, design, ...) 
-{
-    design$variables <- dropFactor(getvars(formula, design$db$connection, 
-        design$db$tablename, updates = design$updates), weights(design))
-    class(design)<-c("survey.design2","survey.design")    
-    rval<-svyloglin(formula,design)
-    rval$call<-sys.call()
-    rval$call[[1]]<-as.name(.Generic)
-    rval
-}
+
