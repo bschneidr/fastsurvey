@@ -17,6 +17,10 @@ arma::mat arma_onestage(const arma::mat& Y,
   
   arma::mat result(n_col_y, n_col_y, arma::fill::zeros);
   
+  if (number_of_data_rows == 0) {
+    return result;
+  }
+  
   // Get distinct strata ids and their length, H
   arma::colvec distinct_strata_ids = unique(strata_ids);
   arma::uword H = distinct_strata_ids.n_elem;
@@ -244,6 +248,11 @@ arma::mat arma_multistage(arma::mat Y,
                           int stage) {
   
   size_t n_stages = samp_unit_ids.n_cols;
+  
+  if (Y.n_rows == 0) {
+    arma::mat V(Y.n_cols, Y.n_cols, arma::fill::zeros);
+    return V;
+  }
   
   // First reorder inputs by first-stage sample unit IDs
   arma::uvec samp_unit_id_order = arma::stable_sort_index(samp_unit_ids.col(0), "ascend");
