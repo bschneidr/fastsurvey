@@ -198,3 +198,26 @@ library(survey)
   if (!all(domain_lonely_psu_comparisons$results_match)) {
     stop("Results for domain lonely PSUs differ between base R and Rcpp implementations.")
   }
+  
+# Checks for edge cases ----
+  
+  ## Zero records ----
+  
+  zero_row_design <- dmu284_strat |> subset(id1 == "Nonexistent")
+  
+  std_error <- zero_row_design |> svytotal(x = ~ y1) |> SE()
+  
+  zero_row_result <- survey:::multistage_rcpp(
+    x = as.matrix(zero_row_design$variables[,c('y1', 'y2')]),
+    clusters = zero_row_design$cluster,
+    stratas = zero_row_design$strata,
+    nPSUs = zero_row_design$fpc$sampsize, 
+    fpcs = zero_row_design$fpc$popsize,
+    lonely.psu=getOption("survey.lonely.psu"),
+    one.stage=one.stage, stage = 1, cal = NULL
+  )
+  
+  if (any(is.na(zero_row_result)) || any(zero_row_result != 0)) {
+    stop("`multistage_rcpp()` should return zeros for zero-row inputs.")
+  }
+  
