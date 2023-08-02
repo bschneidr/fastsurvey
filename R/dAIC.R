@@ -13,7 +13,7 @@ AIC.svyglm<-function(object,...,k=2,null_has_intercept=TRUE){
     }
 }
 extractAIC.svyglm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
-    if(is.svylm(fit)) return(extractAIC_svylm(fit,...))
+    if(is.svylm(fit)) return(extractAIC_svylm(fit,...,null_has_intercept=null_has_intercept))
     if (length(attr(terms(fit),"factors"))){
         ftest<-delete.response(formula(fit))
         if (!null_has_intercept)
@@ -111,7 +111,7 @@ extractAIC_svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
     Isigma2<-Nhat/(2*sigma2hat^2)
     Usigma2<- -1/(2*sigma2hat)+ (y-muhat)^2/(2*sigma2hat^2)
     Hsigma2<- sum(w*Usigma2^2)
-    Deltasigma2<-Hsigma2/Isigma2
+    Deltasigma2<-Isigma2/Hsigma2
     
     ## combine
     deltabar<-mean(c(diag(Delta_mu), Deltasigma2))
