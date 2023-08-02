@@ -88,10 +88,10 @@ AIC.svycoxph<-function (object, ..., k = 2)
 is.svylm<-function(it) {inherits(it,"svyglm") && isTRUE(all.equal(stats::family(it),gaussian()))}
 
 extractAIC_svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
-    sfit <- summary(fit)
-    n<-sfit$df.null
+    y<-fit$y
+    muhat<-fit$linear.predictors
     Nhat<-sum(w<-fit$prior.weights)
-    sigma2hat<-coef(sfit$dispersion)
+    sigma2hat<-    sum((y-muhat)^2 * w) / Nhat
 
     minus2ellhat<- Nhat*log(sigma2hat) +Nhat +Nhat*log(2*pi)
 
@@ -103,11 +103,10 @@ extractAIC_svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
     }
 
     ## for mu
-    Delta_mu<-solve(V0,V) 
+    Delta_mu<-solve(V0*sigma2hat,V) 
 
     ## Now for sigma2
-    y<-fit$y
-    muhat<-fit$linear.predictors
+
     Isigma2<-Nhat/(2*sigma2hat^2)
     Usigma2<- -1/(2*sigma2hat)+ (y-muhat)^2/(2*sigma2hat^2)
     Hsigma2<- sum(w*Usigma2^2)
@@ -118,7 +117,7 @@ extractAIC_svylm<-function(fit,scale,k=2,...,null_has_intercept=TRUE){
     eff.p<-sum(diag(Delta_mu))+Deltasigma2
     aic <- minus2ellhat + k*eff.p
         
-    c(eff.p=eff.p, AIC=aic,deltabar=deltabar)/sigma2hat
+    c(eff.p=eff.p, AIC=aic,deltabar=deltabar)
 }
 
 
