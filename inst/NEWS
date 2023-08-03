@@ -1,3 +1,6 @@
+4.3	Added Ben Schneider's C++ code for multistage variances. It is currently controlled
+	by options(survey.use_rcpp)
+
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)
 
