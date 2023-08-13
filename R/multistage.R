@@ -286,7 +286,7 @@ onestage<-function(x, strata, clusters, nPSU, fpc, lonely.psu=getOption("survey.
    ## For the 'adjust' option for lonely PSUs,
    ## recenter around mean from all PSUs in all strata
    if (!is.null(lonely.psu) && lonely.psu == "adjust") {
-       n_PSUs_from_all_strata <- sum(tapply(X = nPSU, INDEX = strata, FUN = head, 1))
+       n_PSUs_from_all_strata <- sum(tapply(X = nPSU, INDEX = as.numeric(strata), FUN = head, 1))
        x_mean <- colSums(x) / n_PSUs_from_all_strata
        x <- sweep(x = x, MARGIN = 2, STATS = x_mean, FUN = "-")
    }
