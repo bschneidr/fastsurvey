@@ -318,6 +318,7 @@ arma::mat arma_multistage(arma::mat Y,
         f_h = static_cast<double>(n_h) /  N_h;
       } else {
         f_h = 0.0;
+        continue; // Skip to next stratum, since variance contribution is 0
       }
       
       // Get list of first-stage units in the current subset of data, and count them
