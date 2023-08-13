@@ -99,11 +99,11 @@ arma::mat arma_onestage(const arma::mat& Y,
       break;
     }
     
-    if (use_singleton_method_for_domains[0] & ((singleton_method[0] == "adjust") | (singleton_method[0] == "average"))) {
+    if (use_singleton_method_for_domains[0] && ((singleton_method[0] == "adjust") || (singleton_method[0] == "average"))) {
       arma::uword h_row_index = strata_starts(h);
       // Set singleton indicator equal to 1 unless there are multiple observed sampling units in the stratum
       singleton_indicators(h) = 1;
-      while ((singleton_indicators(h) == 1) & (h_row_index <= strata_ends(h))) {
+      while ((singleton_indicators(h) == 1) && (h_row_index <= strata_ends(h))) {
         if (samp_unit_ids(h_row_index) != samp_unit_ids(strata_starts(h))) {
           singleton_indicators(h) = 0;
         }
@@ -112,7 +112,7 @@ arma::mat arma_onestage(const arma::mat& Y,
     }
     
     if ((static_cast<int>(strata_ends[h] - strata_starts[h] + 1)) < 2) {
-      if (use_singleton_method_for_domains[0] & ((singleton_method[0] == "adjust") | (singleton_method[0] == "average"))) {
+      if (use_singleton_method_for_domains[0] && ((singleton_method[0] == "adjust") || (singleton_method[0] == "average"))) {
         singleton_indicators(h) = 1;
       }
     }
@@ -129,7 +129,7 @@ arma::mat arma_onestage(const arma::mat& Y,
   // Iterate over each stratum
   for (arma::uword h = 0; h < H; ++h) {
     
-    if ((singleton_indicators(h) == 1) & (singleton_method[0] != "adjust")) {
+    if ((singleton_indicators(h) == 1) && (singleton_method[0] != "adjust")) {
       break;
     }
     
@@ -149,7 +149,7 @@ arma::mat arma_onestage(const arma::mat& Y,
     }
     
     arma::rowvec Ybar_h;
-    if ((singleton_indicators(h) == 1) & (singleton_method[0] == "adjust")) {
+    if ((singleton_indicators(h) == 1) && (singleton_method[0] == "adjust")) {
       Ybar_h = Y_means;
     } else {
       Ybar_h = arma::sum(Y.rows(h_row_indices), 0) / n_h;
@@ -202,7 +202,7 @@ arma::mat arma_onestage(const arma::mat& Y,
   // For the 'average' method for handling singleton strata,
   // the total variance contribution of each singleton stratum
   // is assumed to be equal to the variance contribution of the average nonsingleton stratum
-  if ((singleton_method[0] == "average") & any_singleton_strata) {
+  if ((singleton_method[0] == "average") && any_singleton_strata) {
     int n_nonsingleton_strata = H - n_singleton_strata;
     double scaling_factor;
     if (n_nonsingleton_strata > 0) {
@@ -265,7 +265,7 @@ arma::mat arma_multistage(arma::mat Y,
   arma::mat later_stage_strata_samp_sizes;
   arma::mat later_stage_strata_pop_sizes;
   
-  if ((n_stages > 1) & !use_only_first_stage[0]) {
+  if ((n_stages > 1) && !use_only_first_stage[0]) {
     later_stage_ids = samp_unit_ids.tail_cols(n_stages - 1);
     later_stage_strata = strata_ids.tail_cols(n_stages - 1);
     later_stage_strata_samp_sizes = strata_samp_sizes.tail_cols(n_stages-1);
@@ -283,7 +283,7 @@ arma::mat arma_multistage(arma::mat Y,
                               stage = stage);
   
   // For each first-stage unit, get variance contribution from next stage
-  if ((n_stages > 1) & !use_only_first_stage[0]) {
+  if ((n_stages > 1) && !use_only_first_stage[0]) {
     
     // Get distinct first-stage strata ids and their length, H
     arma::colvec distinct_strata_ids = unique(first_stage_strata);
