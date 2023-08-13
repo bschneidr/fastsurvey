@@ -89,12 +89,16 @@ arma::mat arma_onestage(const arma::mat& Y,
   for (arma::uword h = 0; h < H; ++h) {
     arma::uword stratum_start = strata_starts(h);
     n_samp_units_all_strata += strata_samp_sizes(stratum_start);
+    // Check if there is only one sampling unit sampled in the stratum
     if (strata_samp_sizes(stratum_start) < 2) {
-      singleton_indicators(h) = 1;
-      if (singleton_method[0] == "fail") {
-        Rcpp::String error_msg("At least one stratum contains only one PSU at stage ");
-        error_msg += stage;
-        Rcpp::stop(error_msg);
+      // If only one sampling unit, check that it wasn't sampled with certainty
+      if ((strata_pop_sizes(stratum_start) > 1)) {
+        singleton_indicators(h) = 1;
+        if ((singleton_method[0] == "fail")) {
+          Rcpp::String error_msg("At least one stratum contains only one PSU at stage ");
+          error_msg += stage;
+          Rcpp::stop(error_msg);
+        }
       }
       break;
     }
@@ -316,7 +320,7 @@ arma::mat arma_multistage(arma::mat Y,
         f_h = 0.0;
       }
       
-      // Get list of first-stage untis in the current subset of data, and count them
+      // Get list of first-stage units in the current subset of data, and count them
       arma::colvec h_first_stage_units = first_stage_ids.elem(h_indices);
       arma::colvec h_unique_first_stage_units = unique(h_first_stage_units);
       arma::uword n_h_subset = h_unique_first_stage_units.n_elem;
