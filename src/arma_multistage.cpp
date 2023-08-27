@@ -277,14 +277,14 @@ arma::mat arma_multistage(arma::mat Y,
   }
   
   // Calculate first-stage variance
-  arma::mat V = arma_onestage(Y = Y,
-                              samp_unit_ids = first_stage_ids,
-                              strata_ids = first_stage_strata,
-                              strata_samp_sizes = first_stage_strata_samp_sizes,
-                              strata_pop_sizes = first_stage_strata_pop_sizes,
-                              singleton_method = singleton_method,
-                              use_singleton_method_for_domains = use_singleton_method_for_domains,
-                              stage = stage);
+  arma::mat V = arma_onestage(Y,
+                              first_stage_ids,
+                              first_stage_strata,
+                              first_stage_strata_samp_sizes,
+                              first_stage_strata_pop_sizes,
+                              singleton_method,
+                              use_singleton_method_for_domains,
+                              stage);
   
   // For each first-stage unit, get variance contribution from next stage
   if ((n_stages > 1) && !use_only_first_stage[0]) {
