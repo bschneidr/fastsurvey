@@ -4,6 +4,9 @@
 	error in scaling Pearson residuals for svyrepglm led to confint.svrepglm with
 	likelihood profiling not finding the ends of the interval (Stephanie Zimmer)
 
+	svyolr with rank deficiency and subsetting of cases in raked designs was overwriting
+	the 'keep' variable (Justin Wishart)
+
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)
 
