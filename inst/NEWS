@@ -7,6 +7,9 @@
 	svyolr with rank deficiency and subsetting of cases in raked designs was overwriting
 	the 'keep' variable (Justin Wishart)
 
+	print.svyciprop() was printing fewer digits for the upper CI limit than the
+	lower limit.
+
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)
 
