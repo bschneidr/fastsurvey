@@ -231,8 +231,8 @@ svydesign.default<-function(ids,probs=NULL,strata=NULL,variables=NULL, fpc=NULL,
 
 onestrat<-function(x,cluster,nPSU,fpc, lonely.psu,stratum=NULL,stage=1,cal=cal){
   
-  recentering <- attr(x, "recentering")
-  if (is.null(recentering)) recentering <- 0
+  stratum_center <- attr(x, "recentering")
+  if (is.null(stratum_center)) stratum_center <- 0
 
   if (is.null(fpc))
       f<-rep(1,NROW(x))
@@ -258,11 +258,11 @@ onestrat<-function(x,cluster,nPSU,fpc, lonely.psu,stratum=NULL,stage=1,cal=cal){
     scale<-rep(scale[1],NROW(x))
   }
   
-  x<-sweep(x=x, MARGIN=2, STATS=recentering, FUN="-")
-  
   if (lonely.psu!="adjust" || nsubset>1 ||
-      (nPSU>1 & !getOption("survey.adjust.domain.lonely")))
-      x<-sweep(x, 2, colMeans(x), "-")
+      (nPSU>1 & !getOption("survey.adjust.domain.lonely"))) {
+    stratum_center <- colMeans(x)
+  }
+  x<-sweep(x=x, MARGIN=2, STATS=stratum_center, FUN="-")
 
   if (nsubset==1 && nPSU>1 && getOption("survey.adjust.domain.lonely")){ 
       warning("Stratum (",stratum,") has only one PSU at stage ",stage)
