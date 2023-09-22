@@ -178,6 +178,7 @@ library(survey)
     
     
     x <- as.matrix(dmu284_strat_domain_lonely_psu$variables[,c('y1','y2')] / dmu284_strat_domain_lonely_psu$prob)
+    suppressWarnings({
     base_r_result <- survey:::multistage(x = x,
                                          clusters = dmu284_strat_domain_lonely_psu$cluster,
                                          stratas = dmu284_strat_domain_lonely_psu$strata,
@@ -185,6 +186,7 @@ library(survey)
                                          fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
                                          lonely.psu=getOption("survey.lonely.psu"),
                                          one.stage=one.stage, stage = 1, cal = NULL)
+    })
     
     rcpp_result <- survey:::multistage_rcpp(x = x,
                                             clusters = dmu284_strat_domain_lonely_psu$cluster,
