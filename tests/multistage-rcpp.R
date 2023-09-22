@@ -179,13 +179,13 @@ library(survey)
     
     x <- as.matrix(dmu284_strat_domain_lonely_psu$variables[,c('y1','y2')] / dmu284_strat_domain_lonely_psu$prob)
     suppressWarnings({
-    base_r_result <- survey:::multistage(x = x,
-                                         clusters = dmu284_strat_domain_lonely_psu$cluster,
-                                         stratas = dmu284_strat_domain_lonely_psu$strata,
-                                         nPSUs = dmu284_strat_domain_lonely_psu$fpc$sampsize,
-                                         fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
-                                         lonely.psu=getOption("survey.lonely.psu"),
-                                         one.stage=one.stage, stage = 1, cal = NULL)
+      base_r_result <- survey:::multistage(x = x,
+                                           clusters = dmu284_strat_domain_lonely_psu$cluster,
+                                           stratas = dmu284_strat_domain_lonely_psu$strata,
+                                           nPSUs = dmu284_strat_domain_lonely_psu$fpc$sampsize,
+                                           fpcs = dmu284_strat_domain_lonely_psu$fpc$popsize,
+                                           lonely.psu=getOption("survey.lonely.psu"),
+                                           one.stage=one.stage, stage = 1, cal = NULL)
     })
     
     rcpp_result <- survey:::multistage_rcpp(x = x,
@@ -209,8 +209,6 @@ library(survey)
   ## Zero records ----
   
   zero_row_design <- dmu284_strat |> subset(id1 == "Nonexistent")
-  
-  std_error <- zero_row_design |> svytotal(x = ~ y1) |> SE()
   
   zero_row_result <- survey:::multistage_rcpp(
     x = as.matrix(zero_row_design$variables[,c('y1', 'y2')]),
