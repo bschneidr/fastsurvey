@@ -231,6 +231,9 @@ svydesign.default<-function(ids,probs=NULL,strata=NULL,variables=NULL, fpc=NULL,
 
 onestrat<-function(x,cluster,nPSU,fpc, lonely.psu,stratum=NULL,stage=1,cal=cal){
   
+  stratum_center <- attr(x, "recentering")
+  if (is.null(stratum_center)) stratum_center <- 0
+
   if (is.null(fpc))
       f<-rep(1,NROW(x))
   else{
@@ -254,16 +257,18 @@ onestrat<-function(x,cluster,nPSU,fpc, lonely.psu,stratum=NULL,stage=1,cal=cal){
     x<-rbind(x,matrix(0,ncol=ncol(x),nrow=nPSU-nrow(x)))
     scale<-rep(scale[1],NROW(x))
   }
+  
   if (lonely.psu!="adjust" || nsubset>1 ||
-      (nPSU>1 & !getOption("survey.adjust.domain.lonely")))
-      x<-sweep(x, 2, colMeans(x), "-")
+      (nPSU>1 & !getOption("survey.adjust.domain.lonely"))) {
+    stratum_center <- colMeans(x)
+  }
+  x<-sweep(x=x, MARGIN=2, STATS=stratum_center, FUN="-")
 
   if (nsubset==1 && nPSU>1 && getOption("survey.adjust.domain.lonely")){ 
       warning("Stratum (",stratum,") has only one PSU at stage ",stage)
       if (lonely.psu=="average" && getOption("survey.adjust.domain.lonely"))
           scale<-NA
     }
-  
   if (nPSU>1){
       return(crossprod(x*sqrt(scale)))
   } else {
@@ -286,12 +291,13 @@ onestage<-function(x, strata, clusters, nPSU, fpc, lonely.psu=getOption("survey.
    ## For the 'adjust' option for lonely PSUs,
    ## recenter around mean from all PSUs in all strata
    if (!is.null(lonely.psu) && lonely.psu == "adjust") {
-       n_PSUs_from_all_strata <- sum(tapply(X = nPSU, INDEX = as.numeric(strata), FUN = head, 1))
-       x_mean <- colSums(x) / n_PSUs_from_all_strata
-       x <- sweep(x = x, MARGIN = 2, STATS = x_mean, FUN = "-")
+     n_PSUs_from_all_strata <- sum(tapply(X = nPSU, INDEX = as.numeric(strata), FUN = head, 1))
+     recentering <- colSums(x) / n_PSUs_from_all_strata
+   } else {
+     recentering <- 0
    }
    stratvars<- tapply(1:NROW(x), list(factor(strata)), function(index){
-       onestrat(x[index,,drop=FALSE], clusters[index],
+       onestrat(x[index,,drop=FALSE] |> `attr<-`('recentering', recentering), clusters[index],
                 nPSU[index][1], fpc[index], ##changed from fpc[index][1], to allow pps(brewer)
                 lonely.psu=lonely.psu,stratum=strata[index][1], stage=stage,cal=cal)
    })

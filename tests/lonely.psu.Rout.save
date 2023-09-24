@@ -1,6 +1,6 @@
 
-R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.1.1 (2021-08-10) -- "Kick Things"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: aarch64-apple-darwin20 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -53,7 +53,7 @@ Data variables:
 > 
 > options(survey.lonely.psu="fail")
 > try(svymean(~api00,ds))
-Error in onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  : 
+Error in onestrat(`attr<-`(x[index, , drop = FALSE], "recentering", recentering),  : 
   Stratum (413) has only one PSU at stage 1
 > try(svymean(~api00, as.svrepdesign(ds)))
 Error in jknweights(design$strata[, 1], design$cluster[, 1], fpc = fpc,  : 
@@ -232,35 +232,35 @@ Data variables:
         mean     SE
 api00 645.14 5.8909
 Warning message:
-In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+In onestrat(`attr<-`(x[index, , drop = FALSE], "recentering", recentering),  :
   Stratum (406) has only one PSU at stage 1
 > options(survey.lonely.psu="remove")
 > svymean(~api00,ds1)
         mean     SE
 api00 645.14 5.8909
 Warning message:
-In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+In onestrat(`attr<-`(x[index, , drop = FALSE], "recentering", recentering),  :
   Stratum (406) has only one PSU at stage 1
 > options(survey.lonely.psu="certainty")
 > svymean(~api00,ds1)
         mean     SE
 api00 645.14 5.8909
 Warning message:
-In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+In onestrat(`attr<-`(x[index, , drop = FALSE], "recentering", recentering),  :
   Stratum (406) has only one PSU at stage 1
 > options(survey.lonely.psu="adjust")
 > svymean(~api00,ds1)
         mean     SE
 api00 645.14 5.9119
 Warning message:
-In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+In onestrat(`attr<-`(x[index, , drop = FALSE], "recentering", recentering),  :
   Stratum (406) has only one PSU at stage 1
 > options(survey.lonely.psu="average")
 > svymean(~api00,ds1)
         mean     SE
 api00 645.14 6.0914
 Warning message:
-In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
+In onestrat(`attr<-`(x[index, , drop = FALSE], "recentering", recentering),  :
   Stratum (406) has only one PSU at stage 1
 > 
 > ## checks for `svytotal()`
@@ -310,4 +310,4 @@ In onestrat(x[index, , drop = FALSE], clusters[index], nPSU[index][1],  :
 > 
 > proc.time()
    user  system elapsed 
-  0.747   0.099   0.921 
+  0.586   0.055   0.625 
