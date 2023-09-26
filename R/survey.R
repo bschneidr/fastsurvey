@@ -1737,7 +1737,7 @@ model.frame.survey.design2<-function(formula,...){
   if (is.null(getOption("survey.replicates.mse")))
       options(survey.replicates.mse=FALSE)
   if (is.null(getOption("survey.use_rcpp")))
-      options(survey.use_rcpp=FALSE)
+      options(survey.use_rcpp=TRUE)
 }
 
 
