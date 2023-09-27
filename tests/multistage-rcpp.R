@@ -1,5 +1,5 @@
 ## temporarily disable while it's being fixed
-q("no")
+## q("no")
 
 ## 
 ## Check that multistage() and multistage_rcpp() give same results
