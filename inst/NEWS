@@ -10,7 +10,9 @@
 	print.svyciprop() was printing fewer digits for the upper CI limit than the
 	lower limit.
 
-       	C+++ code issues 7,8,9 fixed
+       	C++ code issues fixed
+
+	degrees of freedom for score F-test in loglinear models fixed (Thomas Loughin)
 
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)
