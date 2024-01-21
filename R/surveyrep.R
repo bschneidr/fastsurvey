@@ -432,10 +432,10 @@ as.svrepdesign.default<-function(design,type=c("auto","JK1","JKn","BRR","bootstr
 
 
 
-svrepdesign<-function(variables, repweights, weights,data=NULL,...) UseMethod("svrepdesign",data)
+svrepdesign<-function(variables, repweights, weights,data=NULL,degf=NULL,...) UseMethod("svrepdesign",data)
 
 svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
-                              data=NULL,type=c("BRR","Fay","JK1", "JKn","bootstrap",
+                              data=NULL, degf=NULL,type=c("BRR","Fay","JK1", "JKn","bootstrap",
                                                "ACS","successive-difference","JK2","other"),
                               combined.weights=TRUE, rho=NULL, bootstrap.average=NULL,
                               scale=NULL,rscales=NULL,fpc=NULL, fpctype=c("fraction","correction"),
@@ -494,6 +494,12 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
     warning("No sampling weights provided: equal probability assumed")
     weights<-rep(1,NROW(repweights))
   }
+
+    if (!is.null(degf)){
+        if (!is.numeric(degf)) stop("degf must be NULL or numeric")
+        if (degf>ncol(repweights)) warning(paste0("degf (", degf,") is larger than number of replicates (",ncol(repweights),")"))
+        if (degf<=1) warning("degf is <=1")
+        }
 
   repwtmn<-mean(apply(repweights,2,mean))
   wtmn<-mean(weights)
@@ -588,7 +594,10 @@ svrepdesign.default<-function(variables=NULL,repweights=NULL, weights=NULL,
     class(rval)<-"repweights"
   rval$repweights<-repweights
   class(rval)<-"svyrep.design"
-  rval$degf<-degf(rval)
+    if (!is.null(degf))
+        rval$degf<-degf
+    else
+        rval$degf<-degf(rval)
   rval$mse<-mse
   rval
   

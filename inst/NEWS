@@ -16,6 +16,9 @@
 
 	correct the scale in the F-distributed score test (Keiran Shao)
 
+	allow user to specify degf= in svrepdesign to avoid needing to compute it
+	(for Ben Schneider)
+
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)
 

@@ -15,6 +15,8 @@ check.R:  Many combinations of options for svydesign
 
 deff.R:  Regression test on design effects, especially for totals
 
+degf-svrepdesign: check specifying degf to svrepdesign rather than computing it
+
 DBIcheck.R: Check that we get the same results for SQLite-backed and
          in-memory versions of the API data.
 
