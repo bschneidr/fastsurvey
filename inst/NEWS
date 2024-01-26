@@ -19,6 +19,8 @@
 	allow user to specify degf= in svrepdesign to avoid needing to compute it
 	(for Ben Schneider)
 
+	warn if svychisq() is used with a single variable (for Isabelle Michaud)
+
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)
 
