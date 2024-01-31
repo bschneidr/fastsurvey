@@ -1,5 +1,5 @@
 4.3	Added Ben Schneider's C++ code for multistage variances. It is currently controlled
-	by options(survey.use_rcpp)
+	by options(survey.use_rcpp), which defaults to TRUE
 
 	error in scaling Pearson residuals for svyrepglm led to confint.svrepglm with
 	likelihood profiling not finding the ends of the interval (Stephanie Zimmer)
@@ -20,6 +20,8 @@
 	(for Ben Schneider)
 
 	warn if svychisq() is used with a single variable (for Isabelle Michaud)
+
+	fix svyglm(rescale=FALSE) for replicate weights
 
 4.2-1	Fixed the penalty term in AIC for linear regression. Also stop scaling by sigma2
 	(Justin Wishart)

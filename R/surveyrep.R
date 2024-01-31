@@ -1203,6 +1203,8 @@ svrepglm<-svyglm.svyrep.design<-function(formula, design, subset=NULL,family=sta
           pwts<-design$pweights/mean(design$pweights)
       else if (rescale)  ## old behaviour
           pwts<-design$pweights/sum(design$pweights)
+      else
+          pwts<-design$pweights ## no rescaling
 
       if (is.data.frame(pwts)) pwts<-pwts[[1]]
       
