@@ -100,7 +100,7 @@ arma::mat arma_onestage(const arma::mat& Y,
           Rcpp::stop(error_msg);
         }
       }
-      break;
+      continue; // Skip to next stratum
     }
     
     if (use_singleton_method_for_domains[0] && ((singleton_method[0] == "adjust") || (singleton_method[0] == "average"))) {
@@ -134,7 +134,7 @@ arma::mat arma_onestage(const arma::mat& Y,
   for (arma::uword h = 0; h < H; ++h) {
     
     if ((singleton_indicators(h) == 1) && (singleton_method[0] != "adjust")) {
-      break;
+      continue;
     }
     
     arma::uvec h_row_indices = arma::linspace<arma::uvec>(strata_starts[h], strata_ends[h], strata_ends[h] - strata_starts[h] + 1);
