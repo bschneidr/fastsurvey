@@ -100,11 +100,13 @@ arma::mat arma_onestage(const arma::mat& Y,
           Rcpp::stop(error_msg);
         }
       }
-      break;
+      continue; // Skip to next stratum
     }
     
-    if (use_singleton_method_for_domains[0] && ((singleton_method[0] == "adjust") || (singleton_method[0] == "average"))) {
+    // Check for PSUs which are lonely in the domain (but not in the sample)
+    if (use_singleton_method_for_domains[0]) {
       arma::uword h_row_index = strata_starts(h);
+      
       // Set singleton indicator equal to 1 unless there are multiple observed sampling units in the stratum
       singleton_indicators(h) = 1;
       while ((singleton_indicators(h) == 1) && (h_row_index <= strata_ends(h))) {
@@ -113,13 +115,23 @@ arma::mat arma_onestage(const arma::mat& Y,
         }
         h_row_index += 1;
       }
-    }
-    
-    if ((static_cast<int>(strata_ends[h] - strata_starts[h] + 1)) < 2) {
-      if (use_singleton_method_for_domains[0] && ((singleton_method[0] == "adjust") || (singleton_method[0] == "average"))) {
+      
+      if ((static_cast<int>(strata_ends[h] - strata_starts[h] + 1)) < 2) { 
         singleton_indicators(h) = 1;
       }
+      
+      // Throw a warning message about the domain's singleton
+      if (singleton_indicators(h) == 1) {
+        Rcpp::String warning_msg("At least one stratum contains only one PSU at stage ");
+        warning_msg += stage;
+        Rcpp::warning(warning_msg);
+        // If not adjusting for domain singletons, don't mark the stratum as a singleton 
+        if ((singleton_method[0] != "adjust") && (singleton_method[0] != "average")) {
+          singleton_indicators(h) = 0;
+        }
+      }
     }
+    
   }
   int n_singleton_strata = sum(singleton_indicators);
   bool any_singleton_strata = n_singleton_strata > 0;
@@ -134,7 +146,7 @@ arma::mat arma_onestage(const arma::mat& Y,
   for (arma::uword h = 0; h < H; ++h) {
     
     if ((singleton_indicators(h) == 1) && (singleton_method[0] != "adjust")) {
-      break;
+      continue;
     }
     
     arma::uvec h_row_indices = arma::linspace<arma::uvec>(strata_starts[h], strata_ends[h], strata_ends[h] - strata_starts[h] + 1);
