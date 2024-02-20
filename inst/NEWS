@@ -1,3 +1,8 @@
+4.4	Fixes to calibration for PPS sampling
+
+	A PPS variance matrix can now be specified as phase two of a two-phase design.
+	This includes poisson_sampling() as a model for non-response (for Pam Shaw, Jasper Yang)
+
 4.3	Added Ben Schneider's C++ code for multistage variances. It is currently controlled
 	by options(survey.use_rcpp), which defaults to TRUE
 

@@ -296,7 +296,7 @@ ppsvar<-function(x,design){
       if (inherits(psvar, "greg_calibration")) {
         if (psvar$stage==0){
           ## G-calibration at population level
-          y<-qr.resid(psvar$qr,x/psvar$w)*psvar$w
+          x<-qr.resid(psvar$qr,x/psvar$w)*psvar$w
         } else {
           ## G-calibration within clusters
           stop("calibration within clusters not yet available for PPS designs")
@@ -305,8 +305,8 @@ ppsvar<-function(x,design){
         ## ordinary post-stratification
         psw<-attr(psvar, "weights")
         postStrata<-as.factor(psvar)
-        psmeans<-rowsum(y/psw,psvar,reorder=TRUE)/as.vector(table(factor(psvar)))
-        x<- y-psmeans[match(psvar,sort(unique(psvar))),]*psw
+        psmeans<-rowsum(x/psw,psvar,reorder=TRUE)/as.vector(table(factor(psvar)))
+        x<- x-psmeans[match(psvar,sort(unique(psvar))),]*psw
       }
     }
   }
