@@ -10,6 +10,7 @@ Imports: stats, graphics, splines, lattice, minqa, numDeriv, mitools (>= 2.4), R
 LinkingTo: Rcpp, RcppArmadillo
 Suggests: foreign, MASS, KernSmooth, hexbin,
         RSQLite, quantreg, parallel,
-        CompQuadForm, DBI, AER
+        CompQuadForm, DBI, AER,
+	SUMMER (>= 1.4.0)
 URL: http://r-survey.r-forge.r-project.org/survey/
 
