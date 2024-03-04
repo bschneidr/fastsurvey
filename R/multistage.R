@@ -315,7 +315,10 @@ svyrecvar<-function(x, clusters,  stratas, fpcs, postStrata=NULL,
   x<-as.matrix(x)
     cal<-NULL
 
-    use_rcpp<-getOption("survey.use_rcpp")
+  if(isFALSE(fpcs$pps))
+      use_rcpp<-getOption("survey.use_rcpp")
+  else
+      use_rcpp<-FALSE  ## Brewer's method, doesn't work with the current rcpp version
   
   ## Remove post-stratum means, which may cut across clusters
   ## Also center the data using any "g-calibration" models
@@ -522,7 +525,7 @@ as.fpc<-function(df,strata,ids,pps=FALSE){
    }
   
   
-  rval<-list(popsize=popsize, sampsize=sampsize)
+  rval<-list(popsize=popsize, sampsize=sampsize,pps=pps)
   class(rval)<-"survey_fpc"
   rval
 }
