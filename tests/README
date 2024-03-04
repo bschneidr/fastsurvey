@@ -70,6 +70,3 @@ svyolr-rake-subset.R: make sure subsets of calibrated designs get handled correc
 
 anova-svycoxph.R: check that symbolically nested and linear-algebra versions of anova.svycoxph agree
 
-SUMMER.R: check that an example using SUMMER runs -- this is not checked by running examples
-    because I can't have an example using the default eight cores on CRAN and using just
-    one core would require INLA for all installations to get inla.setOption()
