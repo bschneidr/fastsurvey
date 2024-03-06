@@ -36,7 +36,7 @@ svysmoothUnit.survey.design <- function(formula,
     )
   }
   family<-match.arg(family)
-  return(SUMMER::smoothUnit(formula = formula,
+  rval<-SUMMER::smoothUnit(formula = formula,
                             domain = domain,
                             design = design,
                             family = family,
@@ -50,7 +50,9 @@ svysmoothUnit.survey.design <- function(formula,
                             level = level,
                             n.sample = n.sample,
                             return.samples = return.samples,
-                            X.pop.weights = X.pop.weights))
+                           X.pop.weights = X.pop.weights)
+  rval$call<-sys.call(-1)
+  rval
 }
 
 

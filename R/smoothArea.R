@@ -58,7 +58,7 @@ svysmoothArea.survey.design <-  function(formula,
       call. = FALSE
     )
   }
-  return(SUMMER::smoothArea(formula = formula,
+ rval<-SUMMER::smoothArea(formula = formula,
                             domain = domain,
                             design = design,
                             adj.mat = adj.mat,
@@ -73,7 +73,9 @@ svysmoothArea.survey.design <-  function(formula,
                             level = level,
                             n.sample = n.sample,
                             var.tol = var.tol,
-                            return.samples = return.samples))
+                           return.samples = return.samples)
+     rval$call<-sys.call(-1)
+     rval
 }
 
 ## print.svysae <- function(x, ...) {
