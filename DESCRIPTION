@@ -8,7 +8,6 @@ License: GPL-2 | GPL-3
 Depends: R (>= 4.1.0), grid, methods, Matrix, survival
 Imports: stats, graphics, splines, lattice, minqa, numDeriv, mitools (>= 2.4), Rcpp (>= 0.12.8)
 LinkingTo: Rcpp, RcppArmadillo
-VignetteBuilder: R.rsp
 Suggests: foreign, MASS, KernSmooth, hexbin,
         RSQLite, quantreg, parallel,
         CompQuadForm, DBI, AER,
