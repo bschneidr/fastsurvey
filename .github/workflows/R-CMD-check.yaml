@@ -32,4 +32,3 @@ jobs:
           build_args: 'c("--no-manual", "--no-build-vignettes")'
           args: 'c("--no-manual", "--no-build-vignettes", "--ignore-vignettes")'
           error-on: '"never"'
-          
